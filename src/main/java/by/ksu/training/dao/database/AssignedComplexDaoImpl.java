@@ -33,12 +33,12 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
 
     @Override
     public List<AssignedComplex> readUnexecutedByVisitor(Visitor visitor) throws PersistentException {
-        AssignedComplex assignedComplex = null;
-        List<AssignedComplex> list;
         try (PreparedStatement statement = connection.prepareStatement(READ_UNEXECUTED_BY_ID)) {
             statement.setInt(1, visitor.getId());
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            List<AssignedComplex> list = new ArrayList<>();
+            AssignedComplex assignedComplex = null;
+
             while (resultSet.next()) {
                 assignedComplex = new AssignedComplex();
                 assignedComplex.setId(resultSet.getInt("id"));
@@ -49,21 +49,21 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
                 list.add(assignedComplex);
             }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
     }
 
     @Override
     public List<AssignedComplex> readExecutedByVisitorForPeriod(Visitor visitor, int periodDays) throws PersistentException {
-        AssignedComplex assignedComplex = null;
-        List<AssignedComplex> list;
         try (PreparedStatement statement = connection.prepareStatement(READ_EXECUTED_BY_VISITOR_FOR_PERIOD)) {
             statement.setInt(1, visitor.getId());
             statement.setInt(2, periodDays);
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            List<AssignedComplex> list = new ArrayList<>();
+            AssignedComplex assignedComplex = null;
+
             while (resultSet.next()) {
                 assignedComplex = new AssignedComplex();
                 assignedComplex.setId(resultSet.getInt("id"));
@@ -77,20 +77,20 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
                 assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
                 list.add(assignedComplex);
             }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
     }
 
     @Override
     public List<AssignedComplex> readExecutedForPeriod(int periodDays) throws PersistentException {
-        AssignedComplex assignedComplex = null;
-        List<AssignedComplex> list;
         try (PreparedStatement statement = connection.prepareStatement(READ_EXECUTED_FOR_PERIOD)) {
             statement.setInt(1, periodDays);
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            List<AssignedComplex> list = new ArrayList<>();
+            AssignedComplex assignedComplex = null;
+
             while (resultSet.next()) {
                 assignedComplex = new AssignedComplex();
                 assignedComplex.setId(resultSet.getInt("id"));
@@ -104,10 +104,10 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
                 assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
                 list.add(assignedComplex);
             }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
     }
 
     @Override
@@ -135,25 +135,27 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
 
     @Override
     public AssignedComplex read(Integer id) throws PersistentException {
-        AssignedComplex assignedComplex = null;
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            assignedComplex = new AssignedComplex();
-            assignedComplex.setId(id);
-            Visitor visitor = new Visitor();
-            visitor.setId(resultSet.getInt("visitor_id"));
-            assignedComplex.setVisitor(visitor);
-            Complex complex = new Complex();
-            complex.setId(resultSet.getInt("complex_id"));
-            assignedComplex.setComplex(complex);
-            assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
-            assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
+            AssignedComplex assignedComplex = null;
+
+            if (resultSet.next()) {
+                assignedComplex = new AssignedComplex();
+                assignedComplex.setId(id);
+                Visitor visitor = new Visitor();
+                visitor.setId(resultSet.getInt("visitor_id"));
+                assignedComplex.setVisitor(visitor);
+                Complex complex = new Complex();
+                complex.setId(resultSet.getInt("complex_id"));
+                assignedComplex.setComplex(complex);
+                assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
+                assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
+            }
+            return assignedComplex;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return assignedComplex;
     }
 
     @Override

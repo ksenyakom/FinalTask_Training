@@ -1,0 +1,16 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Suite1" verbose="1">
+    <test name="AllTests">
+        <classes>
+            <class name="by.ksu.training.dao.database.ExerciseDaoImplTest"/>
+            <class name="by.ksu.training.dao.database.ComplexDaoImplTest"/>
+            <class name="by.ksu.training.dao.database.SubscriptionDaoImplTest"/>
+            <class name="by.ksu.training.dao.database.UserDaoImplTest"/>
+            <class name="by.ksu.training.dao.database.AssignedComplexServiceDaoImplTest"/>
+            <class name="by.ksu.training.dao.database.PersonDaoImplTest"/>
+            <class name="by.ksu.training.dao.database.AssignedTrainerDaoImplTest"/>
+        </classes>
+    </test>
+</suite>

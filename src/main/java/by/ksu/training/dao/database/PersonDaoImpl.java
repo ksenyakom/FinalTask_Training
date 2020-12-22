@@ -47,35 +47,37 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
 
     @Override
     public Person read(Integer id) throws PersistentException {
-        Person person = null;
 
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            person = new Person();
-            person.setId(id);
-            person.setSurname(resultSet.getString("surname"));
-            person.setName(resultSet.getString("name"));
-            person.setPatronymic(resultSet.getString("patronymic"));
-            person.setDateOfBirth(parseDate.sqlToLocal(resultSet.getDate("date_of_birth")));
-            person.setEmail(resultSet.getString("email"));
-            person.setAddress(resultSet.getString("address"));
-            person.setPhone(resultSet.getString("phone"));
-            person.setAchievements(resultSet.getString("achievements"));
+            Person person = null;
+
+            if (resultSet.next()) {
+                person = new Person();
+                person.setId(id);
+                person.setSurname(resultSet.getString("surname"));
+                person.setName(resultSet.getString("name"));
+                person.setPatronymic(resultSet.getString("patronymic"));
+                person.setDateOfBirth(parseDate.sqlToLocal(resultSet.getDate("date_of_birth")));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhone(resultSet.getString("phone"));
+                person.setAchievements(resultSet.getString("achievements"));
+            }
+            return person;
+
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return person;
     }
 
     @Override
     public List<Person> read() throws PersistentException {
-        Person person = null;
-        List<Person> list;
         try (PreparedStatement statement = connection.prepareStatement(READ_ALL)) {
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            Person person = null;
+            List<Person> list = new ArrayList<>();
             while (resultSet.next()) {
                 person = new Person();
                 person.setId(resultSet.getInt("id"));
@@ -89,10 +91,11 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
                 person.setDateOfBirth(parseDate.sqlToLocal(resultSet.getDate("date_of_birth")));
                 list.add(person);
             }
+            return list;
+
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
     }
 
     @Override

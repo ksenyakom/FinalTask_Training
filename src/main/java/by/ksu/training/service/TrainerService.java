@@ -1,17 +1,18 @@
 package by.ksu.training.service;
 
 import by.ksu.training.entity.Trainer;
+import by.ksu.training.exception.PersistentException;
 
 import java.util.List;
 
 public interface TrainerService {
-    List<Trainer> findAll() throws ServiceException;
+    List<Trainer> findAll() throws PersistentException;
 
-    Trainer findByIdentity(Integer identity) throws ServiceException;
+    Trainer findByIdentity(Integer id) throws PersistentException;
 
-    Trainer findByLoginAndPassword(String login, String password) throws ServiceException;
+    void save(Trainer trainer) throws PersistentException;
 
-    void save(Trainer user) throws ServiceException;
+    void update(Trainer trainer) throws PersistentException;
 
-    void delete(Integer identity) throws ServiceException;
+    void delete(Integer id) throws PersistentException;
 }

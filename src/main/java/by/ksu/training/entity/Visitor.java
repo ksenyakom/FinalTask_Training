@@ -7,6 +7,11 @@ public class Visitor extends Person {
     private Trainer trainer;
     private List<AssignedComplex> complexList;
 
+    public Visitor() {}
+
+    public Visitor(Person person) {
+        super(person);
+    }
 
     public Trainer getTrainer() {
         return trainer;

@@ -13,6 +13,19 @@ public class Person extends Entity {
     private String email;
     private String achievements;
 
+    public Person() {}
+
+    public Person(Person person) {
+        setId(person.getId());
+        setName(person.getName());
+        setPatronymic(person.getPatronymic());
+        setSurname(person.getSurname());
+        setAddress(person.getAddress());
+        setEmail(person.getEmail());
+        setDateOfBirth(person.getDateOfBirth());
+        setPhone(person.getPhone());
+    }
+
     public String getName() {
         return name;
     }

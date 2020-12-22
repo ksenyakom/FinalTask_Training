@@ -29,11 +29,11 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
 
     @Override
     public List<Exercise> read() throws PersistentException {
-        Exercise exercise = null;
-        List<Exercise> list = null;
         try (PreparedStatement statement = connection.prepareStatement(READ_All)) {
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            Exercise exercise = null;
+            List<Exercise> list = new ArrayList<>();
+
             while (resultSet.next()) {
                 exercise = new Exercise();
                 exercise.setId(resultSet.getInt("id"));
@@ -45,10 +45,11 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
                 exercise.setType(resultSet.getInt("type_id"));
                 list.add(exercise);
             }
+            return list;
+
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
     }
 
     @Override
@@ -79,24 +80,27 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
 
     @Override
     public Exercise read(Integer id) throws PersistentException {
-        Exercise exercise = null;
 
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            exercise = new Exercise();
-            exercise.setId(id);
-            exercise.setTitle(resultSet.getString("title"));
-            exercise.setAdjusting(resultSet.getString("adjusting"));
-            exercise.setMistakes(resultSet.getString("mistakes"));
-            exercise.setPicturePath(resultSet.getString("picture_path"));
-            exercise.setAudioPath(resultSet.getString("audio_path"));
-            exercise.setType(resultSet.getInt("type_id"));
+            Exercise exercise = null;
+
+            if (resultSet.next()) {
+                exercise = new Exercise();
+                exercise.setId(id);
+                exercise.setTitle(resultSet.getString("title"));
+                exercise.setAdjusting(resultSet.getString("adjusting"));
+                exercise.setMistakes(resultSet.getString("mistakes"));
+                exercise.setPicturePath(resultSet.getString("picture_path"));
+                exercise.setAudioPath(resultSet.getString("audio_path"));
+                exercise.setType(resultSet.getInt("type_id"));
+            }
+            return exercise;
+
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return exercise;
     }
 
     @Override

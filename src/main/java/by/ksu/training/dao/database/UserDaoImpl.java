@@ -19,6 +19,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     private static final String CREATE = "INSERT INTO `user`(`login`,`password`,`role`) VALUES (?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `user` WHERE `id` = ? ";
     private static final String READ_BY_ROLE = "SELECT * FROM `user` WHERE `role`=? ORDER BY `id`";
+    private static final String READ_BY_LOGIN_AND_PASSWORD = "SELECT `id`, `role` FROM `user` WHERE `login` = ? AND `password` = ?";
     private static final String UPDATE = "UPDATE `user` SET `login` = ?,`password` = ?,`role` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `user` WHERE `id` = ?";
 
@@ -37,6 +38,28 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             throw new PersistentException(e);
         }
     }
+
+    @Override
+    public User readByLoginAndPassword(String login, String password) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_BY_LOGIN_AND_PASSWORD)) {
+            statement.setString(1, login);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            User user = null;
+            if(resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setLogin(login);
+                user.setPassword(password);
+                user.setRole(Role.getByIdentity(resultSet.getInt("role")));
+            }
+            return user;
+
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
 
     @Override
     public Integer create(User entity) throws PersistentException {
@@ -62,20 +85,22 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
     @Override
     public User read(Integer id) throws PersistentException {
-        User user = null;
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            user = new User();
-            user.setId(id);
-            user.setLogin(resultSet.getString("login"));
-            user.setPassword(resultSet.getString("password"));
-            user.setRole(Role.getByIdentity(resultSet.getInt("role")));
+            User user = null;
+
+            if(resultSet.next()) {
+                user = new User();
+                user.setId(id);
+                user.setLogin(resultSet.getString("login"));
+                user.setPassword(resultSet.getString("password"));
+                user.setRole(Role.getByIdentity(resultSet.getInt("role")));
+            }
+            return user;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return user;
     }
 
     @Override

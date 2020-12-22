@@ -18,7 +18,12 @@ public class AssignedTrainerDaoImpl extends BaseDaoImpl implements AssignedTrain
     private static final String CREATE =
             "INSERT INTO `assigned_trainer`(`visitor_id`,`trainer_id`,`begin_date`,`end_date`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `assigned_trainer` WHERE `id` = ? ";
+    private static final String READ_ALL = "SELECT * FROM `assigned_trainer` WHERE";
     private static final String READ_VISITORS_BY_TRAINER = "SELECT `visitor_id` FROM `assigned_trainer` WHERE `trainer_id` = ? ";
+    private static final String READ_CURRENT_TRAINER_BY_VISITOR =
+            "SELECT `trainer_id` FROM `assigned_trainer` WHERE `visitor_id` = ? and `end_date` IS NULL";
+    private static final String READ_CURRENT_BY_VISITOR =
+            "SELECT `id`,`trainer_id`,`begin_date` FROM `assigned_trainer` WHERE `visitor_id` = ? and `end_date` IS NULL";
     private static final String UPDATE =
             "UPDATE `assigned_trainer` SET `visitor_id` = ?,`trainer_id` = ?,`begin_date` = ?,`end_date` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `assigned_trainer` WHERE `id` = ?";
@@ -70,6 +75,34 @@ public class AssignedTrainerDaoImpl extends BaseDaoImpl implements AssignedTrain
     }
 
     @Override
+    public List<AssignedTrainer> read() throws PersistentException {
+
+        try (PreparedStatement statement = connection.prepareStatement(READ_ALL)) {
+            ResultSet resultSet = statement.executeQuery();
+            AssignedTrainer assignedTrainer = null;
+            List<AssignedTrainer> list = new ArrayList<>();
+
+            while (resultSet.next()) {
+                assignedTrainer = new AssignedTrainer();
+                assignedTrainer.setId(resultSet.getInt("id"));
+                Visitor visitor = new Visitor();
+                visitor.setId(resultSet.getInt("visitor_id"));
+                assignedTrainer.setVisitor(visitor);
+                Trainer trainer = new Trainer();
+                trainer.setId(resultSet.getInt("trainer_id"));
+                assignedTrainer.setTrainer(trainer);
+                assignedTrainer.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
+                assignedTrainer.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
+                list.add(assignedTrainer);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+
+    }
+
+    @Override
     public void update(AssignedTrainer entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
             statement.setInt(1, entity.getVisitor().getId());
@@ -109,6 +142,50 @@ public class AssignedTrainerDaoImpl extends BaseDaoImpl implements AssignedTrain
             throw new PersistentException(e);
         }
         return listVisitors;
+    }
+
+    @Override
+    public Trainer readCurrentTrainerByVisitor(Visitor visitor) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_CURRENT_TRAINER_BY_VISITOR)) {
+            statement.setInt(1, visitor.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            Trainer trainer = null;
+            if (resultSet.next()) {
+                trainer = new Trainer();
+                trainer.setId(resultSet.getInt("trainer_id"));
+            }
+            return trainer;
+
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public AssignedTrainer readCurrentByVisitor(Visitor visitor) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_CURRENT_BY_VISITOR)) {
+            statement.setInt(1, visitor.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            AssignedTrainer assignedTrainer = null;
+
+            if (resultSet.next()) {
+                assignedTrainer = new AssignedTrainer();
+                assignedTrainer.setId(resultSet.getInt("id"));
+                Visitor visitor1 = new Visitor();
+                visitor1.setId(visitor.getId());
+                assignedTrainer.setVisitor(visitor1);
+                Trainer trainer = new Trainer();
+                trainer.setId(resultSet.getInt("trainer_id"));
+                assignedTrainer.setTrainer(trainer);
+                assignedTrainer.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
+            }
+            return assignedTrainer;
+
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
     }
 
 }

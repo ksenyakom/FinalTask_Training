@@ -6,6 +6,12 @@ import java.util.Objects;
 public class Trainer extends Person{
     private List<Visitor> visitorList;
 
+    public Trainer() {}
+
+    public Trainer(Person person) {
+        super(person);
+    }
+
     public List<Visitor> getVisitorList() {
         return visitorList;
     }

@@ -12,8 +12,8 @@ public final class CommandProvider {
     private final Map<CommandType, Command> repository = new HashMap<>();
 
     CommandProvider() {
-        repository.put(CommandTypeNamesMain.LANGUAGE, new LanguageChoose());
-        repository.put(CommandTypeNamesMain.WRONG_REQUEST, new WrongRequest());
+//        repository.put(CommandTypeNamesMain.LANGUAGE, new LanguageChoose());
+//        repository.put(CommandTypeNamesMain.WRONG_REQUEST, new WrongRequest());
     }
 
     /**

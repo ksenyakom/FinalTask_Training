@@ -1,32 +1,37 @@
 package by.ksu.training.service;
 
+import by.ksu.training.dao.ExerciseDao;
 import by.ksu.training.entity.Exercise;
+import by.ksu.training.exception.PersistentException;
 
 import java.util.List;
 
-public class ExerciseServiceImpl implements ExerciseService {
+public class ExerciseServiceImpl extends ServiceImpl implements ExerciseService {
     @Override
-    public List<Exercise> findAll() throws ServiceException {
-
+    public List<Exercise> findAll() throws PersistentException {
+        ExerciseDao dao = transaction.createDao(ExerciseDao.class);
+        return dao.read();
     }
 
     @Override
-    public Exercise findByIdentity(Integer identity) throws ServiceException {
-        return null;
+    public Exercise findByIdentity(Integer id) throws PersistentException {
+        ExerciseDao dao = transaction.createDao(ExerciseDao.class);
+        return dao.read(id);
     }
 
     @Override
-    public void save(Exercise user) throws ServiceException {
-
+    public void save(Exercise exercise) throws PersistentException {
+        ExerciseDao dao = transaction.createDao(ExerciseDao.class);
+        if (exercise.getId() != null) {
+            dao.update(exercise);
+        }else {
+            exercise.setId(dao.create(exercise));
+        }
     }
 
     @Override
-    public void update(Exercise user) throws ServiceException {
-
-    }
-
-    @Override
-    public void delete(Integer identity) throws ServiceException {
-
+    public void delete(Integer id) throws PersistentException {
+        ExerciseDao dao = transaction.createDao(ExerciseDao.class);
+        dao.delete(id);
     }
 }

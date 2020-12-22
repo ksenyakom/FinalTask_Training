@@ -25,11 +25,12 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
 
     @Override
     public List<Subscription> read() throws PersistentException {
-        Subscription subscription = null;
-        List<Subscription> list = null;
+
         try (PreparedStatement statement = connection.prepareStatement(READ_ALL)) {
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            List<Subscription> list = new ArrayList<>();
+            Subscription subscription = null;
+
             while (resultSet.next()) {
                 subscription = new Subscription();
                 subscription.setId(resultSet.getInt("id"));
@@ -42,10 +43,10 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
 
                 list.add(subscription);
             }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
     }
 
     @Override
@@ -74,24 +75,25 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
 
     @Override
     public Subscription read(Integer id) throws PersistentException {
-        Subscription subscription = null;
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
-            statement.setInt(1,id);
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            subscription = new Subscription();
-            subscription.setId(resultSet.getInt("id"));
-            Visitor visitor = new Visitor();
-            visitor.setId(resultSet.getInt("visitor_id"));
-            subscription.setVisitor(visitor);
-            subscription.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
-            subscription.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
-            subscription.setPrice(resultSet.getBigDecimal("price"));
+            Subscription subscription = null;
 
+            if (resultSet.next()) {
+                subscription = new Subscription();
+                subscription.setId(resultSet.getInt("id"));
+                Visitor visitor = new Visitor();
+                visitor.setId(resultSet.getInt("visitor_id"));
+                subscription.setVisitor(visitor);
+                subscription.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
+                subscription.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
+                subscription.setPrice(resultSet.getBigDecimal("price"));
+            }
+            return subscription;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return subscription;
     }
 
     @Override

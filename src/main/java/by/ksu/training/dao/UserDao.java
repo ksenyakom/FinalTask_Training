@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface UserDao extends Dao<User> {
     List<Integer> readIdListByRole(Role role) throws PersistentException;
+    User readByLoginAndPassword(String login, String password) throws PersistentException;
 }

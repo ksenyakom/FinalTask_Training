@@ -45,7 +45,9 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     @Override
     public Complex read(Integer id) throws PersistentException {
         Complex complex = readComplex(id);
-        complex.setListOfComplexUnit(readListOfUnitsByComplexId(id));
+        if (complex != null) {
+            complex.setListOfComplexUnit(readListOfUnitsByComplexId(id));
+        }
         return complex;
     }
 
@@ -116,33 +118,40 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     }
 
     public Complex readComplex(Integer id) throws PersistentException {
-        Complex complex = null;
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            complex = new Complex();
-            complex.setId(id);
-            complex.setTitle(resultSet.getString("title"));
-            Trainer trainer = new Trainer();
-            trainer.setId(resultSet.getInt("trainer_id"));
-            complex.setTrainerDeveloped(trainer);
-            Visitor visitor = new Visitor();
-            visitor.setId(resultSet.getInt("visitor_id"));
-            complex.setVisitorFor(visitor);
-            complex.setRating(resultSet.getFloat("rating"));
+            Complex complex = null;
+
+            if (resultSet.next()) {
+                complex = new Complex();
+                complex.setId(id);
+                complex.setTitle(resultSet.getString("title"));
+                Trainer trainer = new Trainer();
+                trainer.setId(resultSet.getInt("trainer_id"));
+                complex.setTrainerDeveloped(trainer);
+                int visitorId = resultSet.getInt("visitor_id");
+                Visitor visitor= null;
+                if (!resultSet.wasNull()) {
+                    visitor = new Visitor();
+                    visitor.setId(visitorId);
+                }
+                complex.setVisitorFor(visitor);
+                complex.setRating(resultSet.getFloat("rating"));
+            }
+            return complex;
+
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return complex;
     }
 
     public List<Complex> readComplex() throws PersistentException {
-        Complex complex = null;
-        List<Complex> list = null;
         try (PreparedStatement statement = connection.prepareStatement(READ_ALL)) {
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            List<Complex> list = new ArrayList<>();
+            Complex complex = null;
+
             while (resultSet.next()) {
                 complex = new Complex();
                 complex.setId(resultSet.getInt("id"));
@@ -150,25 +159,30 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 Trainer trainer = new Trainer();
                 trainer.setId(resultSet.getInt("trainer_id"));
                 complex.setTrainerDeveloped(trainer);
-                Visitor visitor = new Visitor();
-                visitor.setId(resultSet.getInt("visitor_id"));
+                int visitorId = resultSet.getInt("visitor_id");
+                Visitor visitor= null;
+                if (!resultSet.wasNull()) {
+                    visitor = new Visitor();
+                    visitor.setId(visitorId);
+                }
                 complex.setVisitorFor(visitor);
                 complex.setRating(resultSet.getFloat("rating"));
                 list.add(complex);
             }
+            return list;
+
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
     }
 
     public List<Complex.ComplexUnit> readListOfUnitsByComplexId(Integer complexId) throws PersistentException {
-        Complex.ComplexUnit unit = null;
-        List<Complex.ComplexUnit> list = null;
         try (PreparedStatement statement = connection.prepareStatement(READ_LIST_OF_EXERCISES_BY_COMPLEX_ID)) {
             statement.setInt(1, complexId);
             ResultSet resultSet = statement.executeQuery();
-            list = new ArrayList<>();
+            List<Complex.ComplexUnit> list = new ArrayList<>();
+            Complex.ComplexUnit unit = null;
+
             while (resultSet.next()) {
                 unit = new Complex.ComplexUnit();
                 Exercise exercise = new Exercise();
@@ -178,13 +192,11 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 unit.setRepeat(resultSet.getInt("repeat"));
                 list.add(unit);
             }
-            if (list.isEmpty()) {
-                throw new PersistentException();
-            }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return list;
+
     }
 
     public void updateComplex(Complex entity) throws PersistentException {
