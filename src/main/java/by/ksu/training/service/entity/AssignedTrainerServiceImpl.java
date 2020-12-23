@@ -1,8 +1,9 @@
-package by.ksu.training.service;
+package by.ksu.training.service.entity;
 
 import by.ksu.training.dao.AssignedTrainerDao;
 import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.ServiceImpl;
 
 import java.time.LocalDate;
 import java.util.List;

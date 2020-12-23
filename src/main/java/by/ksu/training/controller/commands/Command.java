@@ -2,6 +2,7 @@ package by.ksu.training.controller.commands;
 
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
+import by.ksu.training.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,8 +16,10 @@ import java.util.Set;
  */
 public abstract class Command {
     private Set<Role> allowedRoles = new HashSet<>();
-    private User authorizedUser;
+    private User authorizedUser; // TODO  разные потоки будут писать сюда разные значения???
     private String name;
+
+    protected ServiceFactory factory;
 
     public Set<Role> getAllowedRoles() {
         return allowedRoles;
@@ -41,8 +44,12 @@ public abstract class Command {
     public void setName(String name) {
         this.name = name;
     }
+    public void setFactory(ServiceFactory factory) {
+        this.factory = factory;
+    }
 
-    abstract Command.Forward execute(HttpServletRequest request, HttpServletResponse response);
+
+    abstract Command.Forward exec(HttpServletRequest request, HttpServletResponse response);
 
 
     public static class Forward {

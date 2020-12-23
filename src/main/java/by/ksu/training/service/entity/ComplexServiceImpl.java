@@ -1,8 +1,9 @@
-package by.ksu.training.service;
+package by.ksu.training.service.entity;
 
 import by.ksu.training.dao.ComplexDao;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.ServiceImpl;
 
 import java.util.List;
 

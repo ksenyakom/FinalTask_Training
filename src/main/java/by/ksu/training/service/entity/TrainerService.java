@@ -1,11 +1,12 @@
-package by.ksu.training.service;
+package by.ksu.training.service.entity;
 
 import by.ksu.training.entity.Trainer;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.EntityService;
 
 import java.util.List;
 
-public interface TrainerService {
+public interface TrainerService extends EntityService {
     List<Trainer> findAll() throws PersistentException;
 
     Trainer findByIdentity(Integer id) throws PersistentException;

@@ -1,12 +1,13 @@
-package by.ksu.training.service;
+package by.ksu.training.service.entity;
 
 import by.ksu.training.entity.Exercise;
 import by.ksu.training.entity.Trainer;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.EntityService;
 
 import java.util.List;
 
-public interface ExerciseService {
+public interface ExerciseService extends EntityService {
     List<Exercise> findAll() throws PersistentException;
 
     Exercise findByIdentity(Integer id) throws  PersistentException;

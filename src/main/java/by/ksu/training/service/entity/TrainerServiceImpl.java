@@ -1,12 +1,12 @@
-package by.ksu.training.service;
+package by.ksu.training.service.entity;
 
 import by.ksu.training.dao.AssignedTrainerDao;
 import by.ksu.training.dao.PersonDao;
 import by.ksu.training.dao.UserDao;
-import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Trainer;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.ServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;

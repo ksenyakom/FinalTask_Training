@@ -1,9 +1,10 @@
-package by.ksu.training.service;
+package by.ksu.training.service.entity;
 
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.EntityService;
 
-public interface AssignedComplexService {
+public interface AssignedComplexService extends EntityService {
 
     AssignedComplex findByIdentity(Integer id) throws PersistentException;
 
