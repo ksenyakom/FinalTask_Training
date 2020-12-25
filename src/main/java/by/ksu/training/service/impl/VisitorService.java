@@ -1,4 +1,4 @@
-package by.ksu.training.service.entity;
+package by.ksu.training.service.impl;
 
 import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface VisitorService extends EntityService {
     List<Visitor> findAll() throws PersistentException;
 
-    Visitor findByIdentity(Integer id) throws PersistentException;
+    Visitor findById(Integer id) throws PersistentException;
 
     void save(Visitor visitor) throws PersistentException;
 

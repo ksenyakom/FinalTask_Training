@@ -1,15 +1,15 @@
-package by.ksu.training.service.entity;
+package by.ksu.training.service.impl;
 
+import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
-import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.EntityService;
 
 import java.util.List;
 
 public interface UserService extends EntityService {
-    List<Integer> findIdByRole(Role role) throws PersistentException;
+    List<Person> findPersonIdByRole(Role role) throws PersistentException;
 
     User findByIdentity(Integer id) throws PersistentException;
 

@@ -15,7 +15,7 @@ public class FilePath {
     public static String dataBasePropertiesPath;
     private static String dataBasePropertiesFile = "database.properties";
     private static String dataBasePropertiesFolder = "properties";
- //   public static String xsdFile;
+    //   public static String xsdFile;
 
     static {
         try {
@@ -36,11 +36,11 @@ public class FilePath {
 
 
     public static String initMainPath(String folder) throws ServiceException {
-        // ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URI uri = null;
         try {
-            //   uri = loader.getResource(folder).toURI();
-            uri = ClassLoader.getSystemResource(folder).toURI();
+            uri = loader.getResource(folder).toURI();
+            //  uri = ClassLoader.getSystemResource(folder).toURI();
         } catch (URISyntaxException e) {
             logger.error(e.getMessage(), e);
             throw new ServiceException(e);

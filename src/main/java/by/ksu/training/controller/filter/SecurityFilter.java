@@ -1,4 +1,4 @@
-package by.ksu.training.controller;
+package by.ksu.training.controller.filter;
 
 import by.ksu.training.controller.commands.Command;
 import by.ksu.training.controller.commands.MainCommand;
@@ -24,37 +24,46 @@ public class SecurityFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+            // получаем request response command
             HttpServletRequest httpRequest = (HttpServletRequest)request;
             HttpServletResponse httpResponse = (HttpServletResponse)response;
             Command command = (Command)httpRequest.getAttribute("command");
+            // получаем allowRoles
             Set<Role> allowRoles = command.getAllowedRoles();
-            String userName = "unauthorized user";
+
+            //получаем session, берем user оттуда ???
             HttpSession session = httpRequest.getSession(false);
             User user = null;
             if(session != null) {
                 user = (User)session.getAttribute("authorizedUser");
-                command.setAuthorizedUser(user);
+                // Это что за атрибут???
                 String errorMessage = (String)session.getAttribute("SecurityFilterMessage");
                 if(errorMessage != null) {
                     httpRequest.setAttribute("message", errorMessage);
                     session.removeAttribute("SecurityFilterMessage");
                 }
             }
+
+            //проверяем может ли этот User выполнить выбранную команду
+            String userName = "unauthorized user";
             boolean canExecute = allowRoles == null;
             if(user != null) {
                 userName = "\"" + user.getLogin() + "\" user";
                 canExecute = canExecute || allowRoles.contains(user.getRole());
             }
+            // если может то следующий фильтр
             if(canExecute) {
                 chain.doFilter(request, response);
             } else {
-                logger.info(String.format("Trying of %s access to forbidden resource \"%s\"", userName, command.getName()));
+                // если нет, то redirect на login.html и сообщение на SecurityFilterMessage
+                logger.info("Trying of %s access to forbidden resource {}", userName, command.getName());
                 if(session != null && command.getClass() != MainCommand.class) {
                     session.setAttribute("SecurityFilterMessage", "Доступ запрещён");
                 }
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");
             }
         } else {
+            //ошибка
             logger.error("It is impossible to use HTTP filter");
             request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
         }

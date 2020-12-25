@@ -23,15 +23,15 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     private static final String UPDATE = "UPDATE `user` SET `login` = ?,`password` = ?,`role` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `user` WHERE `id` = ?";
 
-
+//TODO return List<Person>
     @Override
-    public List<Integer> readIdListByRole(Role role) throws PersistentException {
+    public List<Person> readPersonByRole(Role role) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ROLE)) {
             statement.setInt(1, role.getIdentity());
             ResultSet resultSet = statement.executeQuery();
-            List<Integer> list = new ArrayList<>();
+            List<Person> list = new ArrayList<>();
             while (resultSet.next()) {
-                list.add(resultSet.getInt("id"));
+                list.add(new Person(resultSet.getInt("id")));
             }
             return list;
         } catch (SQLException e) {

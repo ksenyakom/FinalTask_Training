@@ -3,7 +3,7 @@ package by.ksu.training.service;
 import by.ksu.training.dao.Transaction;
 import by.ksu.training.dao.TransactionFactory;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.entity.*;
+import by.ksu.training.service.impl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
 
   //  private final Map<Class<? extends EntityService>, Service> repository = new HashMap<>();
 
-    public Service getService(Class<? extends EntityService> clazz) throws PersistentException {
+    public <T extends EntityService> T getService(Class<T> clazz) throws PersistentException {
         ServiceImpl service = null;
             if (clazz == AssignedComplexService.class) { service = new AssignedComplexServiceImpl();}
             else if (clazz == AssignedTrainerService.class) {service = new AssignedTrainerServiceImpl(); }
@@ -33,7 +33,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
                 service.setTransaction(transaction);
                 //TODO где transaction.commit происходит
                 //TODO и возвращать connectoin в pool
-                return service;
+                return (T)service;
             } else {
                 logger.error("No such service: {}", clazz);
                 throw new PersistentException("No such service");

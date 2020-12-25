@@ -2,7 +2,7 @@ package by.ksu.training.dao.database;
 
 import by.ksu.training.dao.Transaction;
 import by.ksu.training.dao.UserDao;
-import by.ksu.training.dao.database.TransactionImpl;
+import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -62,14 +62,14 @@ public class UserDaoImplTest {
     }
 
     @Test(priority = 4, dataProvider = "user")
-    public void testReadIdListByRole(User user) throws PersistentException {
+    public void testReadPersonByRole(User user) throws PersistentException {
         int id = userDao.create(user);
         user.setId(id);
-        List<Integer> list = userDao.readIdListByRole(Role.TRAINER);
+        List<Person> list = userDao.readPersonByRole(Role.TRAINER);
         userDao.delete(id);
         transaction.commit();
-
-        assertTrue(list.contains(user.getId()));
+        Person expectedPerson = new Person(user.getId());
+        assertTrue(list.contains(expectedPerson));
     }
 
     @Test(priority = 1, dataProvider = "user")

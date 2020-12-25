@@ -1,7 +1,6 @@
-package by.ksu.training.service.entity;
+package by.ksu.training.service.impl;
 
 import by.ksu.training.entity.Exercise;
-import by.ksu.training.entity.Trainer;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.EntityService;
 

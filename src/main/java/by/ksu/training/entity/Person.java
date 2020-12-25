@@ -25,6 +25,9 @@ public class Person extends Entity {
         setDateOfBirth(person.getDateOfBirth());
         setPhone(person.getPhone());
     }
+    public Person(Integer id) {
+        setId(id);
+    }
 
     public String getName() {
         return name;

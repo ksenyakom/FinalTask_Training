@@ -47,7 +47,6 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
 
     @Override
     public Person read(Integer id) throws PersistentException {
-
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -56,6 +55,29 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
             if (resultSet.next()) {
                 person = new Person();
                 person.setId(id);
+                person.setSurname(resultSet.getString("surname"));
+                person.setName(resultSet.getString("name"));
+                person.setPatronymic(resultSet.getString("patronymic"));
+                person.setDateOfBirth(parseDate.sqlToLocal(resultSet.getDate("date_of_birth")));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhone(resultSet.getString("phone"));
+                person.setAchievements(resultSet.getString("achievements"));
+            }
+            return person;
+
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public Person read(Person person) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
+            statement.setInt(1, person.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
                 person.setSurname(resultSet.getString("surname"));
                 person.setName(resultSet.getString("name"));
                 person.setPatronymic(resultSet.getString("patronymic"));

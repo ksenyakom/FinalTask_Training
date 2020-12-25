@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface PersonDao extends Dao<Person> {
     List<Person> read() throws PersistentException;
+    Person read(Person person) throws PersistentException;
 }

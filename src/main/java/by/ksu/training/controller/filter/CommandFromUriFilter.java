@@ -1,4 +1,4 @@
-package by.ksu.training.controller;
+package by.ksu.training.controller.filter;
 
 import by.ksu.training.controller.commands.Command;
 import by.ksu.training.controller.commands.CommandProvider;
@@ -16,7 +16,6 @@ public class CommandFromUriFilter implements Filter {
     private static Logger logger = LogManager.getLogger(CommandFromUriFilter.class);
 
     private static Map<String, Class<? extends Command>> commands = new ConcurrentHashMap<>();
-    // TODO зачем тут потокобезопасная коллекция
     private static CommandProvider commandProvider;
 
     static {
@@ -32,9 +31,10 @@ public class CommandFromUriFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(request instanceof HttpServletRequest) {
             HttpServletRequest httpRequest = (HttpServletRequest)request;
+            // определение uri commandName из contextPath для обращения за коммандой
             String contextPath = httpRequest.getContextPath();
             String uri = httpRequest.getRequestURI();
-            logger.debug(String.format("Starting of processing of request for URI \"%s\"", uri));
+            logger.debug("Starting of processing of request for URI {}", uri);
             int beginCommand = contextPath.length();
             int endCommand = uri.lastIndexOf('.');
             String commandName;
@@ -45,12 +45,11 @@ public class CommandFromUriFilter implements Filter {
             }
             Class<? extends Command> commandClass = commands.get(commandName);
             try {
-               // Command command = commandClass.newInstance();
                 Command command = commandProvider.getCommand(commandClass);
                 command.setName(commandName);
                 httpRequest.setAttribute("command", command);
                 chain.doFilter(request, response);
-            } catch (NullPointerException e) {
+            } catch (NullPointerException e) {// TODO че это за null
                 logger.error("It is impossible to create action handler object", e);
                 httpRequest.setAttribute("error", String.format("Запрошенный адрес %s не может быть обработан сервером", uri));
                 httpRequest.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);

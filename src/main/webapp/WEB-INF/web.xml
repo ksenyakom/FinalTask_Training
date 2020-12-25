@@ -16,7 +16,7 @@
 
     <filter>
         <filter-name>EncodingFilter</filter-name>
-        <filter-class>by.ksu.training.controller.EncodingFilter</filter-class>
+        <filter-class>by.ksu.training.controller.filter.EncodingFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
@@ -24,7 +24,7 @@
     </filter-mapping>
     <filter>
         <filter-name>ActionFromUriFilter</filter-name>
-        <filter-class>by.ksu.training.controller.CommandFromUriFilter</filter-class>
+        <filter-class>by.ksu.training.controller.filter.CommandFromUriFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>ActionFromUriFilter</filter-name>
@@ -32,7 +32,7 @@
     </filter-mapping>
     <filter>
         <filter-name>SecurityFilter</filter-name>
-        <filter-class>by.ksu.training.controller.SecurityFilter</filter-class>
+        <filter-class>by.ksu.training.controller.filter.SecurityFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>SecurityFilter</filter-name>

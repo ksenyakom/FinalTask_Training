@@ -8,6 +8,6 @@ import by.ksu.training.exception.PersistentException;
  * @version 1.0, 23.12.2020
  */
 public interface ServiceFactory {
-    Service getService(Class<? extends EntityService> clazz) throws PersistentException;
+    <T extends EntityService> T getService(Class<T> clazz) throws PersistentException;
     void close();
 }

@@ -16,7 +16,6 @@ import java.util.Set;
  */
 public abstract class Command {
     private Set<Role> allowedRoles = new HashSet<>();
-    private User authorizedUser; // TODO  разные потоки будут писать сюда разные значения???
     private String name;
 
     protected ServiceFactory factory;
@@ -29,13 +28,6 @@ public abstract class Command {
         this.allowedRoles = allowedRoles;
     }
 
-    public User getAuthorizedUser() {
-        return authorizedUser;
-    }
-
-    public void setAuthorizedUser(User authorizedUser) {
-        this.authorizedUser = authorizedUser;
-    }
 
     public String getName() {
         return name;

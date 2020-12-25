@@ -6,6 +6,7 @@ import by.ksu.training.dao.TransactionFactory;
 import by.ksu.training.dao.UserDao;
 import by.ksu.training.dao.database.TransactionFactoryImpl;
 import by.ksu.training.dao.pool.ConnectionPool;
+import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.FilePath;
@@ -47,7 +48,7 @@ public class Runner {
 
             //получим всех тренеров
             UserDao userDao = transaction.createDao(UserDao.class);
-            List<Integer> trainersIdList = userDao.readIdListByRole(Role.TRAINER);
+            List<Person> trainersIdList = userDao.readPersonByRole(Role.TRAINER);
             PersonDao dao = transaction.createDao(PersonDao.class);
 
 //            List<Trainer> list = dao.read(trainersIdList);

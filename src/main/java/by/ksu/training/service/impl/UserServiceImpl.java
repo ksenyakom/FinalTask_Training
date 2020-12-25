@@ -1,6 +1,7 @@
-package by.ksu.training.service.entity;
+package by.ksu.training.service.impl;
 
 import by.ksu.training.dao.UserDao;
+import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -11,9 +12,9 @@ import java.util.List;
 
 public class UserServiceImpl extends ServiceImpl implements UserService {
     @Override
-    public List<Integer> findIdByRole(Role role) throws PersistentException {
+    public List<Person> findPersonIdByRole(Role role) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
-        return userDao.readIdListByRole(role);
+        return userDao.readPersonByRole(role);
     }
 
     @Override

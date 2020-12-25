@@ -1,4 +1,4 @@
-package by.ksu.training.controller;
+package by.ksu.training.controller.filter;
 import javax.servlet.*;
 import java.io.IOException;
 

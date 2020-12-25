@@ -1,4 +1,4 @@
-package by.ksu.training.service.entity;
+package by.ksu.training.service.impl;
 
 import by.ksu.training.entity.Complex;
 import by.ksu.training.exception.PersistentException;
