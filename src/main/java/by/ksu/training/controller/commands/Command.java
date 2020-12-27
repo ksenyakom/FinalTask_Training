@@ -15,7 +15,8 @@ import java.util.Set;
  * command interface for pattern Command
  */
 public abstract class Command {
-    private Set<Role> allowedRoles = new HashSet<>();
+    private Set<Role> allowedRoles;
+  //  private Set<Role> allowedRoles = new HashSet<>();
     private String name;
 
     protected ServiceFactory factory;

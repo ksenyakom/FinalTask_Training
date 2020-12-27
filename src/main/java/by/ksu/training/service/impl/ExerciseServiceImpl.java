@@ -3,6 +3,7 @@ package by.ksu.training.service.impl;
 import by.ksu.training.dao.ExerciseDao;
 import by.ksu.training.entity.Exercise;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.ExerciseService;
 import by.ksu.training.service.ServiceImpl;
 
 import java.util.List;

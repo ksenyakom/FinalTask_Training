@@ -192,7 +192,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 unit.setRepeat(resultSet.getInt("repeat"));
                 list.add(unit);
             }
-            return list;
+            return list; //TODO возвращает пустой лист а не null??
         } catch (SQLException e) {
             throw new PersistentException(e);
         }

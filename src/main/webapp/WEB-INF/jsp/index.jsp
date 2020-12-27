@@ -6,28 +6,58 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>Йога Index</title>
   </head>
   <body>
   <h3>Йога для начинающих</h3>
 
 
-  ${user.id}
-  ${user.login}
-  ${user.password}
-  ${requestScope.user.id}
-<br>
-  list
-  ${tList[1].id}
+  <a href="/WEB-INF/jsp/login.html">login</a>
   <br>
+  <a href="/WEB-INF/jsp/register.html">Registration</a>
   <br>
-  ${1+2*6}
-  ${cookie.JSESSIONID}
-  ${1+2*6}
+  <a href="/WEB-INF/jsp/executedComplex.html">Executed complexes</a>
   <br>
+
+    <table border="1">
+      <caption>
+        <h4>Список тренировок:</h4>
+      </caption>
+      <tr>
+        <th scope="col">Number</th>
+        <th scope="col">id</th>
+        <th scope="col">Title</th>
+        <th scope="col">trainerDeveloped</th>
+        <th scope="col">rating</th>
+      </tr>
+      <c:forEach items="${lst}" var="complex" varStatus="status">
+        <tr>
+          <td><c:out value="${ status.count }"/></td>
+          <td><c:out value="${ complex.id }"/></td>
+          <td><c:out value="${ complex.title }"/></td>
+          <td><c:out value="${ complex.trainerDeveloped.id }"/></td>
+          <td><c:out value="${ complex.rating }"/></td>
+        </tr>
+      </c:forEach>
+    </table>
   <br>
+<%--  ${user.id}--%>
+<%--  ${user.login}--%>
+<%--  ${user.password}--%>
+<%--  ${requestScope.user.id}--%>
+<%--<br>--%>
+<%--  list--%>
+<%--  ${tList[1].id}--%>
+<%--  <br>--%>
+<%--  <br>--%>
+<%--  ${1+2*6}--%>
+<%--  ${cookie.JSESSIONID}--%>
+<%--  ${1+2*6}--%>
+<%--  <br>--%>
+<%--  <br>--%>
 
   Чем же отличается йога от физкультуры? Что нужно знать начинающим заниматься йогой в домашних условиях?
 

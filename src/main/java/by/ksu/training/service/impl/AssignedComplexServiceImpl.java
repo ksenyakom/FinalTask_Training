@@ -3,6 +3,7 @@ package by.ksu.training.service.impl;
 import by.ksu.training.dao.AssignedComplexDao;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.AssignedComplexService;
 import by.ksu.training.service.ServiceImpl;
 
 public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedComplexService {

@@ -12,6 +12,7 @@ public final class CommandProvider {
 
     public CommandProvider() {
         repository.put(MainCommand.class, new MainCommand());
+        repository.put(StartCommand.class, new StartCommand());
     }
 
     /**

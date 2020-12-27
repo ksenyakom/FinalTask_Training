@@ -9,6 +9,7 @@ import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ServiceImpl;
+import by.ksu.training.service.VisitorService;
 
 import java.util.ArrayList;
 import java.util.List;

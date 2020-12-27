@@ -3,6 +3,7 @@ package by.ksu.training.controller.filter;
 import by.ksu.training.controller.commands.Command;
 import by.ksu.training.controller.commands.CommandProvider;
 import by.ksu.training.controller.commands.MainCommand;
+import by.ksu.training.controller.commands.StartCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,9 @@ public class CommandFromUriFilter implements Filter {
     private static CommandProvider commandProvider;
 
     static {
-        commands.put("/", MainCommand.class);
+        commands.put("/", StartCommand.class);
+        commands.put("/index", StartCommand.class);
+        commands.put("/main", MainCommand.class);
     }
 
     @Override
@@ -29,6 +32,7 @@ public class CommandFromUriFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        logger.debug("i am in uri filter");
         if(request instanceof HttpServletRequest) {
             HttpServletRequest httpRequest = (HttpServletRequest)request;
             // определение uri commandName из contextPath для обращения за коммандой

@@ -3,6 +3,7 @@ package by.ksu.training.service.impl;
 import by.ksu.training.dao.AssignedTrainerDao;
 import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.exception.PersistentException;
+import by.ksu.training.service.AssignedTrainerService;
 import by.ksu.training.service.ServiceImpl;
 
 import java.time.LocalDate;

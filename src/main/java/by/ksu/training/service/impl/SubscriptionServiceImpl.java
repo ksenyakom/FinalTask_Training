@@ -4,6 +4,7 @@ import by.ksu.training.dao.SubscriptionDao;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ServiceImpl;
+import by.ksu.training.service.SubscriptionService;
 
 import java.util.List;
 

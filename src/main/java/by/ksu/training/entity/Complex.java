@@ -100,7 +100,7 @@ public class Complex extends Entity {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("");
-        if (listOfUnits != null) {
+        if (listOfUnits != null && listOfUnits.size() != 0) {
             listOfUnits.forEach(unit -> sb.append(unit.exercise.getId()).append(","));
             sb.deleteCharAt(sb.length() - 1);
         }

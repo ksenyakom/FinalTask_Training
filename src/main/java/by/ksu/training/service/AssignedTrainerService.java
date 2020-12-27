@@ -1,4 +1,4 @@
-package by.ksu.training.service.impl;
+package by.ksu.training.service;
 
 import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.exception.PersistentException;

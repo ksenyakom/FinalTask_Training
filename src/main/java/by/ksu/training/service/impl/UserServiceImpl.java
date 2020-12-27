@@ -6,6 +6,7 @@ import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ServiceImpl;
+import by.ksu.training.service.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
