@@ -1,12 +1,12 @@
 USE `test_yoga_db`;
 
 INSERT INTO`user`
-(`id`,`login`,`password`,`role`)
+(`id`,`login`,`password`,`email`,`role`)
 VALUES
-( 2, "visitor1", "$2a$10$RA5aLuulm3YgXpEPpQKoU.NjsKybP5QKxY7ipqddMVeqPUDeOpr0u", 2),  /* bcrypt хэш пароля "visitor1" */
-( 3, "visitor2", "$2a$10$kfQwDHqryMl1m6ueRqbLau0BOZifm7W5Di7LXgkCecGL3RjAg06HK", 2),  /* bcrypt хэш пароля "visitor2" */
-( 4, "trainer1", "$2a$10$mb9tYJzMQzzSiYOf9Out6.LDruh2qnNIViNASXFwrilJ2nioHKpgK", 1),  /* bcrypt хэш пароля "trainer1" */
-( 5, "trainer2", "$2a$10$OCLUi8aOjhON2wR/5D.uhueTiQcaMhEfuklwPzsFRvehJJZQvG8KG", 1);  /* bcrypt хэш пароля "trainer2" */
+( 2, "visitor1", "$2a$10$RA5aLuulm3YgXpEPpQKoU.NjsKybP5QKxY7ipqddMVeqPUDeOpr0u","lexPopovich@mail.ru", 2),  /* bcrypt хэш пароля "visitor1" */
+( 3, "visitor2", "$2a$10$kfQwDHqryMl1m6ueRqbLau0BOZifm7W5Di7LXgkCecGL3RjAg06HK","dobrynya@mail.ru", 2),  /* bcrypt хэш пароля "visitor2" */
+( 4, "trainer1", "$2a$10$mb9tYJzMQzzSiYOf9Out6.LDruh2qnNIViNASXFwrilJ2nioHKpgK","ivan@mail.ru", 1),  /* bcrypt хэш пароля "trainer1" */
+( 5, "trainer2", "$2a$10$OCLUi8aOjhON2wR/5D.uhueTiQcaMhEfuklwPzsFRvehJJZQvG8KG","petr@gmai.com", 1);  /* bcrypt хэш пароля "trainer2" */
 
 INSERT INTO`subscription`
 (`id`,`visitor_id`,`begin_date`,`end_date`,`price`)
@@ -15,12 +15,12 @@ VALUES
 (2, 3, "2020-10-12", "2021-03-11", 100);
 
 INSERT INTO `person`
-(`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`email`,`phone`,`achievements`)
+(`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`phone`,`achievements`)
 VALUES
-(2, "Попович", "Алексей", "Леонтьевич", "1600-12-16", "деревня Селище д.1, Ростовского района Ярославской области, Русь", "lexPopovich@mail.ru", "+75555555555", "true"),
-(3, "Бесфамильный", "Добрыня", "Никитич", "1650-01-01", "г.Рязань д.1, Рязанского района, Русь", "dobrynya@mail.ru", "+72222222222", "true"),
-(4,"Иванов", "Иван", "Иванович", "2006-09-11", "ул. Покровского, 13-3", "ivan@mail.ru", "375291234567", "Мастер спорта"),
-(5,"Петров", "Пётр", "Петрович", "2008-12-15", "пр-т Будёного, 3А-43", "petr@gmai.com", "375292345678", "Победитель чемпионата");
+(2, "Попович", "Алексей", "Леонтьевич", "1600-12-16", "деревня Селище д.1, Ростовского района Ярославской области, Русь",  "+75555555555", "true"),
+(3, "Бесфамильный", "Добрыня", "Никитич", "1650-01-01", "г.Рязань д.1, Рязанского района, Русь",  "+72222222222", "true"),
+(4,"Иванов", "Иван", "Иванович", "2006-09-11", "ул. Покровского, 13-3",  "375291234567", "Мастер спорта"),
+(5,"Петров", "Пётр", "Петрович", "2008-12-15", "пр-т Будёного, 3А-43",  "375292345678", "Победитель чемпионата");
 
 INSERT INTO `exercise_type`
 (`id`, `type`)

@@ -5,6 +5,8 @@ CREATE TABLE `user`
     `id`       INTEGER      NOT NULL AUTO_INCREMENT,
     `login`    VARCHAR(255) NOT NULL UNIQUE,
     `password` CHAR(64)     NOT NULL,
+    `email`    VARCHAR(255) NOT NULL,
+
     /*
      * 0 - администратор (Role.ADMINISTRATOR)
      * 1 - тренер (Role.TRAINER)
@@ -30,13 +32,12 @@ CREATE TABLE `subscription`
 
 CREATE TABLE `person`
 (
-    `id`            INTEGER      ,
+    `id`            INTEGER,
     `surname`       VARCHAR(255) NULL,
     `name`          VARCHAR(255) NOT NULL,
     `patronymic`    VARCHAR(255) NULL,
     `date_of_birth` DATE         NULL,
     `address`       VARCHAR(255) NULL,
-    `email`         VARCHAR(255) NOT NULL,
     `phone`         VARCHAR(20)  NULL, /*погуглить*/
     `achievements`  VARCHAR(500) NULL, /*для visitor true, false; для trainer - достижения String*/
 

@@ -5,6 +5,7 @@ import by.ksu.training.controller.commands.CommandManager;
 import by.ksu.training.controller.commands.CommandManagerFactory;
 import by.ksu.training.dao.database.TransactionFactoryImpl;
 import by.ksu.training.dao.pool.ConnectionPool;
+import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.FilePath;
 import by.ksu.training.service.GetDBProperties;
@@ -35,6 +36,8 @@ public class DispatcherServlet extends HttpServlet {
             logger.error("It is impossible to initialize application", e);
             destroy();
         }
+
+
     }
 
     @Override
@@ -48,36 +51,50 @@ public class DispatcherServlet extends HttpServlet {
                 CommandManager commandManager = CommandManagerFactory.getManager(serviceFactory);
                 Command.Forward forward = commandManager.execute(command, req, resp);
                 commandManager.close();
-                req.getRequestDispatcher(forward.getForward()).forward(req, resp);
+                if (forward != null) {
+                    String uri = "/WEB-INF/jsp/" + forward.getForward();
+                    req.getRequestDispatcher(uri).forward(req, resp);
+                } else {
+                    String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
+                    req.getRequestDispatcher(uri).forward(req, resp);
+                }
             } else {
                 req.getRequestDispatcher("/WEB-INF/jsp/index.html").forward(req, resp);
+                //TODO
             }
-
-//            resp.setContentType("text/html");
-//            resp.setCharacterEncoding("UTF-8");
-//
-//            UserService userService = serviceFactory.getService(UserService.class);
-//            TrainerService trainerService = serviceFactory.getService(TrainerService.class);
-//
-//            User user = userService.findByIdentity(1);
-//            List<Trainer> trainerList = trainerService.findAll();
-//            req.setAttribute("tList", trainerList);
-//
-//            req.setAttribute("user", user);
-//            ServletContext servletContext = req.getServletContext();
-//            Enumeration<String> sc = servletContext.getAttributeNames();
-//            System.out.println("parameters context:");
-//            while (sc.hasMoreElements()) {
-//                String par = sc.nextElement();
-//                System.out.println(par + " = " + servletContext.getAttribute(par));
-//            }
-//
-//            req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, resp);
-
         } catch (PersistentException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            Command command = (Command) req.getAttribute("command");
+            HttpSession session = req.getSession();
+            User user = (User) session.getAttribute("authorisedUser");
+            ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
 
+            if (command != null) {
+                if (user == null) {
+                    CommandManager commandManager = CommandManagerFactory.getManager(serviceFactory);
+                    Command.Forward forward = commandManager.execute(command, req, resp);
+                    commandManager.close();
+                    if (forward != null) {
+                        req.getRequestDispatcher(forward.getForward()).forward(req, resp);
+                    } else {
+                        String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
+                        req.getRequestDispatcher(uri).forward(req, resp);
+                    }
+                } else {
+                    String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
+                    req.getRequestDispatcher(uri).forward(req, resp);
+                }
+            } else {
+                req.getRequestDispatcher("/WEB-INF/jsp/index.html").forward(req, resp);
+            }
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
     }
 }

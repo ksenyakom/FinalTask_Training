@@ -5,6 +5,7 @@ import java.util.Objects;
 public class User extends Entity{
     private String login;
     private String password;
+    private String email;
     private Role role;
 
     public String getLogin() {
@@ -31,6 +32,14 @@ public class User extends Entity{
         this.role = role;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,18 +48,22 @@ public class User extends Entity{
         User user = (User) o;
         return Objects.equals(login, user.login) &&
                 Objects.equals(password, user.password) &&
+                Objects.equals(email, user.email) &&
                 role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), login, password, role);
+        return Objects.hash(super.hashCode(), login, password, email, role);
     }
 
     @Override
     public String toString() {
-        return  "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role;
+        return "User{" + super.toString() +
+                "login=" + login +
+                ", password=" + password +
+                ", email=" + email +
+                ", role=" + role +
+                "} " ;
     }
 }

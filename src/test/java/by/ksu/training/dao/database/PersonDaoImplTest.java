@@ -52,6 +52,7 @@ public class PersonDaoImplTest {
             User user = new User();
             user.setLogin("UniqueGuest"+i);
             user.setPassword("12345");
+            user.setEmail("mail@mail.ru");
             user.setRole(Role.getByIdentity(1+i%2));
             listId.add(userDao.create(user));
         }
@@ -77,14 +78,12 @@ public class PersonDaoImplTest {
         person.setPatronymic("Петрович");
         person.setDateOfBirth(LocalDate.of(1990, 6, 21));
         person.setAddress("Минск, пр.Независимости 1-1");
-        person.setEmail("pupkin@mail.ru");
         person.setPhone("375298563214");
         person.setAchievements("show achievements");
 
         Person personEmpty = new Person();
         personEmpty.setId(listId.get(1));
         personEmpty.setName("Саша");
-        personEmpty.setEmail("sanya@mail.ru");
         return new Object[]{
                 person,
                 personEmpty
@@ -106,7 +105,6 @@ public class PersonDaoImplTest {
         Person person = new Person();
         person.setId(listId.get(2));
         person.setName("Саша");
-        person.setEmail("sanya@mail.ru");
 
         personDao.create(person);
         personDao.create(person);
@@ -131,7 +129,6 @@ public class PersonDaoImplTest {
         person.setPatronymic("Петровна");
         person.setDateOfBirth(LocalDate.of(1985, 6, 21));
         person.setAddress("Минск, пл. Свободы 1-100");
-        person.setEmail("pupkina@mail.ru");
         person.setPhone("375291112233");
         person.setAchievements("do not show achievements");
 
@@ -148,7 +145,6 @@ public class PersonDaoImplTest {
         Person person = new Person();
         person.setId(listId.get(1) + listId.get(2));
         person.setName("Саша");
-        person.setEmail("sanya@mail.ru");
 
         personDao.update(person);
     }

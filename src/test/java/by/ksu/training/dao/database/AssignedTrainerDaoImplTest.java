@@ -51,17 +51,20 @@ public class AssignedTrainerDaoImplTest {
         User user = new User();
         user.setLogin("TrainerPetya");
         user.setPassword("12345");
+        user.setEmail("mail@mail.ru");
         user.setRole(Role.VISITOR);
         visitorId = userDao.create(user);
         user = new User();
         user.setLogin("VeryGoodVisitor");
         user.setPassword("112233");
+        user.setEmail("mail@mail.ru");
         user.setRole(Role.TRAINER);
         trainerId1 = userDao.create(user);
 
         user = new User();
         user.setLogin("TrainerVasya");
         user.setPassword("445566");
+        user.setEmail("mail@mail.ru");
         user.setRole(Role.TRAINER);
         trainerId2 = userDao.create(user);
 

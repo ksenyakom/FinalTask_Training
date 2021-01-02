@@ -10,7 +10,7 @@ public class Person extends Entity {
     private LocalDate dateOfBirth;
     private String address;
     private String phone;
-    private String email;
+
     private String achievements;
 
     public Person() {}
@@ -21,7 +21,6 @@ public class Person extends Entity {
         setPatronymic(person.getPatronymic());
         setSurname(person.getSurname());
         setAddress(person.getAddress());
-        setEmail(person.getEmail());
         setDateOfBirth(person.getDateOfBirth());
         setPhone(person.getPhone());
     }
@@ -69,14 +68,6 @@ public class Person extends Entity {
         this.address = address;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -105,13 +96,12 @@ public class Person extends Entity {
                 Objects.equals(dateOfBirth, person.dateOfBirth) &&
                 Objects.equals(address, person.address) &&
                 Objects.equals(phone, person.phone) &&
-                Objects.equals(email, person.email) &&
                 Objects.equals(achievements, person.achievements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, surname, patronymic, dateOfBirth, address, phone, email, achievements);
+        return Objects.hash(super.hashCode(), name, surname, patronymic, dateOfBirth, address, phone, achievements);
     }
 
     @Override
@@ -123,7 +113,6 @@ public class Person extends Entity {
               s+=  ", dateOfBirth=" + dateOfBirth ;
               s+=  ", address=" + address ;
               s+=  ", phone=" + phone ;
-              s+=  ", email=" + email ;
               s+=  "} ";
                 return s;
 //        return "Person{"  + super.toString()+

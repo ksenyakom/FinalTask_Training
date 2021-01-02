@@ -2,9 +2,12 @@ package by.ksu.training.service.impl;
 
 import by.ksu.training.dao.AssignedComplexDao;
 import by.ksu.training.entity.AssignedComplex;
+import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
 import by.ksu.training.service.ServiceImpl;
+
+import java.util.List;
 
 public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedComplexService {
     @Override
@@ -28,5 +31,23 @@ public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedC
     public void delete(Integer id) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
         acDao.delete(id);
+    }
+
+    @Override
+    public List<AssignedComplex> findUnexecutedByVisitor(Visitor visitor) throws PersistentException {
+        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
+        return acDao.readUnexecutedByVisitor(visitor);
+    }
+
+    @Override
+    public List<AssignedComplex> findExecutedByVisitorForPeriod(Visitor visitor, int periodDays) throws PersistentException {
+        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
+        return acDao.readExecutedByVisitorForPeriod(visitor,periodDays);
+    }
+
+    @Override
+    public List<AssignedComplex> findExecutedForPeriod(int period) throws PersistentException {
+        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
+        return acDao.readExecutedForPeriod(period);
     }
 }

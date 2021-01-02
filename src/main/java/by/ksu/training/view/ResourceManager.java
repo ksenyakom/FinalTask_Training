@@ -7,11 +7,11 @@ public enum ResourceManager {
         INSTANCE;
         private ResourceBundle resourceBundle;
         private final String resourceName = "properties.text";
-        private String languageDefault = "en";
-        private String countryDefault ="US";
+//        private String languageDefault = "en";
+//        private String countryDefault ="US";
 
         private ResourceManager() {
-            resourceBundle = ResourceBundle.getBundle(resourceName,new Locale(languageDefault, countryDefault));
+            resourceBundle = ResourceBundle.getBundle(resourceName,new Locale(Locale.getDefault().getLanguage()));
         }
 
         public void changeResource(Locale locale) {

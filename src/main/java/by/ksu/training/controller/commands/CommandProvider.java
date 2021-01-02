@@ -1,18 +1,24 @@
 package by.ksu.training.controller.commands;
 
 
+import by.ksu.training.controller.commands.admin.ShowUsersByRoleCommand;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * contain map of commands
  */
 public final class CommandProvider {
-    private final Map<Class<? extends Command>, Command> repository = new HashMap<>();
+    private final Map<Class<? extends Command>, Command> repository = new ConcurrentHashMap<>();
 
     public CommandProvider() {
-        repository.put(MainCommand.class, new MainCommand());
         repository.put(StartCommand.class, new StartCommand());
+        repository.put(LoginCommand.class, new LoginCommand());
+        repository.put(ShowUsersByRoleCommand.class, new ShowUsersByRoleCommand());
+        repository.put(RegistrationCommand.class, new RegistrationCommand());
+        repository.put(ShowExecuteLog.class, new ShowExecuteLog());
     }
 
     /**

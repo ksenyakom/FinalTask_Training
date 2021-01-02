@@ -15,9 +15,6 @@ public class ServiceFactoryImpl implements ServiceFactory {
         this.factory = factory;
     }
 
-
-  //  private final Map<Class<? extends EntityService>, Service> repository = new HashMap<>();
-
     public <T extends EntityService> T getService(Class<T> clazz) throws PersistentException {
         ServiceImpl service = null;
             if (clazz == AssignedComplexService.class) { service = new AssignedComplexServiceImpl();}

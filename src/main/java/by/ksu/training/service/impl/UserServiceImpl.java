@@ -17,6 +17,11 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         UserDao userDao = transaction.createDao(UserDao.class);
         return userDao.readPersonByRole(role);
     }
+    @Override
+    public List<User> findUserByRole(Role role) throws PersistentException {
+        UserDao userDao = transaction.createDao(UserDao.class);
+        return userDao.readUserByRole(role);
+    }
 
     @Override
     public User findByIdentity(Integer id) throws PersistentException {
@@ -27,7 +32,7 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
     @Override
     public User findByLoginAndPassword(String login, String password) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
-        return userDao.readByLoginAndPassword(login,password);
+        return userDao.readByLoginAndPassword(login,bcrypt(password));
     }
 
     @Override
@@ -54,7 +59,13 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         userDao.delete(id);
     }
 
+    @Override
+    public boolean checkLoginExist(String login) throws PersistentException {
+        UserDao userDao = transaction.createDao(UserDao.class);
+        return userDao.checkIfLoginExist(login);
+    }
+
     private String bcrypt(String pass) {
-        return BCrypt.hashpw(pass, BCrypt.gensalt(12));
+        return BCrypt.hashpw(pass, BCrypt.gensalt(8));
     }
 }

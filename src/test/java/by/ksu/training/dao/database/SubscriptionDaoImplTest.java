@@ -52,6 +52,7 @@ public class SubscriptionDaoImplTest {
         User user = new User();
         user.setLogin("ComplexGuest");
         user.setPassword("12345");
+        user.setEmail("mail@mail.ru");
         user.setRole(Role.VISITOR);
         visitorId = userDao.create(user);
 

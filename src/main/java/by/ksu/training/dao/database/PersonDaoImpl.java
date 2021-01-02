@@ -17,11 +17,11 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
 
 
     private static final String CREATE =
-            "INSERT INTO `person` (`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`email`,`phone`,`achievements`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO `person` (`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`phone`,`achievements`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String READ_BY_ID = "SELECT * FROM `person` WHERE `id`= ?";
     private static final String READ_ALL = "SELECT * FROM `person`";
     private static final String UPDATE =
-            "UPDATE `person` SET `surname`=?,`name`=?,`patronymic`=?,`date_of_birth`=?,`address`=?,`email`=?,`phone`=?,`achievements`=? WHERE `id` = ?";
+            "UPDATE `person` SET `surname`=?,`name`=?,`patronymic`=?,`date_of_birth`=?,`address`=?,`phone`=?,`achievements`=? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `person` WHERE `id`= ?";
 
     @Override
@@ -33,9 +33,8 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
             statement.setString(4, entity.getPatronymic());
             statement.setDate(5, parseDate.localToSql(entity.getDateOfBirth()));
             statement.setString(6, entity.getAddress());
-            statement.setString(7, entity.getEmail());
-            statement.setString(8, entity.getPhone());
-            statement.setString(9, entity.getAchievements());
+            statement.setString(7, entity.getPhone());
+            statement.setString(8, entity.getAchievements());
 
             statement.executeUpdate();
             logger.debug("inserted person {}", entity);
@@ -59,7 +58,6 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
                 person.setName(resultSet.getString("name"));
                 person.setPatronymic(resultSet.getString("patronymic"));
                 person.setDateOfBirth(parseDate.sqlToLocal(resultSet.getDate("date_of_birth")));
-                person.setEmail(resultSet.getString("email"));
                 person.setAddress(resultSet.getString("address"));
                 person.setPhone(resultSet.getString("phone"));
                 person.setAchievements(resultSet.getString("achievements"));
@@ -82,7 +80,6 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
                 person.setName(resultSet.getString("name"));
                 person.setPatronymic(resultSet.getString("patronymic"));
                 person.setDateOfBirth(parseDate.sqlToLocal(resultSet.getDate("date_of_birth")));
-                person.setEmail(resultSet.getString("email"));
                 person.setAddress(resultSet.getString("address"));
                 person.setPhone(resultSet.getString("phone"));
                 person.setAchievements(resultSet.getString("achievements"));
@@ -106,7 +103,6 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
                 person.setSurname(resultSet.getString("surname"));
                 person.setName(resultSet.getString("name"));
                 person.setPatronymic(resultSet.getString("patronymic"));
-                person.setEmail(resultSet.getString("email"));
                 person.setAddress(resultSet.getString("address"));
                 person.setPhone(resultSet.getString("phone"));
                 person.setAchievements(resultSet.getString("achievements"));
@@ -128,10 +124,9 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
             statement.setString(3, entity.getPatronymic());
             statement.setDate(4, parseDate.localToSql(entity.getDateOfBirth()));
             statement.setString(5, entity.getAddress());
-            statement.setString(6, entity.getEmail());
-            statement.setString(7, entity.getPhone());
-            statement.setString(8, entity.getAchievements());
-            statement.setInt(9, entity.getId());
+            statement.setString(6, entity.getPhone());
+            statement.setString(7, entity.getAchievements());
+            statement.setInt(8, entity.getId());
             int result = statement.executeUpdate();
             if (result == 0) {
                 throw new PersistentException("No any rows updated");

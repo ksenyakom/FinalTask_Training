@@ -54,6 +54,7 @@ public class UserDaoImplTest {
         User user = new User();
         user.setLogin("RareGuest");
         user.setPassword("12345");
+        user.setEmail("mail@mail.ru");
         user.setRole(Role.TRAINER);
 
         return new Object[]{
@@ -100,6 +101,7 @@ public class UserDaoImplTest {
         user.setId(id);
 
         user.setPassword("98765");
+        user.setEmail("newMail@mail.ru");
         user.setRole(Role.VISITOR);
         user.setLogin("Guest2");
 
@@ -128,6 +130,17 @@ public class UserDaoImplTest {
         userDao.delete(id);
         user = userDao.read(id);
         transaction.commit();
+
         assertNull(user);
+    }
+
+    @Test(priority = 3, dataProvider = "user")
+    public void testCheckLogin(User user) throws PersistentException {
+        int id = userDao.create(user);
+        boolean bool = userDao.checkIfLoginExist(user.getLogin());
+        userDao.delete(id);
+        transaction.commit();
+
+        assertTrue(bool);
     }
 }

@@ -53,11 +53,13 @@ public class AssignedComplexServiceDaoImplTest {
         User user = new User();
         user.setLogin("ComplexGuest");
         user.setPassword("12345");
+        user.setEmail("mail@mail.ru");
         user.setRole(Role.VISITOR);
         visitorId = userDao.create(user);
         user = new User();
         user.setLogin("ComplexTrainer");
         user.setPassword("112233");
+        user.setEmail("mail@mail.ru");
         user.setRole(Role.TRAINER);
         trainerId = userDao.create(user);
 

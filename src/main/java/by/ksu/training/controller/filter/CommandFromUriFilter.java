@@ -1,9 +1,7 @@
 package by.ksu.training.controller.filter;
 
-import by.ksu.training.controller.commands.Command;
-import by.ksu.training.controller.commands.CommandProvider;
-import by.ksu.training.controller.commands.MainCommand;
-import by.ksu.training.controller.commands.StartCommand;
+import by.ksu.training.controller.commands.*;
+import by.ksu.training.controller.commands.admin.ShowUsersByRoleCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +20,10 @@ public class CommandFromUriFilter implements Filter {
     static {
         commands.put("/", StartCommand.class);
         commands.put("/index", StartCommand.class);
-        commands.put("/main", MainCommand.class);
+        commands.put("/login", LoginCommand.class);
+        commands.put("/user/list", ShowUsersByRoleCommand.class);
+        commands.put("/registration", RegistrationCommand.class);
+        commands.put("/executed", ShowExecuteLog.class);
     }
 
     @Override

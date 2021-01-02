@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface UserService extends EntityService {
     List<Person> findPersonIdByRole(Role role) throws PersistentException;
+    List<User> findUserByRole(Role role) throws PersistentException;
 
     User findByIdentity(Integer id) throws PersistentException;
 
@@ -18,4 +19,6 @@ public interface UserService extends EntityService {
     void save(User user) throws PersistentException;
 
     void delete(Integer id) throws PersistentException;
+
+    boolean checkLoginExist(String login) throws PersistentException;
 }

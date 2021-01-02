@@ -5,8 +5,9 @@ import by.ksu.training.view.ResourceManager;
 public enum  Role {
 
     ADMINISTRATOR("value.role.str1"),
-    VISITOR("value.role.str2"),
-    TRAINER("value.role.str3");
+    TRAINER("value.role.str3"),
+    VISITOR("value.role.str2");
+
 
     private static ResourceManager manager = ResourceManager.INSTANCE;
     private String value;
@@ -25,5 +26,10 @@ public enum  Role {
 
     public static Role getByIdentity(Integer identity) {
         return Role.values()[identity];
+    }
+
+    @Override
+    public String toString() {
+        return getValue();
     }
 }

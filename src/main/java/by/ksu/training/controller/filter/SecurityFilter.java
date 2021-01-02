@@ -1,7 +1,7 @@
 package by.ksu.training.controller.filter;
 
 import by.ksu.training.controller.commands.Command;
-import by.ksu.training.controller.commands.MainCommand;
+import by.ksu.training.controller.commands.StartCommand;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import org.apache.logging.log4j.LogManager;
@@ -57,7 +57,7 @@ public class SecurityFilter implements Filter {
             } else {
                 // если нет, то redirect на login.html и сообщение на SecurityFilterMessage
                 logger.info("Trying of %s access to forbidden resource {}", userName, command.getName());
-                if(session != null && command.getClass() != MainCommand.class) {
+                if(session != null && command.getClass() != StartCommand.class) {
                     session.setAttribute("SecurityFilterMessage", "Доступ запрещён");
                 }
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");
