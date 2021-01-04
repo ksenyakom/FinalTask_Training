@@ -47,23 +47,20 @@
         <div class="form-group">
             <label for="newPassword">Новый пароль</label>
             <input type="password" class="form-control" id="newPassword" placeholder="Введите пароль"
-                   name="password"
-                   >
+                   name="password">
             <p class="help-block">Подсказка</p>
         </div>
         <br>
         <div class="form-group">
             <label for="password2">Пароль повторно</label>
             <input type="password" class="form-control" id="password2" placeholder="Введите пароль повторно"
-                   name="password2"
-                   >
+                   name="password2">
         </div>
 
         <div class="form-group">
             <label for="password">Старый пароль</label>
             <input type="password" class="form-control" id="password" placeholder="Введите пароль"
-                   name="password"
-                   >
+                   name="password">
             <p class="help-block">Подсказка</p>
         </div>
 

@@ -18,6 +18,13 @@
         <welcome-file>/WEB-INF/jsp/index.html</welcome-file>
     </welcome-file-list>
 
+    <jsp-config>
+        <taglib>
+            <taglib-uri>customtags</taglib-uri>
+            <taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>

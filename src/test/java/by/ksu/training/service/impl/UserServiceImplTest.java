@@ -3,6 +3,7 @@ package by.ksu.training.service.impl;
 import by.ksu.training.dao.Transaction;
 import by.ksu.training.dao.UserDao;
 import by.ksu.training.dao.database.TransactionImpl;
+import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.*;
 import org.testng.annotations.AfterClass;
@@ -19,9 +20,7 @@ import static org.testng.Assert.*;
 public class UserServiceImplTest {
     private Connection connection;
     private Transaction transaction;
-    private UserDao userDao;
     UserService userService;
-    private int id;
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
@@ -35,15 +34,12 @@ public class UserServiceImplTest {
         connection.setAutoCommit(false);
 
         transaction = new TransactionImpl(connection);
-        userDao = transaction.createDao(UserDao.class);
         userService = new UserServiceImpl();
-     //   ServiceFactory serviceFactory = new ServiceFactoryImpl()
-        //TODO
+        ((ServiceImpl)userService).setTransaction(transaction);
     }
 
     @AfterClass
     public void destroy() throws PersistentException, SQLException {
-        userDao.delete(id);
         transaction.commit();
         connection.close();
     }
@@ -58,8 +54,13 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testFindByLoginAndPassword() {
+    public void testFindByLoginAndPassword() throws PersistentException {
+        String login = "Visitor1";
+        String password = "visitor1";
 
+        User foundUser = userService.findByLoginAndPassword(login, password);
+
+        assertNotNull(foundUser);
     }
 
     @Test

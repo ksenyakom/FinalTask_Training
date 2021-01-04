@@ -81,7 +81,8 @@ public class DispatcherServlet extends HttpServlet {
                     Command.Forward forward = commandManager.execute(command, req, resp);
                     commandManager.close();
                     if (forward != null) {
-                        req.getRequestDispatcher(forward.getForward()).forward(req, resp);
+                        String uri = "/WEB-INF/jsp" + forward.getForward();
+                        req.getRequestDispatcher(uri).forward(req, resp);
                     } else {
                         String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
                         req.getRequestDispatcher(uri).forward(req, resp);
@@ -91,7 +92,7 @@ public class DispatcherServlet extends HttpServlet {
                     req.getRequestDispatcher(uri).forward(req, resp);
                 }
             } else {
-                req.getRequestDispatcher("/WEB-INF/jsp/index.html").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, resp);
             }
         } catch (PersistentException e) {
             e.printStackTrace();

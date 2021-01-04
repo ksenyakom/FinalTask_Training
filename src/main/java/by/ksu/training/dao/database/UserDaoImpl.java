@@ -20,7 +20,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     private static final String READ_BY_ID = "SELECT * FROM `user` WHERE `id` = ? ";
     private static final String READ_ID_BY_ROLE = "SELECT `id` FROM `user` WHERE `role`=? ORDER BY `id`";
     private static final String READ_BY_ROLE = "SELECT `id`,`login`,`email` FROM `user` WHERE `role`=? ORDER BY `id`";
-    private static final String READ_BY_LOGIN_AND_PASSWORD = "SELECT `id`, `role`, `email` FROM `user` WHERE `login` = ? AND `password` = ?";
+    private static final String READ_BY_LOGIN = "SELECT `id`, `role`, `email`,`password` FROM `user` WHERE `login` = ?";
     private static final String UPDATE = "UPDATE `user` SET `login` = ?,`password` = ?, `email` = ?,`role` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `user` WHERE `id` = ?";
     private static final String CHECK_BY_LOGIN = "SELECT 1 FROM `user` WHERE `login`=? limit 1";
@@ -65,17 +65,16 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public User readByLoginAndPassword(String login, String password) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(READ_BY_LOGIN_AND_PASSWORD)) {
+    public User readByLogin(String login) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_BY_LOGIN)) {
             statement.setString(1, login);
-            statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
             User user = null;
             if(resultSet.next()) {
                 user = new User();
                 user.setId(resultSet.getInt("id"));
                 user.setLogin(login);
-                user.setPassword(password);
+                user.setPassword(resultSet.getString("password"));
                 user.setRole(Role.getByIdentity(resultSet.getInt("role")));
                 user.setEmail(resultSet.getString("email"));
             }

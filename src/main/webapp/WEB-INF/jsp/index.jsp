@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -9,6 +10,7 @@
 <body>
 
 <%@ include file="main_menu.jsp" %>
+<ctg:welcome user="${sessionScope.authorizedUser}"/>
 
 <div class="container-fluid text-center">
     <div class="row content">
@@ -20,8 +22,9 @@
         </div>
             <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
-            <h1>Немного о йоге</h1>
-            <p><img src="<c:url value="/img/yogaimg.jpg"/>" class="img-responsive" alt="Поза лотоса с поднятыми вверх руками"/></p>
+            <p><img src="<c:url value="/img/yogaimg.jpg"/>" class="img-responsive center-block" width=400" alt="Поза лотоса с поднятыми вверх руками"/></p>
+
+            <h2>Немного о йоге</h2>
             <p> Чем же отличается йога от физкультуры?
                 Что нужно знать начинающим заниматься йогой в домашних условиях?
 

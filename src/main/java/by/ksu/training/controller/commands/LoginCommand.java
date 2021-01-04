@@ -32,7 +32,8 @@ public class LoginCommand extends Command {
                     session.setAttribute("authorizedUser", user);
                //     session.setAttribute("menu", menu.get(user.getRole()));
                     logger.info("user {} is logged in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-                    return new Forward("/index.html");
+                    request.setAttribute("command",null);
+                    return new Forward("/index.jsp");
                 } else {
                     request.setAttribute("message", "Имя пользователя или пароль не опознанны");
                     logger.info("user {} unsuccessfully tried to log in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
