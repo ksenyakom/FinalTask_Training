@@ -3,7 +3,6 @@ package by.ksu.training.controller.commands;
 
 import by.ksu.training.controller.commands.admin.ShowUsersByRoleCommand;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,7 +17,11 @@ public final class CommandProvider {
         repository.put(LoginCommand.class, new LoginCommand());
         repository.put(ShowUsersByRoleCommand.class, new ShowUsersByRoleCommand());
         repository.put(RegistrationCommand.class, new RegistrationCommand());
-        repository.put(ShowExecuteLog.class, new ShowExecuteLog());
+        repository.put(ShowJournal.class, new ShowJournal());
+        repository.put(ShowLoginCommand.class, new ShowLoginCommand());
+        repository.put(ShowRegistrationCommand.class, new ShowRegistrationCommand());
+        repository.put(LogoutCommand.class, new LogoutCommand());
+        repository.put(UserDeleteCommand.class, new UserDeleteCommand());
     }
 
     /**

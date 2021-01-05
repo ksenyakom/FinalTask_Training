@@ -2,8 +2,11 @@ package by.ksu.training.controller.commands;
 
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
+import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.UserService;
+import by.ksu.training.service.validator.UserValidator;
+import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,41 +24,33 @@ public class RegistrationCommand extends Command {
 
     @Override
     protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        String email = request.getParameter("email");
-        //TODO сделать проверку повторного пароля на форме
-        //А если user уже в  зарегистррован?
+        Validator<User> validator = new UserValidator();
+        User user = null;
+
         try {
-            if (login != null && password != null && email != null) {
-                UserService service = factory.getService(UserService.class);
+            user = validator.validate(request);
+            UserService service = factory.getService(UserService.class);
 
-                if (!service.checkLoginExist(login)) {
-                    User user = new User();
+            if (!service.checkLoginExist(user.getLogin())) {
+                user.setRole(Role.VISITOR);
+                service.save(user);
 
-                    user.setLogin(login);
-                    user.setPassword(password);
-                    user.setEmail(email);
-                    user.setRole(Role.VISITOR);
-                    service.save(user);
+                HttpSession session = request.getSession();
+                session.setAttribute("authorizedUser", user);
+                logger.info("user {} is created logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+                request.setAttribute("command", null);
+                return new Forward("/index.html", true);
 
-                    HttpSession session = request.getSession();
-                    session.setAttribute("authorizedUser", user);
-                    logger.info("user {} is created logged in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-                    return new Forward("/index.html");
-
-                } else {
-                    request.setAttribute("message", "Пользователь с таким именем уже существует");
-                    logger.info("user {} already exist", login);
-                    return null;
-                }
+            } else {
+                request.setAttribute("message", "Пользователь с таким именем уже существует");
+                logger.info("user {} already exist", user.getLogin());
+                return null;
             }
-        } catch (PersistentException e) {
+        } catch (PersistentException | IncorrectFormDataException e) {
             request.setAttribute("message", "Невозможно зарегестрировать нового пользователя, обратитесь к администратору");
-            logger.error("user {} unsuccessfully tried to register from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+            logger.error("user {} unsuccessfully tried to register from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+            return null;
         }
-        return null;
-        //  return new Forward("WEB-INF/jsp/index.jsp");
     }
 
 

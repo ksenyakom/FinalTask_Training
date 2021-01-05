@@ -18,7 +18,7 @@ import java.util.Set;
  * @Author Kseniya Oznobishina
  * @Date 02.01.2021
  */
-public class ShowExecuteLog extends Command{
+public class ShowJournal extends Command{
     private static Logger logger = LogManager.getLogger(DispatcherServlet.class);
 
     @Override
@@ -33,7 +33,7 @@ public class ShowExecuteLog extends Command{
             logger.error("Error while show execute log",e);
             return new Forward("index.jsp");
         }
-        return new Forward("executed.jsp");
+        return new Forward("journal.jsp");
     }
 
     @Override

@@ -14,16 +14,24 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CommandFromUriFilter implements Filter {
     private static Logger logger = LogManager.getLogger(CommandFromUriFilter.class);
 
-    private static Map<String, Class<? extends Command>> commands = new ConcurrentHashMap<>();
+    private static Map<String, Class<? extends Command>> commandsGet = new ConcurrentHashMap<>();
+    private static Map<String, Class<? extends Command>> commandsPost = new ConcurrentHashMap<>();
     private static CommandProvider commandProvider;
 
-    static {
-        commands.put("/", StartCommand.class);
-        commands.put("/index", StartCommand.class);
-        commands.put("/login", LoginCommand.class);
-        commands.put("/user/list", ShowUsersByRoleCommand.class);
-        commands.put("/registration", RegistrationCommand.class);
-        commands.put("/executed", ShowExecuteLog.class);
+    static { // не забывать ложить класс в CommandProvider!!!!
+        commandsGet.put("/", StartCommand.class);
+        commandsGet.put("/index", StartCommand.class);
+        commandsGet.put("/login", ShowLoginCommand.class);
+        commandsGet.put("/logout", LogoutCommand.class);
+        commandsGet.put("/user/list", ShowUsersByRoleCommand.class);
+        commandsGet.put("/journal", ShowJournal.class);
+        commandsGet.put("/registration", ShowRegistrationCommand.class);
+
+
+        commandsPost.put("/user/list", UserDeleteCommand.class);
+        commandsPost.put("/registration", RegistrationCommand.class);
+        commandsPost.put("/login", LoginCommand.class);
+
     }
 
     @Override
@@ -34,8 +42,8 @@ public class CommandFromUriFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         logger.debug("i am in uri filter");
-        if(request instanceof HttpServletRequest) {
-            HttpServletRequest httpRequest = (HttpServletRequest)request;
+        if (request instanceof HttpServletRequest) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
             // определение uri commandName из contextPath для обращения за коммандой
             String contextPath = httpRequest.getContextPath();
             String uri = httpRequest.getRequestURI();
@@ -43,12 +51,24 @@ public class CommandFromUriFilter implements Filter {
             int beginCommand = contextPath.length();
             int endCommand = uri.lastIndexOf('.');
             String commandName;
-            if(endCommand >= 0) {
+            if (endCommand >= 0) {
                 commandName = uri.substring(beginCommand, endCommand);
             } else {
                 commandName = uri.substring(beginCommand);
             }
-            Class<? extends Command> commandClass = commands.get(commandName);
+            Class<? extends Command> commandClass;
+            String method = httpRequest.getMethod();
+            switch (method.toLowerCase()) {
+                case "get":
+                    commandClass = commandsGet.get(commandName);
+                    break;
+                case "post":
+                    commandClass = commandsPost.get(commandName);
+                    break;
+                default:
+                    commandClass = null;
+            }
+
             try {
                 Command command = commandProvider.getCommand(commandClass);
                 command.setName(commandName);
@@ -66,5 +86,6 @@ public class CommandFromUriFilter implements Filter {
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 }

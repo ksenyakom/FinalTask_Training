@@ -2,6 +2,7 @@ package by.ksu.training.service.impl;
 
 import by.ksu.training.dao.AssignedComplexDao;
 import by.ksu.training.entity.AssignedComplex;
+import by.ksu.training.entity.User;
 import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
@@ -48,6 +49,8 @@ public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedC
     @Override
     public List<AssignedComplex> findExecutedForPeriod(int period) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.readExecutedForPeriod(period);
+        List<AssignedComplex> list = acDao.readExecutedForPeriod(period);
+        List<User> users = list.stream().m
+        return
     }
 }

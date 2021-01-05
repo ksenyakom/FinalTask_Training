@@ -1,30 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctg" uri="customtags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <title>Йога Index</title>
-    <%@ include file="head.jsp" %>
+    <%@ include file="common/head.jsp" %>
 </head>
 <body>
+<fmt:setLocale value="en"/>
+<fmt:setBundle basename="properties.text" var="lang"/>
 
-<%@ include file="main_menu.jsp" %>
-<ctg:welcome user="${sessionScope.authorizedUser}"/>
+<p><fmt:message key="message.langMenu.str1" bundle="${lang}" /></p>
+
+<%@ include file="common/main_menu.jsp" %>
+<%--собственный тег--%>
+<%--<ctg:welcome user="${sessionScope.authorizedUser}"/>--%>
 
 <div class="container-fluid text-center">
     <div class="row content">
         <%-- menu of the page--%>
         <div class="col-sm-2 sidenav text-left">
-            <p><a href="registration.html">Registration</a></p>
-            <p><a href="user/list.html">List users</a></p>
+
+            <p><a href="<c:url value="/user/list.html"/>">List users</a></p>
             <p><a href="#">Link</a></p>
         </div>
             <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
             <p><img src="<c:url value="/img/yogaimg.jpg"/>" class="img-responsive center-block" width=400" alt="Поза лотоса с поднятыми вверх руками"/></p>
 
-            <h2>Немного о йоге</h2>
+            <h2>О йоге</h2>
             <p> Чем же отличается йога от физкультуры?
                 Что нужно знать начинающим заниматься йогой в домашних условиях?
 
@@ -45,38 +51,14 @@
             </p>
             <hr>
             <h3>Test</h3>
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered">
-                    <caption>
-                        <h4>Список тренировок:</h4>
-                    </caption>
-                    <tr class="active">
-                        <th scope="col">Number</th>
-                        <th scope="col">id</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">trainerDeveloped</th>
-                        <th scope="col">rating</th>
-                    </tr>
-                    <c:forEach items="${lst}" var="complex" varStatus="status">
-                        <tr class="success">
-                            <td class="success"><c:out value="${ status.count }"/></td>
-                            <td class="info"><c:out value="${ complex.id }"/></td>
-                            <td class="warning"><c:out value="${ complex.title }"/></td>
-                            <td><c:out value="${ complex.trainerDeveloped.id }"/></td>
-                            <td><c:out value="${ complex.rating }"/></td>
-                        </tr>
-                    </c:forEach>
-                </table>
-            </div>
 
         </div>
         <div class="col-sm-2 sidenav">
-            <%@ include file="ads.jsp" %>
-
+            <%@ include file="common/ads.jsp" %>
         </div>
     </div>
 </div>
 
-<%@ include file="footer.jsp" %>
+<%@ include file="common/footer.jsp" %>
 </body>
 </html>

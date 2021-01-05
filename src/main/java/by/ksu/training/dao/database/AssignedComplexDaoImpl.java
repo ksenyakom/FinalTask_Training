@@ -89,6 +89,8 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             statement.setInt(1, periodDays);
             ResultSet resultSet = statement.executeQuery();
             List<AssignedComplex> list = new ArrayList<>();
+            List<Visitor> visitors = new ArrayList<>();
+            List<Complex> complexes = new ArrayList<>(); // подумать завтра об этом
             AssignedComplex assignedComplex = null;
 
             while (resultSet.next()) {

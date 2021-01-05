@@ -8,63 +8,44 @@
 <html lang="en">
 <head>
     <title>Регистрация</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
-    <style>
-        body {
-            padding: 30px;
-        }
-    </style>
+    <%@ include file="common/head.jsp" %>
+    <script type="text/javascript" src="<c:url value="/js/validator_registration.js"/>"></script>
 </head>
-<body>
-<h2>Регистрация</h2>
 
-<c:url value="registration.html" var="url"/>
-<form action="${url}" method="POST">
+<body>
+<%@ include file="common/main_menu.jsp" %>
+
+
+
+<form action="<c:url value="registration.html"/>" method="POST" onsubmit="return validateRegistration(this)">
     <div class="container">
+        <h2>Регистрация</h2>
+        <br>
         <div class="form-group">
-            <label for="lgn">Логин</label>
-            <input type="text" class="form-control" id="lgn" placeholder="Введите логин"
-                   name="login"
-                   required
-                   value=${param.login}>
+            <label for="login">Логин</label>
+            <input type="text" class="form-control" id="login" placeholder="Введите логин"
+                   name="login"  value="${param.login}" >
+            <p class="help-block">Логин может включать прописные и строчные буквы, цифры, символы _,-</p>
+
         </div>
         <br>
         <div class="form-group">
             <label for="password">Пароль</label>
             <input type="password" class="form-control" id="password" placeholder="Введите пароль"
-                   name="password"
-                   required>
-            <p class="help-block">Подсказка</p>
+                   name="password" >
+            <p class="help-block">Пароль должен состоять из не менее 5 символов</p>
         </div>
         <div class="form-group">
             <label for="password2">Пароль повторно</label>
             <input type="password" class="form-control" id="password2" placeholder="Введите пароль повторно"
-                   name="password2"
-                   required>
+                   name="password2" >
         </div>
         <br>
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" placeholder="Введите email"
-                   name="email"
-                   required
-                   value=${param.email}>
-
+                   name="email" value="${param.email}" >
         </div>
-
         <br>
         <div class="checkbox">
             <label for="password">
@@ -72,8 +53,10 @@
             </label>
         </div>
         <br>
+        <p id="errorMessage" class="text-danger"></p>
+        <br>
 
-        <button type="submit" class="btn btn-success">Вход</button>
+        <button type="submit" class="btn btn-success">Регистрация</button>
     </div>
 </form>
 </body>

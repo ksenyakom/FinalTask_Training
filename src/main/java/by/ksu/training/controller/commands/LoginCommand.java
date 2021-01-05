@@ -20,13 +20,12 @@ public class LoginCommand extends Command {
 
     @Override
     protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        String login = (String) request.getParameter("login");
-        String password = (String) request.getParameter("password");
+        String login =  request.getParameter("login");
+        String password = request.getParameter("password");
         try {
             if (login != null && password != null) {
                 UserService service = factory.getService(UserService.class);
                 User user = service.findByLoginAndPassword(login, password);
-                //TODO переделать, проверяется пароль не так
                 if (user != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("authorizedUser", user);
@@ -40,11 +39,12 @@ public class LoginCommand extends Command {
                 }
             }
         } catch (PersistentException e) {
+            logger.error("Exception while Login of user {}",login, e);
         }
 
         return null;
 
-      //  return new Forward("WEB-INF/jsp/index.jsp");
+      //  return new Forward("/index.jsp");
     }
 
     @Override
