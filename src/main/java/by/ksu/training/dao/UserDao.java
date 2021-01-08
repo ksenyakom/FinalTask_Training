@@ -11,5 +11,6 @@ public interface UserDao extends Dao<User> {
     List<Person> readPersonByRole(Role role) throws PersistentException;
     List<User> readUserByRole(Role role) throws PersistentException; //TODO test
     User readByLogin(String login) throws PersistentException;
+    void readLogin(List<User> users) throws PersistentException;
     boolean checkIfLoginExist(String login)  throws PersistentException;
 }

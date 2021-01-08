@@ -4,17 +4,23 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class AssignedComplex extends Entity {
-    private Visitor visitor;
+    private User user;
     private Complex complex;
     private LocalDate dateExpected;
     private LocalDate dateExecuted;
 
-    public Visitor getVisitor() {
-        return visitor;
+    public AssignedComplex() {}
+
+    public AssignedComplex(Integer id) {
+        this.setId(id);
     }
 
-    public void setVisitor(Visitor visitor) {
-        this.visitor = visitor;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Complex getComplex() {
@@ -47,7 +53,7 @@ public class AssignedComplex extends Entity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         AssignedComplex that = (AssignedComplex) o;
-        return Objects.equals(visitor, that.visitor) &&
+        return Objects.equals(user, that.user) &&
                 Objects.equals(complex, that.complex) &&
                 Objects.equals(dateExpected, that.dateExpected) &&
                 Objects.equals(dateExecuted, that.dateExecuted);
@@ -55,13 +61,13 @@ public class AssignedComplex extends Entity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), visitor, complex, dateExpected, dateExecuted);
+        return Objects.hash(super.hashCode(), user, complex, dateExpected, dateExecuted);
     }
 
     @Override
     public String toString() {
         return "AssignedComplex{" + super.toString()+
-                ", visitor=" + visitor.getId() +
+                ", user=" + user.getId() +
                 ", complex=" + complex.getId() +
                 ", dateExpected=" + dateExpected +
                 ", dateExecuted=" + dateExecuted +

@@ -10,9 +10,12 @@ import java.util.List;
 
 public interface UserService extends EntityService {
     List<Person> findPersonIdByRole(Role role) throws PersistentException;
+
     List<User> findUserByRole(Role role) throws PersistentException;
 
     User findByIdentity(Integer id) throws PersistentException;
+
+    void findLogin(List<User> users) throws PersistentException;
 
     User findByLoginAndPassword(String login, String password) throws PersistentException;
 

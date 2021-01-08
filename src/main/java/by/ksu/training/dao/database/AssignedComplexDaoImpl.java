@@ -3,6 +3,7 @@ package by.ksu.training.dao.database;
 import by.ksu.training.dao.AssignedComplexDao;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
+import by.ksu.training.entity.User;
 import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ParseDate;
@@ -11,7 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedComplexDao {
     private static Logger logger = LogManager.getLogger(AssignedComplexDaoImpl.class);
@@ -32,9 +35,9 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
 
 
     @Override
-    public List<AssignedComplex> readUnexecutedByVisitor(Visitor visitor) throws PersistentException {
+    public List<AssignedComplex> readUnexecutedByUser(User user) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_UNEXECUTED_BY_ID)) {
-            statement.setInt(1, visitor.getId());
+            statement.setInt(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             List<AssignedComplex> list = new ArrayList<>();
             AssignedComplex assignedComplex = null;
@@ -42,7 +45,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             while (resultSet.next()) {
                 assignedComplex = new AssignedComplex();
                 assignedComplex.setId(resultSet.getInt("id"));
-                assignedComplex.setVisitor(visitor);
+                assignedComplex.setUser(user);
                 Complex complex = new Complex();
                 complex.setId(resultSet.getInt("complex_id"));
                 assignedComplex.setComplex(complex);
@@ -56,22 +59,30 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
     }
 
     @Override
-    public List<AssignedComplex> readExecutedByVisitorForPeriod(Visitor visitor, int periodDays) throws PersistentException {
+    public List<AssignedComplex> readExecutedByUserForPeriod(User user, int periodDays) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_EXECUTED_BY_VISITOR_FOR_PERIOD)) {
-            statement.setInt(1, visitor.getId());
+            statement.setInt(1, user.getId());
             statement.setInt(2, periodDays);
             ResultSet resultSet = statement.executeQuery();
             List<AssignedComplex> list = new ArrayList<>();
+            Map<Integer, Complex> complexes = new HashMap<>();
             AssignedComplex assignedComplex = null;
-
+            Integer id;
+            Complex complex;
             while (resultSet.next()) {
                 assignedComplex = new AssignedComplex();
                 assignedComplex.setId(resultSet.getInt("id"));
-                Visitor visitor1 = new Visitor();
-                visitor1.setId(visitor.getId());
-                assignedComplex.setVisitor(visitor1);
-                Complex complex = new Complex();
-                complex.setId(resultSet.getInt("complex_id"));
+//                Visitor visitor1 = new Visitor();
+//                visitor1.setId(visitor.getId());
+                assignedComplex.setUser(user);
+
+                id = resultSet.getInt("complex_id");
+                if (complexes.containsKey(id)) {
+                    complex = complexes.get(id);
+                } else {
+                    complex = new Complex(id);
+                    complexes.put(id, complex);
+                }
                 assignedComplex.setComplex(complex);
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
                 assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
@@ -89,18 +100,33 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             statement.setInt(1, periodDays);
             ResultSet resultSet = statement.executeQuery();
             List<AssignedComplex> list = new ArrayList<>();
-            List<Visitor> visitors = new ArrayList<>();
-            List<Complex> complexes = new ArrayList<>(); // подумать завтра об этом
+            Map<Integer, User> users = new HashMap<>();
+            Map<Integer, Complex> complexes = new HashMap<>(); //TODO везде так сделать надо
             AssignedComplex assignedComplex = null;
+            Integer id = null;
+            User user;
+            Complex complex;
 
             while (resultSet.next()) {
                 assignedComplex = new AssignedComplex();
                 assignedComplex.setId(resultSet.getInt("id"));
-                Visitor visitor = new Visitor();
-                visitor.setId(resultSet.getInt("visitor_id"));
-                assignedComplex.setVisitor(visitor);
-                Complex complex = new Complex();
-                complex.setId(resultSet.getInt("complex_id"));
+
+                id = resultSet.getInt("visitor_id");
+                if (users.containsKey(id)) {
+                    user = users.get(id);
+                } else {
+                    user = new User(id);
+                    users.put(id, user);
+                }
+                assignedComplex.setUser(user);
+
+                id = resultSet.getInt("complex_id");
+                if (complexes.containsKey(id)) {
+                    complex = complexes.get(id);
+                } else {
+                    complex = new Complex(id);
+                    complexes.put(id, complex);
+                }
                 assignedComplex.setComplex(complex);
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
                 assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
@@ -115,7 +141,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
     @Override
     public Integer create(AssignedComplex entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, entity.getVisitor().getId());
+            statement.setInt(1, entity.getUser().getId());
             statement.setInt(2, entity.getComplex().getId());
             statement.setDate(3, parseDate.localToSql(entity.getDateExpected()));
             statement.setDate(4, parseDate.localToSql(entity.getDateExecuted()));
@@ -143,13 +169,30 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             AssignedComplex assignedComplex = null;
 
             if (resultSet.next()) {
-                assignedComplex = new AssignedComplex();
-                assignedComplex.setId(id);
-                Visitor visitor = new Visitor();
-                visitor.setId(resultSet.getInt("visitor_id"));
-                assignedComplex.setVisitor(visitor);
-                Complex complex = new Complex();
-                complex.setId(resultSet.getInt("complex_id"));
+                assignedComplex = new AssignedComplex(id);
+                User user = new User(resultSet.getInt("visitor_id"));
+                assignedComplex.setUser(user);
+                Complex complex = new Complex(resultSet.getInt("complex_id"));
+                assignedComplex.setComplex(complex);
+                assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
+                assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
+            }
+            return assignedComplex;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public AssignedComplex read(AssignedComplex assignedComplex) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
+            statement.setInt(1, assignedComplex.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                User user = new User(resultSet.getInt("visitor_id"));
+                assignedComplex.setUser(user);
+                Complex complex = new Complex(resultSet.getInt("complex_id"));
                 assignedComplex.setComplex(complex);
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
                 assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
@@ -163,7 +206,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
     @Override
     public void update(AssignedComplex entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
-            statement.setInt(1, entity.getVisitor().getId());
+            statement.setInt(1, entity.getUser().getId());
             statement.setInt(2, entity.getComplex().getId());
             statement.setDate(3, parseDate.localToSql(entity.getDateExpected()));
             statement.setDate(4, parseDate.localToSql(entity.getDateExecuted()));

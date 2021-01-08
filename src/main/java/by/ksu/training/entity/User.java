@@ -8,6 +8,12 @@ public class User extends Entity{
     private String email;
     private Role role;
 
+    public User() {};
+
+    public User(Integer id) {
+        this.setId(id);
+    }
+
     public String getLogin() {
         return login;
     }

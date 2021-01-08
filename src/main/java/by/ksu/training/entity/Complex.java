@@ -11,6 +11,13 @@ public class Complex extends Entity {
     private float rating;
     private List<ComplexUnit> listOfUnits;
 
+    /** Constructor*/
+    public Complex() {}
+
+    public Complex(Integer id) {
+        this.setId(id);
+    }
+
     public String getTitle() {
         return title;
     }

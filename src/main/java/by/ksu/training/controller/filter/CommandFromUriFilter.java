@@ -24,8 +24,9 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/login", ShowLoginCommand.class);
         commandsGet.put("/logout", LogoutCommand.class);
         commandsGet.put("/user/list", ShowUsersByRoleCommand.class);
-        commandsGet.put("/journal", ShowJournal.class);
+        commandsGet.put("/journal", ShowJournalCommand.class);
         commandsGet.put("/registration", ShowRegistrationCommand.class);
+        commandsGet.put("/change_language", ChangeLanguageCommand.class);
 
 
         commandsPost.put("/user/list", UserDeleteCommand.class);

@@ -45,14 +45,14 @@
         <filter-name>ActionFromUriFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
-    <filter>
-        <filter-name>SecurityFilter</filter-name>
-        <filter-class>by.ksu.training.controller.filter.SecurityFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>SecurityFilter</filter-name>
-        <url-pattern>*.html</url-pattern>
-    </filter-mapping>
+<!--    <filter>-->
+<!--        <filter-name>SecurityFilter</filter-name>-->
+<!--        <filter-class>by.ksu.training.controller.filter.SecurityFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>SecurityFilter</filter-name>-->
+<!--        <url-pattern>*.html</url-pattern>-->
+<!--    </filter-mapping>-->
     <!--
     <error-page>
         <error-code>404</error-code>

@@ -9,12 +9,18 @@ import by.ksu.training.service.AssignedComplexService;
 import by.ksu.training.service.ServiceImpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedComplexService {
     @Override
     public AssignedComplex findByIdentity(Integer id) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
         return acDao.read(id);
+    }
+    @Override
+    public AssignedComplex find(AssignedComplex assignedComplex) throws PersistentException {
+        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
+        return acDao.read(assignedComplex);
     }
 
     @Override
@@ -35,22 +41,20 @@ public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedC
     }
 
     @Override
-    public List<AssignedComplex> findUnexecutedByVisitor(Visitor visitor) throws PersistentException {
+    public List<AssignedComplex> findUnexecutedByUser(User user) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.readUnexecutedByVisitor(visitor);
+        return acDao.readUnexecutedByUser(user);
     }
 
     @Override
-    public List<AssignedComplex> findExecutedByVisitorForPeriod(Visitor visitor, int periodDays) throws PersistentException {
+    public List<AssignedComplex> findExecutedByUserForPeriod(User user, int periodDays) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.readExecutedByVisitorForPeriod(visitor,periodDays);
+        return acDao.readExecutedByUserForPeriod(user,periodDays);
     }
 
     @Override
     public List<AssignedComplex> findExecutedForPeriod(int period) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        List<AssignedComplex> list = acDao.readExecutedForPeriod(period);
-        List<User> users = list.stream().m
-        return
+        return acDao.readExecutedForPeriod(period);
     }
 }

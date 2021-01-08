@@ -186,4 +186,16 @@ public class ComplexDaoImplTest {
         assertNull(complex);
     }
 
-}
+    @Test(priority = 3, dataProvider = "complex")
+    public void testReadTitle(Complex complex) throws PersistentException {
+
+            int id = complexDao.create(complex);
+            Complex complex1 = new Complex(id);
+            complexDao.readTitle(List.of(complex1));
+            complexDao.delete(id);
+            transaction.commit();
+
+            assertEquals(complex1.getTitle(), complex.getTitle());
+    }
+
+  }

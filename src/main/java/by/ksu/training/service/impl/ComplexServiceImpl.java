@@ -16,6 +16,12 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
     }
 
     @Override
+    public void findTitle(List<Complex> complexes) throws PersistentException {
+        ComplexDao complexDao = transaction.createDao(ComplexDao.class);
+        complexDao.readTitle(complexes);
+    }
+
+    @Override
     public List<Complex> findAll() throws PersistentException {
         ComplexDao complexDao = transaction.createDao(ComplexDao.class);
         return complexDao.read();

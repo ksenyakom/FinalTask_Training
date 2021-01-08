@@ -18,13 +18,13 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
     private static final String CREATE = "INSERT INTO `user`(`login`,`password`,`email`,`role`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `user` WHERE `id` = ? ";
+    private static final String READ_LOGIN_BY_ID = "SELECT `login` FROM `user` WHERE `id` = ? ";
     private static final String READ_ID_BY_ROLE = "SELECT `id` FROM `user` WHERE `role`=? ORDER BY `id`";
     private static final String READ_BY_ROLE = "SELECT `id`,`login`,`email` FROM `user` WHERE `role`=? ORDER BY `id`";
     private static final String READ_BY_LOGIN = "SELECT `id`, `role`, `email`,`password` FROM `user` WHERE `login` = ?";
     private static final String UPDATE = "UPDATE `user` SET `login` = ?,`password` = ?, `email` = ?,`role` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `user` WHERE `id` = ?";
     private static final String CHECK_BY_LOGIN = "SELECT 1 FROM `user` WHERE `login`=? limit 1";
-
 
 
     @Override
@@ -70,7 +70,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             User user = null;
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 user = new User();
                 user.setId(resultSet.getInt("id"));
                 user.setLogin(login);
@@ -90,8 +90,8 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(CHECK_BY_LOGIN)) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()) {
-               return resultSet.getInt(1) == 1;
+            if (resultSet.next()) {
+                return resultSet.getInt(1) == 1;
             }
             return false;
 
@@ -131,7 +131,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery();
             User user = null;
 
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 user = new User();
                 user.setId(id);
                 user.setLogin(resultSet.getString("login"));
@@ -140,6 +140,23 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 user.setRole(Role.getByIdentity(resultSet.getInt("role")));
             }
             return user;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public void readLogin(List<User> users) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_LOGIN_BY_ID)) {
+            for (User user : users) {
+                statement.setInt(1, user.getId());
+                ResultSet resultSet = statement.executeQuery();
+
+                if (resultSet.next()) {
+                    user.setLogin(resultSet.getString("login"));
+                }
+                resultSet.close(); //TODO еще почитать про закрытие
+            }
         } catch (SQLException e) {
             throw new PersistentException(e);
         }

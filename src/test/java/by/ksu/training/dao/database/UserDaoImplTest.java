@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import javax.validation.constraints.AssertTrue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -142,5 +143,30 @@ public class UserDaoImplTest {
         transaction.commit();
 
         assertTrue(bool);
+    }
+
+    @Test
+    public void testReadUserByRole() {
+    }
+
+    @Test
+    public void testReadByLogin() {
+    }
+
+    @Test
+    public void testCheckIfLoginExist() {
+    }
+
+    @Test
+    public void testRead() {
+    }
+
+    @Test
+    public void testReadLogin() throws PersistentException {
+        List <User> users = List.of(new User(2), new User(3));
+        userDao.readLogin(users);
+
+        assertTrue(users.get(0).getLogin().equals("visitor1"));
+        assertTrue(users.get(1).getLogin().equals("visitor2"));
     }
 }

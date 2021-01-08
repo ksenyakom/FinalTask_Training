@@ -17,11 +17,12 @@ public final class CommandProvider {
         repository.put(LoginCommand.class, new LoginCommand());
         repository.put(ShowUsersByRoleCommand.class, new ShowUsersByRoleCommand());
         repository.put(RegistrationCommand.class, new RegistrationCommand());
-        repository.put(ShowJournal.class, new ShowJournal());
+        repository.put(ShowJournalCommand.class, new ShowJournalCommand());
         repository.put(ShowLoginCommand.class, new ShowLoginCommand());
         repository.put(ShowRegistrationCommand.class, new ShowRegistrationCommand());
         repository.put(LogoutCommand.class, new LogoutCommand());
         repository.put(UserDeleteCommand.class, new UserDeleteCommand());
+        repository.put(ChangeLanguageCommand.class, new ChangeLanguageCommand());
     }
 
     /**

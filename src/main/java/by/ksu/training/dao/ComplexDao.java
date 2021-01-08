@@ -8,4 +8,5 @@ import java.util.List;
 public interface ComplexDao extends Dao<Complex>{
     List<Complex> read() throws PersistentException;
 
+    void readTitle(List<Complex> complexes) throws PersistentException;
 }

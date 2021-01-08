@@ -38,11 +38,11 @@
                         <th scope="col">Дата выполнения</th>
                     </tr>
                     <c:forEach items="${lst}" var="assignedComplex" varStatus="status">
-                        <tr class="success">
+                        <tr>
                             <td><c:out value="${ status.count }"/></td>
                             <td><c:out value="${ assignedComplex.id }"/></td>
                             <td><c:out value="${ assignedComplex.complex.title }"/></td>
-                            <td><c:out value="${ assignedComplex.visitor.name }"/></td>
+                            <td><c:out value="${ assignedComplex.user.login }"/></td>
                             <td><c:out value="${ assignedComplex.dateExecuted }"/></td>
                         </tr>
                     </c:forEach>

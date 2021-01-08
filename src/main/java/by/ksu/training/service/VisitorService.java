@@ -16,4 +16,5 @@ public interface VisitorService extends EntityService {
     void update(Visitor visitor) throws PersistentException;
 
     void delete(Integer id) throws PersistentException;
+
 }

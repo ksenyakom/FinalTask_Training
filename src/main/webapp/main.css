@@ -30,6 +30,6 @@ footer {
     .row.content {height:auto;}
 }
 
-.error {
-    color: red;
+.language {
+    padding: 30px;
 }

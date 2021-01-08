@@ -18,6 +18,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
 
     private static final String CREATE = "INSERT INTO `complex`(`title`,`trainer_id`,`visitor_id`,`rating`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `complex` WHERE `id` = ? ";
+    private static final String READ_TITLE_BY_ID = "SELECT `title` FROM `complex` WHERE `id` = ? ";
     private static final String READ_ALL = "SELECT * FROM `complex` ORDER BY `id`";
     private static final String UPDATE_COMPLEX = "UPDATE `complex` SET `title`=?,`trainer_id`=?,`visitor_id`=?,`rating`=? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `complex` WHERE `id` = ?";
@@ -60,6 +61,8 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         }
         return list;
     }
+
+
 
     @Override
     public void update(Complex entity) throws PersistentException {
@@ -141,6 +144,23 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
             }
             return complex;
 
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public void readTitle(List<Complex> complexes) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_TITLE_BY_ID)) {
+            for (Complex complex : complexes) {
+                statement.setInt(1, complex.getId());
+                ResultSet resultSet = statement.executeQuery();
+
+                if (resultSet.next()) {
+                    complex.setTitle(resultSet.getString("title"));
+                }
+                resultSet.close();
+            }
         } catch (SQLException e) {
             throw new PersistentException(e);
         }

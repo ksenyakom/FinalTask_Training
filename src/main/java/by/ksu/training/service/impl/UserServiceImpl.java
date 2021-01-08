@@ -30,6 +30,13 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         return userDao.read(id);
     }
 
+    @Override
+    public void findLogin(List<User> users) throws PersistentException {
+        UserDao userDao = transaction.createDao(UserDao.class);
+        userDao.readLogin(users);
+    }
+
+    @Override
     public User findByLoginAndPassword(String login, String password) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
         User user = userDao.readByLogin(login);

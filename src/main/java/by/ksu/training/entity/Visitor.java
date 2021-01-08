@@ -13,6 +13,10 @@ public class Visitor extends Person {
         super(person);
     }
 
+    public Visitor(Integer id) {
+        super(id);
+    }
+
     public Trainer getTrainer() {
         return trainer;
     }

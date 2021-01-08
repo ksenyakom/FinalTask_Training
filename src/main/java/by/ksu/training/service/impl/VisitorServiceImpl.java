@@ -6,6 +6,7 @@ import by.ksu.training.dao.PersonDao;
 import by.ksu.training.dao.UserDao;
 import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
+import by.ksu.training.entity.User;
 import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ServiceImpl;
@@ -28,7 +29,7 @@ public class VisitorServiceImpl extends ServiceImpl implements VisitorService {
         for (Person person : listId) {
             visitor = new Visitor(personDao.read(person));
             visitor.setTrainer(atDao.readCurrentTrainerByVisitor(visitor));
-            visitor.setComplexList(acDao.readUnexecutedByVisitor(visitor));
+            visitor.setComplexList(acDao.readUnexecutedByUser(new User(visitor.getId())));
             visitorList.add(visitor);
         }
 
@@ -42,7 +43,7 @@ public class VisitorServiceImpl extends ServiceImpl implements VisitorService {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
         Visitor visitor = new Visitor(personDao.read(id));
         visitor.setTrainer(atDao.readCurrentTrainerByVisitor(visitor));
-        visitor.setComplexList(acDao.readUnexecutedByVisitor(visitor));
+        visitor.setComplexList(acDao.readUnexecutedByUser(new User(visitor.getId())));
 
         return visitor;
     }
@@ -66,4 +67,5 @@ public class VisitorServiceImpl extends ServiceImpl implements VisitorService {
         PersonDao personDao = transaction.createDao(PersonDao.class);
         personDao.delete(id);
     }
+
 }
