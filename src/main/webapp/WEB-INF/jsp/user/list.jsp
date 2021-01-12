@@ -13,12 +13,13 @@
 <div class="container-fluid">
     <div class="row content">
         <%-- menu of the page--%>
-        <div class="col-sm-2 sidenav text-left">
-            <p><a href="<c:url value="/user/list.html"/>">Список пользователей</a></p>
-            <p><a href="#">Поиск назначенного тренера/посетителя</a></p>
-            <p><a href="#">Подписки посетителей</a></p>
-            <p><a href="#">Link</a></p>
-        </div>
+        <c:import url="../admin/menu.jsp"/>
+<%--        <div class="col-sm-2 sidenav text-left">--%>
+<%--            <p><a href="<c:url value="/user/list.html"/>">Список пользователей</a></p>--%>
+<%--            <p><a href="#">Поиск назначенного тренера/посетителя</a></p>--%>
+<%--            <p><a href="#">Подписки посетителей</a></p>--%>
+<%--            <p><a href="#">Link</a></p>--%>
+<%--        </div>--%>
         <%--Content of the page --%>
         <div class="col-sm-8">
 

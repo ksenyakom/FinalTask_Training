@@ -14,8 +14,12 @@
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
 
+    <!--    <welcome-file-list>-->
+    <!--        <welcome-file>/WEB-INF/jsp/index.html</welcome-file>-->
+    <!--    </welcome-file-list>-->
+
     <welcome-file-list>
-        <welcome-file>/WEB-INF/jsp/index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
     <jsp-config>
@@ -45,14 +49,14 @@
         <filter-name>ActionFromUriFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
-<!--    <filter>-->
-<!--        <filter-name>SecurityFilter</filter-name>-->
-<!--        <filter-class>by.ksu.training.controller.filter.SecurityFilter</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>SecurityFilter</filter-name>-->
-<!--        <url-pattern>*.html</url-pattern>-->
-<!--    </filter-mapping>-->
+    <!--    <filter>-->
+    <!--        <filter-name>SecurityFilter</filter-name>-->
+    <!--        <filter-class>by.ksu.training.controller.filter.SecurityFilter</filter-class>-->
+    <!--    </filter>-->
+    <!--    <filter-mapping>-->
+    <!--        <filter-name>SecurityFilter</filter-name>-->
+    <!--        <url-pattern>*.html</url-pattern>-->
+    <!--    </filter-mapping>-->
     <!--
     <error-page>
         <error-code>404</error-code>

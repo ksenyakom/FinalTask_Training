@@ -12,10 +12,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandFromUriFilter implements Filter {
-    private static Logger logger = LogManager.getLogger(CommandFromUriFilter.class);
+    private static final Logger logger = LogManager.getLogger(CommandFromUriFilter.class);
 
-    private static Map<String, Class<? extends Command>> commandsGet = new ConcurrentHashMap<>();
-    private static Map<String, Class<? extends Command>> commandsPost = new ConcurrentHashMap<>();
+    private static final Map<String, Class<? extends Command>> commandsGet = new ConcurrentHashMap<>();
+    private static final Map<String, Class<? extends Command>> commandsPost = new ConcurrentHashMap<>();
     private static CommandProvider commandProvider;
 
     static { // не забывать ложить класс в CommandProvider!!!!
@@ -57,6 +57,7 @@ public class CommandFromUriFilter implements Filter {
             } else {
                 commandName = uri.substring(beginCommand);
             }
+
             Class<? extends Command> commandClass;
             String method = httpRequest.getMethod();
             switch (method.toLowerCase()) {
@@ -69,6 +70,10 @@ public class CommandFromUriFilter implements Filter {
                 default:
                     commandClass = null;
             }
+
+//            if (commandClass == null) {
+//
+//            }
 
             try {
                 Command command = commandProvider.getCommand(commandClass);

@@ -1,44 +1,38 @@
 package by.ksu.training.controller.commands;
 
 import by.ksu.training.entity.Role;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
 import java.util.Set;
 
 /**
  * @Author Kseniya Oznobishina
  * @Date 07.01.2021
  */
-public class ChangeLanguageCommand extends Command{
+public class ChangeLanguageCommand extends Command {
+    private static Logger logger = LogManager.getLogger(ChangeLanguageCommand.class);
     public static final String LANGUAGE = "language";
+    public static final String PAGE = "page";
+
     @Override
     protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        String language = request.getParameter("language");
-        String country = request.getParameter("country");
+        String language = request.getParameter(LANGUAGE);
+        String page = request.getParameter(PAGE);
 
-//        if (language != null && country != null) {
-//            Locale locale = new Locale(language,country);
-//        }
-
-//        Cookie langCookie = null;
-
-//        for (Cookie cookie : request.getCookies()) {
-//            if (cookie.getName().equals(LANGUAGE)) {
-//                langCookie = cookie;
-//            }
-//        }
-
-        Cookie cookie = new Cookie("language", language + "_" + country);
-        response.addCookie(cookie);
-
-   //     ResourceManager resourceManager = ResourceManager.INSTANCE;
-   //     resourceManager.changeResource(locale);
+        if (language != null) {
+            Cookie cookie = new Cookie(LANGUAGE, language);
+            response.addCookie(cookie);
+        }
         request.setAttribute("command", null);
-        //TODO переходить на текущую страницу
-        return new Forward("/index.html", true);
+        String contextPath = request.getContextPath();
+        page = page.substring(contextPath.length());
+
+        logger.debug("Redirect to page: {}", page);
+        return new Forward(page, true);
     }
 
     @Override

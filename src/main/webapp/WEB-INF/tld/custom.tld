@@ -17,4 +17,17 @@
             <type>by.ksu.training.entity.User</type>
         </attribute>
     </tag>
+
+    <tag>
+        <name>parse</name>
+        <tag-class>by.ksu.training.tag.LocalDateTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>localDate</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.time.LocalDate</type>
+        </attribute>
+    </tag>
+
 </taglib>

@@ -150,12 +150,11 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(READ_LOGIN_BY_ID)) {
             for (User user : users) {
                 statement.setInt(1, user.getId());
-                ResultSet resultSet = statement.executeQuery();
-
-                if (resultSet.next()) {
-                    user.setLogin(resultSet.getString("login"));
+                try(ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user.setLogin(resultSet.getString("login"));
+                    }
                 }
-                resultSet.close(); //TODO еще почитать про закрытие
             }
         } catch (SQLException e) {
             throw new PersistentException(e);

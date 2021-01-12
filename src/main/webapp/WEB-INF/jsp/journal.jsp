@@ -1,16 +1,20 @@
 <%--
-  Created by IntelliJ IDEA.
   User: User
   Date: 27.12.2020
   Time: 22:48
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
+
+<%--Локализация--%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${cookie.language.value}"/>
+<fmt:setBundle basename="properties.text"/>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>Журнал</title>
+    <title><fmt:message key="title.journal"/></title>
     <%@ include file="common/head.jsp" %>
 
 </head>
@@ -19,31 +23,35 @@
 
 <div class="container-fluid text-center">
     <div class="row content">
-        <%-- menu of the page--%>
-        <div class="col-sm-2 sidenav text-left">
-
-            <p><a href="<c:url value="/user/list.html"/>">List users</a></p>
-            <p><a href="#">Link</a></p>
-        </div>
+        <%--side menu of the page--%>
+        <c:import url="/WEB-INF/jsp/common/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
-                        <h4>Журнал тренировок:</h4>
+                    <h4><fmt:message key="journal.table.name"/></h4>
                     <tr class="active">
                         <th scope="col">№</th>
-                        <th scope="col">id</th>
-                        <th scope="col">Название</th>
-                        <th scope="col">Имя пользователя</th>
-                        <th scope="col">Дата выполнения</th>
+                        <th scope="col"><fmt:message key="journal.table.head.training_name"/></th>
+                        <th scope="col"><fmt:message key="journal.table.head.user_login"/></th>
+                        <th scope="col"><fmt:message key="journal.table.head.date"/></th>
                     </tr>
                     <c:forEach items="${lst}" var="assignedComplex" varStatus="status">
                         <tr>
                             <td><c:out value="${ status.count }"/></td>
-                            <td><c:out value="${ assignedComplex.id }"/></td>
                             <td><c:out value="${ assignedComplex.complex.title }"/></td>
                             <td><c:out value="${ assignedComplex.user.login }"/></td>
-                            <td><c:out value="${ assignedComplex.dateExecuted }"/></td>
+<%--                            <fmt:formatDate value="${ assignedComplex.dateExecuted }" var="date"/>--%>
+<%--                            <td>--%>
+<%--                                <ctg:parse localDate="${ assignedComplex.dateExecuted }" language="${cookie.language.value}"/>--%>
+<%--                            </td>--%>
+                            <td>
+                                <fmt:parseDate value="${assignedComplex.dateExecuted}" pattern="yyyy-MM-dd"
+                                               var="parsedDate" type="date" />
+
+                                <fmt:formatDate value="${parsedDate}"
+                                                type="date" dateStyle="short" />
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>

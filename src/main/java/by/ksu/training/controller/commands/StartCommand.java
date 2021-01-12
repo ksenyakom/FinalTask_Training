@@ -17,15 +17,7 @@ public class StartCommand extends Command{
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            ComplexService complexService = factory.getService(ComplexService.class);
-            List<Complex>  complexList = complexService.findAll(); //TODO find all not individual
-            request.setAttribute("lst", complexList);
-
-        } catch (PersistentException e) {
-            logger.error("Exception in StartCommand",e);
-        }
-        return new Forward("index.jsp");
+        return new Forward("/index.jsp",true);
 
     }
 

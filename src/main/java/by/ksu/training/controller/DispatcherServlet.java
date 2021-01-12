@@ -75,8 +75,7 @@ public class DispatcherServlet extends HttpServlet {
 //            e.printStackTrace();
 //        }
     }
-
-    private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+       private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             Command command = (Command) req.getAttribute("command");
             ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -99,7 +98,7 @@ public class DispatcherServlet extends HttpServlet {
                     req.getRequestDispatcher(uri).forward(req, resp);
                 }
             } else {
-                req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, resp);
+                req.getRequestDispatcher("/index.jsp").forward(req, resp);
                 //TODO
             }
         } catch (PersistentException e) {

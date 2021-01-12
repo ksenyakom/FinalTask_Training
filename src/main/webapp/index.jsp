@@ -4,37 +4,30 @@
 <%--Локализация--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${cookie.language.value}"/>
-<fmt:setBundle basename="properties.text" var="lang"/>
+<fmt:setBundle basename="properties.text"/>
 <!DOCTYPE html>
 <html lang="ru">
 
 <head>
-    <title>Йога Index</title>
-    <%@ include file="common/head.jsp" %>
+    <title><fmt:message key="title.index"/></title>
+    <%@ include file="/WEB-INF/jsp/common/head.jsp" %>
 </head>
 <body>
 
-
-<p><fmt:message key="message.langMenu.str1" bundle="${lang}"/></p>
-
-<%@ include file="common/main_menu.jsp" %>
-<%--собственный тег--%>
-<ctg:welcome user="${sessionScope.authorizedUser}"/>
+<%@ include file="/WEB-INF/jsp/common/main_menu.jsp" %>
 
 <div class="container-fluid text-center">
     <div class="row content">
-        <%-- menu of the page--%>
-        <div class="col-sm-2 sidenav text-left">
-            <p><a href='<c:url value="/user/list.html"/>'>List users</a></p>
-            <p><a href="#">Link</a></p>
-        </div>
+        <%--side menu of the page--%>
+            <c:import url="/WEB-INF/jsp/common/side_menu.jsp"/>
+
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
             <br>
             <p><img src='<c:url value="/img/yogaimg.jpg"/>' class="img-responsive center-block" width=400"
-                    alt="Поза лотоса с поднятыми вверх руками"/></p>
+                    alt="<fmt:message key="picture.caption.lotus_hands_up"/>"/></p>
 
-            <h2>О йоге</h2>
+            <h2>О йоге jsp</h2>
             <p> Чем же отличается йога от физкультуры?
                 Что нужно знать начинающим заниматься йогой в домашних условиях?
 
@@ -68,11 +61,11 @@
 
         </div>
         <div class="col-sm-2 sidenav">
-            <%@ include file="common/ads.jsp" %>
+            <c:import url="WEB-INF/jsp/common/ads.jsp"/>
         </div>
     </div>
 </div>
 
-<%@ include file="common/footer.jsp" %>
+<c:import url="WEB-INF/jsp/common/footer.jsp"/>
 </body>
 </html>
