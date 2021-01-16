@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class Complex extends Entity {
     private String title;
-    private Trainer trainerDeveloped;
-    private Visitor visitorFor;
+    private User trainerDeveloped;
+    private User visitorFor;
     private float rating;
     private List<ComplexUnit> listOfUnits;
 
@@ -26,19 +26,19 @@ public class Complex extends Entity {
         this.title = title;
     }
 
-    public Trainer getTrainerDeveloped() {
+    public User getTrainerDeveloped() {
         return trainerDeveloped;
     }
 
-    public void setTrainerDeveloped(Trainer trainerDeveloped) {
+    public void setTrainerDeveloped(User trainerDeveloped) {
         this.trainerDeveloped = trainerDeveloped;
     }
 
-    public Visitor getVisitorFor() {
+    public User getVisitorFor() {
         return visitorFor;
     }
 
-    public void setVisitorFor(Visitor visitorFor) {
+    public void setVisitorFor(User visitorFor) {
         this.visitorFor = visitorFor;
     }
 

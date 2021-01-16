@@ -1,7 +1,6 @@
-package by.ksu.training.controller.commands;
+package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
-import by.ksu.training.controller.filter.CommandFromUriFilter;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Set;
 
 public class LoginCommand extends Command {

@@ -4,7 +4,6 @@ import by.ksu.training.dao.AssignedComplexDao;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
-import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ParseDate;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +44,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             while (resultSet.next()) {
                 assignedComplex = new AssignedComplex();
                 assignedComplex.setId(resultSet.getInt("id"));
-                assignedComplex.setUser(user);
+                assignedComplex.setVisitor(user);
                 Complex complex = new Complex();
                 complex.setId(resultSet.getInt("complex_id"));
                 assignedComplex.setComplex(complex);
@@ -74,7 +73,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
                 assignedComplex.setId(resultSet.getInt("id"));
 //                Visitor visitor1 = new Visitor();
 //                visitor1.setId(visitor.getId());
-                assignedComplex.setUser(user);
+                assignedComplex.setVisitor(user);
 
                 id = resultSet.getInt("complex_id");
                 if (complexes.containsKey(id)) {
@@ -118,7 +117,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
                     user = new User(id);
                     users.put(id, user);
                 }
-                assignedComplex.setUser(user);
+                assignedComplex.setVisitor(user);
 
                 id = resultSet.getInt("complex_id");
                 if (complexes.containsKey(id)) {
@@ -141,7 +140,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
     @Override
     public Integer create(AssignedComplex entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, entity.getUser().getId());
+            statement.setInt(1, entity.getVisitor().getId());
             statement.setInt(2, entity.getComplex().getId());
             statement.setDate(3, parseDate.localToSql(entity.getDateExpected()));
             statement.setDate(4, parseDate.localToSql(entity.getDateExecuted()));
@@ -171,7 +170,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             if (resultSet.next()) {
                 assignedComplex = new AssignedComplex(id);
                 User user = new User(resultSet.getInt("visitor_id"));
-                assignedComplex.setUser(user);
+                assignedComplex.setVisitor(user);
                 Complex complex = new Complex(resultSet.getInt("complex_id"));
                 assignedComplex.setComplex(complex);
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
@@ -191,7 +190,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
 
             if (resultSet.next()) {
                 User user = new User(resultSet.getInt("visitor_id"));
-                assignedComplex.setUser(user);
+                assignedComplex.setVisitor(user);
                 Complex complex = new Complex(resultSet.getInt("complex_id"));
                 assignedComplex.setComplex(complex);
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
@@ -206,7 +205,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
     @Override
     public void update(AssignedComplex entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
-            statement.setInt(1, entity.getUser().getId());
+            statement.setInt(1, entity.getVisitor().getId());
             statement.setInt(2, entity.getComplex().getId());
             statement.setDate(3, parseDate.localToSql(entity.getDateExpected()));
             statement.setDate(4, parseDate.localToSql(entity.getDateExecuted()));

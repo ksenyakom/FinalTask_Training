@@ -20,8 +20,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.*;
 
 public class ComplexDaoImplTest {
     private Transaction transaction;
@@ -125,11 +124,9 @@ public class ComplexDaoImplTest {
 
         Complex complex = new Complex();
         complex.setTitle("Растяжка111");
-        Trainer trainer = new Trainer();
-        trainer.setId(trainerId);
+        User trainer = new User(trainerId);
         complex.setTrainerDeveloped(trainer);
-        Visitor visitor = new Visitor();
-        visitor.setId(visitorId);
+        User visitor = new User(visitorId);
         complex.setVisitorFor(visitor); //TODO another complex without this field
         complex.setRating(4.5f);
         complex.setListOfComplexUnit(List.of(unit, unit, unit));
@@ -198,4 +195,20 @@ public class ComplexDaoImplTest {
             assertEquals(complex1.getTitle(), complex.getTitle());
     }
 
-  }
+    // test for ordering of complexes by rating
+    @Test(priority = 3, dataProvider = "complex")
+    public void testReadAllCommonComplexMetaData(Complex complex) throws PersistentException {
+        int id = complexDao.create(complex);
+        Complex complex1 = new Complex(id);
+        List<Complex> complexes = complexDao.readAllCommonComplexMetaData();
+        complexDao.delete(id);
+        transaction.commit();
+
+        if (complexes.size() > 1) {
+
+            assertTrue(complexes.get(0).getRating() > complexes.get(1).getRating(),
+                    String.format("rating complex 0 : %s ; rating complex 1 : %s" ,
+                            complexes.get(0).getRating(), complexes.get(1).getRating()));
+        }
+        }
+}

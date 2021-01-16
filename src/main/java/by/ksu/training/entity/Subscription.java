@@ -5,16 +5,23 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Subscription extends Entity{
-    private Visitor visitor;
+    private User visitor;
     private LocalDate beginDate;
     private LocalDate endDate;
     private BigDecimal price;
 
-    public Visitor getVisitor() {
+    public Subscription() {
+    }
+
+    public Subscription(Integer id) {
+        this.setId(id);
+    }
+
+    public User getVisitor() {
         return visitor;
     }
 
-    public void setVisitor(Visitor visitor) {
+    public void setVisitor(User visitor) {
         this.visitor = visitor;
     }
 

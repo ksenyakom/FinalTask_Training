@@ -24,7 +24,7 @@
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
             <br>
-            <p><img src='<c:url value="/img/yogaimg.jpg"/>' class="img-responsive center-block" width=400"
+            <p><img src='<c:url value="/img/yogaimg.jpg"/>' class="img-responsive center-block" width=400
                     alt="<fmt:message key="picture.caption.lotus_hands_up"/>"/></p>
 
             <h2>О йоге jsp</h2>

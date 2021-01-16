@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SubscriptionDao extends Dao<Subscription> {
     List<Subscription> read() throws PersistentException;
+
+    List<Subscription> readAllActive() throws PersistentException;
 }

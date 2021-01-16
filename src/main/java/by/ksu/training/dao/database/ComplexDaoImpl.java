@@ -1,23 +1,23 @@
 package by.ksu.training.dao.database;
 
 import by.ksu.training.dao.ComplexDao;
-import by.ksu.training.entity.Complex;
-import by.ksu.training.entity.Exercise;
-import by.ksu.training.entity.Trainer;
-import by.ksu.training.entity.Visitor;
+import by.ksu.training.entity.*;
 import by.ksu.training.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     private static Logger logger = LogManager.getLogger(ComplexDaoImpl.class);
 
     private static final String CREATE = "INSERT INTO `complex`(`title`,`trainer_id`,`visitor_id`,`rating`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `complex` WHERE `id` = ? ";
+    private static final String READ_ALL_COMMON_METADATA = "SELECT `id`,`title`,`trainer_id`,`rating` FROM `complex` WHERE `visitor_id` IS NULL ORDER  BY `rating` DESC";
     private static final String READ_TITLE_BY_ID = "SELECT `title` FROM `complex` WHERE `id` = ? ";
     private static final String READ_ALL = "SELECT * FROM `complex` ORDER BY `id`";
     private static final String UPDATE_COMPLEX = "UPDATE `complex` SET `title`=?,`trainer_id`=?,`visitor_id`=?,`rating`=? WHERE `id` = ?";
@@ -56,13 +56,40 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     @Override
     public List<Complex> read() throws PersistentException {
         List<Complex> list = readComplex();
-        for (int i = 0; i < list.size() ; i++) {
+        for (int i = 0; i < list.size(); i++) {
             list.get(i).setListOfComplexUnit(readListOfUnitsByComplexId(i));
         }
         return list;
     }
 
+    @Override
+    public List<Complex> readAllCommonComplexMetaData() throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_ALL_COMMON_METADATA)) {
+            ResultSet resultSet = statement.executeQuery();
+            List<Complex> list = new ArrayList<>();
+            Map<Integer, User> trainerMap = new HashMap<>();
+            Complex complex = null;
+            User trainer = null;
 
+            while (resultSet.next()) {
+                complex = new Complex(resultSet.getInt("id"));
+                complex.setTitle(resultSet.getString("title"));
+
+                Integer id = resultSet.getInt("trainer_id");
+                trainer = trainerMap.containsKey(id) ? trainerMap.get(id) : new User(id);
+                trainerMap.putIfAbsent(id, trainer);
+                complex.setTrainerDeveloped(trainer);
+
+                complex.setRating(resultSet.getFloat("rating"));
+
+                list.add(complex);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
 
     @Override
     public void update(Complex entity) throws PersistentException {
@@ -130,14 +157,12 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 complex = new Complex();
                 complex.setId(id);
                 complex.setTitle(resultSet.getString("title"));
-                Trainer trainer = new Trainer();
-                trainer.setId(resultSet.getInt("trainer_id"));
+                User trainer = new User(resultSet.getInt("trainer_id"));
                 complex.setTrainerDeveloped(trainer);
                 int visitorId = resultSet.getInt("visitor_id");
-                Visitor visitor= null;
+                User visitor = null;
                 if (!resultSet.wasNull()) {
-                    visitor = new Visitor();
-                    visitor.setId(visitorId);
+                    visitor = new User(visitorId);
                 }
                 complex.setVisitorFor(visitor);
                 complex.setRating(resultSet.getFloat("rating"));
@@ -176,14 +201,12 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 complex = new Complex();
                 complex.setId(resultSet.getInt("id"));
                 complex.setTitle(resultSet.getString("title"));
-                Trainer trainer = new Trainer();
-                trainer.setId(resultSet.getInt("trainer_id"));
+                User trainer = new User(resultSet.getInt("trainer_id"));
                 complex.setTrainerDeveloped(trainer);
                 int visitorId = resultSet.getInt("visitor_id");
-                Visitor visitor= null;
+                User visitor = null;
                 if (!resultSet.wasNull()) {
-                    visitor = new Visitor();
-                    visitor.setId(visitorId);
+                    visitor = new User(visitorId);
                 }
                 complex.setVisitorFor(visitor);
                 complex.setRating(resultSet.getFloat("rating"));

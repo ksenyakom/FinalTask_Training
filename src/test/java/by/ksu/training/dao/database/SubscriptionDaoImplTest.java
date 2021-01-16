@@ -68,8 +68,7 @@ public class SubscriptionDaoImplTest {
     @DataProvider(name = "sub")
     public Object[] createData() {
         Subscription subscription = new Subscription();
-        Visitor visitor = new Visitor();
-        visitor.setId(visitorId);
+        User visitor = new User(visitorId);
         subscription.setVisitor(visitor);
         subscription.setBeginDate(LocalDate.of(2020, 1, 1));
         subscription.setEndDate(LocalDate.of(2020, 5, 1));

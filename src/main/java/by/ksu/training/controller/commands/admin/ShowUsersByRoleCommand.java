@@ -18,18 +18,19 @@ import java.util.List;
  */
 public class ShowUsersByRoleCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowUsersByRoleCommand.class);
+    public static final String ROLE = "role";
 
     @Override
     protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             String sRole = request.getParameter("role");
-            if (sRole != null) {
+             if (sRole != null) {
                 Role role = Role.valueOf(sRole.toUpperCase());
 
                 UserService userService = factory.getService(UserService.class);
                 List<User> userList = userService.findUserByRole(role);
-
                 request.setAttribute("lst", userList);
+
             }
         } catch (PersistentException e) {
             logger.error("Exception in command", e);

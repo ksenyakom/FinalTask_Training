@@ -1,5 +1,6 @@
-package by.ksu.training.controller.commands;
+package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.commands.Command;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 
@@ -12,7 +13,7 @@ import java.util.Set;
  * @Author Kseniya Oznobishina
  * @Date 05.01.2021
  */
-public class ShowRegistrationCommand extends Command{
+public class ShowRegistrationCommand extends Command {
     @Override
     protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
         return new Forward("registration.jsp");

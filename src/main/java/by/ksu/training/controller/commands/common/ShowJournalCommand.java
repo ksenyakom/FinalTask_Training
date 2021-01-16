@@ -1,6 +1,6 @@
-package by.ksu.training.controller.commands;
+package by.ksu.training.controller.commands.common;
 
-import by.ksu.training.controller.DispatcherServlet;
+import by.ksu.training.controller.commands.Command;
 import by.ksu.training.entity.*;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.*;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @Date 02.01.2021
  */
 public class ShowJournalCommand extends Command {
-    private static Logger logger = LogManager.getLogger(DispatcherServlet.class);
+    private static Logger logger = LogManager.getLogger(ShowJournalCommand.class);
 
     @Override
     protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
@@ -27,7 +27,7 @@ public class ShowJournalCommand extends Command {
             AssignedComplexService assignedComplexService = factory.getService(AssignedComplexService.class);
             List<AssignedComplex> list = assignedComplexService.findExecutedForPeriod(periodDefault);
             List<User> users = list.stream()
-                    .map(AssignedComplex::getUser)
+                    .map(AssignedComplex::getVisitor)
                     .distinct()
                     .collect(Collectors.toList());
             UserService userService = factory.getService(UserService.class);

@@ -1,18 +1,30 @@
 package by.ksu.training.service.impl;
 
 import by.ksu.training.dao.ComplexDao;
+import by.ksu.training.dao.UserDao;
 import by.ksu.training.entity.Complex;
+import by.ksu.training.entity.Subscription;
+import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.ServiceImpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
     @Override
     public Complex findByIdentity(Integer id) throws PersistentException {
         ComplexDao complexDao = transaction.createDao(ComplexDao.class);
         return complexDao.read(id);
+    }
+
+    @Override
+    public List<Complex> findAllCommonComplexMetaData() throws PersistentException {
+        ComplexDao complexDao = transaction.createDao(ComplexDao.class);
+        List<Complex> complexes = complexDao.readAllCommonComplexMetaData();
+        readTrainerLogin(complexes);
+        return complexes;
     }
 
     @Override
@@ -43,5 +55,14 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
     public void delete(Integer id) throws PersistentException {
         ComplexDao complexDao = transaction.createDao(ComplexDao.class);
         complexDao.delete(id);
+    }
+
+    private void readTrainerLogin(List<Complex> complexes) throws PersistentException {
+        List<User> trainers = complexes.stream()
+                .map(complex -> complex.getTrainerDeveloped())
+                .distinct()
+                .collect(Collectors.toList());
+        UserDao userDao = transaction.createDao(UserDao.class);
+        userDao.readLogin(trainers);
     }
 }

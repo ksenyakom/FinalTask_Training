@@ -40,42 +40,15 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       doProcess(req,resp);
+        doProcess(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doProcess(req,resp);
-//        try {
-//            Command command = (Command) req.getAttribute("command");
-//            HttpSession session = req.getSession();
-//            User user = (User) session.getAttribute("authorisedUser");
-//            ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
-//
-//            if (command != null) {
-//                if (user == null) {
-//                    CommandManager commandManager = CommandManagerFactory.getManager(serviceFactory);
-//                    Command.Forward forward = commandManager.execute(command, req, resp);
-//                    commandManager.close();
-//                    if (forward != null) {
-//                        String uri = "/WEB-INF/jsp" + forward.getForward();
-//                        req.getRequestDispatcher(uri).forward(req, resp);
-//                    } else {
-//                        String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
-//                        req.getRequestDispatcher(uri).forward(req, resp);
-//                    }
-//                } else {
-//                    String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
-//                    req.getRequestDispatcher(uri).forward(req, resp);
-//                }
-//            } else {
-//                req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, resp);
-//            }
-//        } catch (PersistentException e) {
-//            e.printStackTrace();
-//        }
+        doProcess(req, resp);
     }
-       private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             Command command = (Command) req.getAttribute("command");
             ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -84,11 +57,16 @@ public class DispatcherServlet extends HttpServlet {
                 CommandManager commandManager = CommandManagerFactory.getManager(serviceFactory);
                 Command.Forward forward = commandManager.execute(command, req, resp);
                 commandManager.close();
-                if (forward != null) {
+                String message = (String) req.getAttribute("err_message");
+                if (message != null) {
+                  //  resp.sendError(404, message);
+                    req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
 
+                } else if (forward != null) {
                     if (forward.isRedirect()) {
                         String uri = req.getContextPath() + forward.getForward();
                         resp.sendRedirect(uri);
+
                     } else {
                         String uri = "/WEB-INF/jsp/" + forward.getForward();
                         req.getRequestDispatcher(uri).forward(req, resp);
@@ -103,6 +81,7 @@ public class DispatcherServlet extends HttpServlet {
             }
         } catch (PersistentException e) {
             e.printStackTrace();
+            //TODo 
         }
     }
 }

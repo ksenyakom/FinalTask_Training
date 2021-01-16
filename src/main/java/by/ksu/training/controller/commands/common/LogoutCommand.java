@@ -1,5 +1,6 @@
-package by.ksu.training.controller.commands;
+package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.commands.AuthorizedUserCommand;
 import by.ksu.training.entity.Role;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,7 @@ import java.util.Set;
  * @Author Kseniya Oznobishina
  * @Date 05.01.2021
  */
-public class LogoutCommand extends AuthorizedUserCommand{
+public class LogoutCommand extends AuthorizedUserCommand {
     @Override
     protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();

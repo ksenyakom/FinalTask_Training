@@ -17,4 +17,6 @@ public interface ComplexService extends EntityService {
     void delete(Integer id) throws PersistentException;
 
     void findTitle(List<Complex> complexes) throws PersistentException;
+
+    List<Complex> findAllCommonComplexMetaData() throws PersistentException;;
 }

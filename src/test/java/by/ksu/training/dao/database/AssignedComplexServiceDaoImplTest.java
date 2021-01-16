@@ -64,8 +64,7 @@ public class AssignedComplexServiceDaoImplTest {
 
         Complex complex1 = new Complex();
         complex1.setTitle("Силовая тренировка");
-        Trainer trainer = new Trainer();
-        trainer.setId(trainerId);
+        User trainer = new User(trainerId);
         complex1.setTrainerDeveloped(trainer);
         Complex complex2 = new Complex();
         complex2.setTitle("Базовая тренировка");
@@ -92,13 +91,13 @@ public class AssignedComplexServiceDaoImplTest {
         User user = new User(userId);
 
         AssignedComplex assignedComplex = new AssignedComplex();
-        assignedComplex.setUser(user);
+        assignedComplex.setVisitor(user);
         assignedComplex.setComplex(complex);
         assignedComplex.setDateExpected(LocalDate.of(2020, 12, 10));
         assignedComplex.setDateExecuted(LocalDate.of(2020, 12, 10));
 
         AssignedComplex assignedComplex2 = new AssignedComplex();
-        assignedComplex2.setUser(user);
+        assignedComplex2.setVisitor(user);
         assignedComplex2.setComplex(complex);
         assignedComplex2.setDateExpected(LocalDate.of(2020, 12, 30));
         // dateExecuted = null;
@@ -154,7 +153,7 @@ public class AssignedComplexServiceDaoImplTest {
         int id = assignedComplexDao.create(assignedComplex);
         assignedComplex.setId(id);
 
-        List<AssignedComplex> list = assignedComplexDao.readUnexecutedByUser(assignedComplex.getUser());
+        List<AssignedComplex> list = assignedComplexDao.readUnexecutedByUser(assignedComplex.getVisitor());
 
         if (assignedComplex.getDateExecuted() == null) {
             assertTrue(list.contains(assignedComplex));
@@ -172,14 +171,14 @@ public class AssignedComplexServiceDaoImplTest {
         int periodDays = 30;
 
         AssignedComplex assignedComplex = new AssignedComplex();
-        assignedComplex.setUser(user);
+        assignedComplex.setVisitor(user);
         assignedComplex.setComplex(complex);
         LocalDate now = LocalDate.now();
         assignedComplex.setDateExpected(now);
         assignedComplex.setDateExecuted(now);
 
         AssignedComplex assignedComplex2 = new AssignedComplex();
-        assignedComplex2.setUser(user);
+        assignedComplex2.setVisitor(user);
         assignedComplex2.setComplex(complex);
         LocalDate firstDayOfPeriod = LocalDate.now().minusDays(periodDays-1);
         assignedComplex2.setDateExpected(firstDayOfPeriod);
@@ -197,7 +196,7 @@ public class AssignedComplexServiceDaoImplTest {
         assignedComplex.setId(id);
 
         List<AssignedComplex> list = assignedComplexDao
-                .readExecutedByUserForPeriod(assignedComplex.getUser(), periodDays);
+                .readExecutedByUserForPeriod(assignedComplex.getVisitor(), periodDays);
 
         if (assignedComplex.getDateExecuted() == null) {
             assertFalse(list.contains(assignedComplex));

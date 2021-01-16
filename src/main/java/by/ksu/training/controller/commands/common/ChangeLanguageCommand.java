@@ -1,5 +1,6 @@
-package by.ksu.training.controller.commands;
+package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.commands.Command;
 import by.ksu.training.entity.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,9 +28,12 @@ public class ChangeLanguageCommand extends Command {
             Cookie cookie = new Cookie(LANGUAGE, language);
             response.addCookie(cookie);
         }
-        request.setAttribute("command", null);
-        String contextPath = request.getContextPath();
-        page = page.substring(contextPath.length());
+
+        // page == "" if user just came and changes language from first time loaded page index
+        if (page != "") {
+            String contextPath = request.getContextPath();
+            page = page.substring(contextPath.length());
+        }
 
         logger.debug("Redirect to page: {}", page);
         return new Forward(page, true);
@@ -38,5 +42,6 @@ public class ChangeLanguageCommand extends Command {
     @Override
     public Set<Role> getAllowedRoles() {
         return null;
+        //TOdo optional?
     }
 }

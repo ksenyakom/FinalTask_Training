@@ -14,4 +14,6 @@ public interface SubscriptionService extends EntityService {
     void save(Subscription subscription) throws PersistentException;
 
     void delete(Integer id) throws PersistentException;
+
+    List<Subscription> findAllActive() throws PersistentException;
 }

@@ -15,11 +15,11 @@
 <html lang="ru">
 <head>
     <title><fmt:message key="title.journal"/></title>
-    <%@ include file="common/head.jsp" %>
+    <c:import url="common/head.jsp"/>
 
 </head>
 <body>
-<%@ include file="common/main_menu.jsp" %>
+<c:import url="common/main_menu.jsp"/>
 
 <div class="container-fluid text-center">
     <div class="row content">
@@ -38,19 +38,16 @@
                     </tr>
                     <c:forEach items="${lst}" var="assignedComplex" varStatus="status">
                         <tr>
-                            <td><c:out value="${ status.count }"/></td>
-                            <td><c:out value="${ assignedComplex.complex.title }"/></td>
-                            <td><c:out value="${ assignedComplex.user.login }"/></td>
-<%--                            <fmt:formatDate value="${ assignedComplex.dateExecuted }" var="date"/>--%>
-<%--                            <td>--%>
+                            <td>${ status.count }</td>
+                            <td>${ assignedComplex.complex.title }</td>
+                            <td>${ assignedComplex.visitor.login }</td>
+<%--                            <fmt:formatDate value="${ assignedComplex.dateExecuted }" var="date"/>--%> <%--                            <td>--%>
 <%--                                <ctg:parse localDate="${ assignedComplex.dateExecuted }" language="${cookie.language.value}"/>--%>
 <%--                            </td>--%>
                             <td>
                                 <fmt:parseDate value="${assignedComplex.dateExecuted}" pattern="yyyy-MM-dd"
-                                               var="parsedDate" type="date" />
-
-                                <fmt:formatDate value="${parsedDate}"
-                                                type="date" dateStyle="short" />
+                                               var="parsedDate" type="date"/>
+                                <fmt:formatDate value="${parsedDate}" type="date" dateStyle="short"/>
                             </td>
                         </tr>
                     </c:forEach>
@@ -62,12 +59,12 @@
 
         </div>
         <div class="col-sm-2 sidenav">
-            <%@ include file="common/ads.jsp" %>
+            <c:import url="common/ads.jsp"/>
         </div>
     </div>
 </div>
 
-<%@ include file="common/footer.jsp" %>
+<c:import url="common/footer.jsp"/>
 <br>
 </body>
 </html>

@@ -17,8 +17,11 @@
 </head>
 <body>
 <div class="col-sm-2 sidenav text-left">
-    <p><a href='<c:url value="/user/list.html"/>'><fmt:message key="label.side_menu.users"/></a></p>
-    <p><a href="#"><fmt:message key="label.side_menu.trainings"/></a></p>
+    <p><a href='<c:url value="/user/list.html"/>'>Личный кабинет админа</a></p>
+    <p><a href="#">Личный кабинет тренера</a></p>
+    <p><a href="#">Личный кабинет посетителя</a></p>
+    <p><a href='<c:url value="/complex/list.html"/>'><fmt:message key="label.side_menu.trainings"/></a></p>
+    <p><a href='<c:url value="/journal.html"/>'><fmt:message key="label.main_menu.journal"/></a></p>
 </div>
 </body>
 </html>
