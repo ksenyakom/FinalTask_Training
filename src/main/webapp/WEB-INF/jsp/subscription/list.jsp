@@ -13,13 +13,15 @@
 <head>
     <title><fmt:message key="title.subscription_list"/></title>
     <%@ include file="../common/head.jsp" %>
+    <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
+
 </head>
 <body>
 <%@ include file="../common/main_menu.jsp" %>
 <div class="container-fluid">
     <div class="row content">
         <%-- menu of the page--%>
-        <c:import url="../admin/menu.jsp"/>
+        <c:import url="../admin/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8">
             <h4 class="text-center"><fmt:message key="table.subscription_list.name"/></h4>
@@ -40,7 +42,7 @@
             </form>
 
             <br>
-            <form>
+            <form onsubmit="return validateDelete(this)">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <caption>
@@ -74,7 +76,7 @@
                                 <td><a href='<c:url value="/subscription/edit.html?editId=${subscription.id}"/>'><fmt:message
                                         key="table.edit"/></a>
                                 </td>
-                                <td><input type="checkbox" name="remove" value="${subscription.id}"/></td>
+                                <td><input type="checkbox"  class="require-one" name="remove" value="${subscription.id}"/></td>
                             </tr>
                         </c:forEach>
                     </table>

@@ -1,4 +1,4 @@
-function validateSubscription(form) {
+function validateSubscriptionEdit(form) {
     var message = "";
     var beginDate = form.beginDate.value;
     var endDate = form.endDate.value;

@@ -10,9 +10,6 @@
 <fmt:setBundle basename="properties.text"/>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Title</title>
-</head>
 <body>
 <div class="col-sm-2 sidenav text-left">
     <p><a href='<c:url value="/user/list.html"/>'><fmt:message key="label.side_menu.admin.users"/></a></p>

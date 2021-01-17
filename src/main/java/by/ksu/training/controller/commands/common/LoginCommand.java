@@ -30,7 +30,7 @@ public class LoginCommand extends Command {
                //     session.setAttribute("menu", menu.get(user.getRole()));
                     logger.info("user {} is logged in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
                     request.setAttribute("command",null);
-                    return new Forward("/index.jsp");
+                    return new Forward("/index.jsp",true);
                 } else {
                     request.setAttribute("message", "Имя пользователя или пароль не опознанны");
                     logger.info("user {} unsuccessfully tried to log in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
@@ -42,7 +42,7 @@ public class LoginCommand extends Command {
 
         return null;
 
-      //  return new Forward("/index.jsp");
+      //  return new Forward("/oldIndex.jsp");
     }
 
     @Override

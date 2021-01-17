@@ -6,6 +6,8 @@ import by.ksu.training.exception.IncorrectFormDataException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Enumeration;
 import java.util.Scanner;
 
@@ -61,6 +63,27 @@ public class SubscriptionValidator implements Validator<Subscription> {
             throw new IncorrectFormDataException(PRICE, price);
         }
 
+        try {
+            if (beginDate != null) {
+                LocalDate localDate = LocalDate.parse(beginDate);
+                subscription.setBeginDate(localDate);
+            } else {
+                throw new IncorrectFormDataException(BEGIN_DATE, beginDate);
+            }
+        }catch (DateTimeParseException e) {
+            throw new IncorrectFormDataException(BEGIN_DATE, beginDate);
+        }
+
+        try {
+            if (endDate != null) {
+                LocalDate localDate = LocalDate.parse(endDate);
+                subscription.setEndDate(localDate);
+            } else {
+                throw new IncorrectFormDataException(END_DATE, endDate);
+            }
+        }catch (DateTimeParseException e) {
+            throw new IncorrectFormDataException(END_DATE, endDate);
+        }
 
 // сделать даты
 

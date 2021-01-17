@@ -35,7 +35,7 @@ public class ShowAllCommonComplexCommand extends Command {
 
         } catch (PersistentException e) {
             logger.error("Error while show execute log", e);
-            return new Forward("index.jsp");
+            return new Forward("oldIndex.jsp");
         }
         return new Forward("complex/list.jsp");
     }

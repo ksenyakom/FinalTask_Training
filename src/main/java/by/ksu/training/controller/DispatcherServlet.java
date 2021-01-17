@@ -76,7 +76,7 @@ public class DispatcherServlet extends HttpServlet {
                     req.getRequestDispatcher(uri).forward(req, resp);
                 }
             } else {
-                req.getRequestDispatcher("/index.jsp").forward(req, resp);
+                req.getRequestDispatcher("/oldIndex.jsp").forward(req, resp);
                 //TODO
             }
         } catch (PersistentException e) {

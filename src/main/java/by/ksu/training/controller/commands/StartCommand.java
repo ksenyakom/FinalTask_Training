@@ -17,7 +17,7 @@ public class StartCommand extends Command{
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        return new Forward("/index.jsp",true);
+        return new Forward("/oldIndex.jsp",true);
 
     }
 

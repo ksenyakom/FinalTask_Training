@@ -16,7 +16,7 @@
 <div class="container-fluid">
     <div class="row content">
         <%-- menu of the page--%>
-        <c:import url="../admin/menu.jsp"/>
+        <c:import url="../admin/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>

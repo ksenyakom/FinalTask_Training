@@ -3,6 +3,7 @@ package by.ksu.training.controller.commands;
 
 import by.ksu.training.controller.commands.admin.*;
 import by.ksu.training.controller.commands.common.*;
+import by.ksu.training.controller.commands.visitor.ShowVisitorAssignedComplexesCommand;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +30,7 @@ public final class CommandProvider {
         repository.put(SubscriptionDeleteCommand.class, new SubscriptionDeleteCommand());
         repository.put(ShowSubscriptionEditCommand.class, new ShowSubscriptionEditCommand());
         repository.put(SubscriptionUpdateCommand.class, new SubscriptionUpdateCommand());
+        repository.put(ShowVisitorAssignedComplexesCommand.class, new ShowVisitorAssignedComplexesCommand());
 
     }
 

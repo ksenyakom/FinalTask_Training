@@ -3,6 +3,7 @@ package by.ksu.training.controller.filter;
 import by.ksu.training.controller.commands.*;
 import by.ksu.training.controller.commands.admin.*;
 import by.ksu.training.controller.commands.common.*;
+import by.ksu.training.controller.commands.visitor.ShowVisitorAssignedComplexesCommand;
 import by.ksu.training.entity.Subscription;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +28,7 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/login", ShowLoginCommand.class);
         commandsGet.put("/logout", LogoutCommand.class);
         commandsGet.put("/user/list", ShowUsersByRoleCommand.class);
+        commandsGet.put("/visitor/assigned_trainings", ShowVisitorAssignedComplexesCommand.class);
         commandsGet.put("/subscription/list", ShowAllSubscriptionsCommand.class);
         commandsGet.put("/subscription/edit", ShowSubscriptionEditCommand.class);
         commandsGet.put("/complex/list", ShowAllCommonComplexCommand.class);

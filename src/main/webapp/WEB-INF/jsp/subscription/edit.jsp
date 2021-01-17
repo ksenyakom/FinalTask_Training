@@ -20,7 +20,7 @@
 <div class="container-fluid">
     <div class="row content">
         <%-- menu of the page--%>
-        <c:import url="../admin/menu.jsp"/>
+        <c:import url="../admin/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8">
 
@@ -28,10 +28,11 @@
                 <c:param name = "subscriptionId" value = "${subscription.id}"/>
                 <c:param name = "visitorId" value = "${subscription.visitor.id}"/>
             </c:url>
-            <form action="${myURL}" method="POST" onsubmit="return validateSubscription(this)">
-                <div class="container">
-                    <h2><fmt:message key="title.subscription_edit"/></h2>
-                    <br>
+            <form action="${myURL}" method="POST" onsubmit="return validateSubscriptionEdit(this)">
+                <h2><fmt:message key="title.subscription_edit"/></h2>
+                <br>
+                <div class="container col-xs-6">
+
                     <p>Visitor: ${subscription.visitor.login}</p>
                     <div class="form-group">
                         <label for="beginDate">Дата начала</label>
@@ -46,7 +47,8 @@
                     <br>
                     <div class="form-group">
                         <label for="price">Стоимость</label>
-                        <input type="number" class="form-control" id="price" name="price">
+                        <input type="number" class="form-control" id="price"
+                               name="price" value="${subscription.price}" required>
                     </div>
                     <br>
                     <p id="errorMessage" class="text-danger"></p>

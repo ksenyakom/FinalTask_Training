@@ -1,7 +1,9 @@
 package by.ksu.training.service.impl;
 
 import by.ksu.training.dao.AssignedComplexDao;
+import by.ksu.training.dao.ComplexDao;
 import by.ksu.training.entity.AssignedComplex;
+import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
 import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
@@ -43,18 +45,31 @@ public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedC
     @Override
     public List<AssignedComplex> findUnexecutedByUser(User user) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.readUnexecutedByUser(user);
+        List<AssignedComplex> assignedComplexes = acDao.readUnexecutedByUser(user);
+        readComplexTitle(assignedComplexes);
+        return  assignedComplexes;
     }
 
     @Override
     public List<AssignedComplex> findExecutedByUserForPeriod(User user, int periodDays) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.readExecutedByUserForPeriod(user,periodDays);
+        List<AssignedComplex> assignedComplexes = acDao.readExecutedByUserForPeriod(user,periodDays);
+        readComplexTitle(assignedComplexes);
+        return  assignedComplexes;
     }
 
     @Override
     public List<AssignedComplex> findExecutedForPeriod(int period) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
         return acDao.readExecutedForPeriod(period);
+    }
+
+    private void readComplexTitle(List<AssignedComplex> assignedComplexes) throws PersistentException {
+        List<Complex> complexes = assignedComplexes.stream()
+                .map(AssignedComplex::getComplex)
+                .distinct()
+                .collect(Collectors.toList());
+        ComplexDao complexDao = transaction.createDao(ComplexDao.class);
+        complexDao.readTitle(complexes);
     }
 }
