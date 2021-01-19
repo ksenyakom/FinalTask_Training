@@ -43,6 +43,8 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/journal", ShowJournalCommand.class);
         commandsGet.put("/registration", ShowRegistrationCommand.class);
         commandsGet.put("/change_language", ChangeLanguageCommand.class);
+        commandsGet.put("/assigned_trainer/list", ShowAssignedTrainerListCommand.class);
+        commandsGet.put("/assigned_trainer/set", ShowAssignedTrainerSetPageCommand.class);
 
 
         commandsPost.put("/user/deleteUser", DeleteUserCommand.class);
@@ -53,6 +55,7 @@ public class CommandFromUriFilter implements Filter {
         commandsPost.put("/subscription/save_new", SubscriptionSaveNewCommand.class);
         commandsPost.put("/registration", RegistrationCommand.class);
         commandsPost.put("/login", LoginCommand.class);
+        commandsPost.put("/assigned_trainer/save", SaveAssignedTrainerCommand.class);
     }
 
     @Override

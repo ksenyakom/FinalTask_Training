@@ -82,10 +82,8 @@ public class AssignedTrainerDaoImplTest {
 
     @DataProvider(name = "assignedTrainer")
     public Object[] createData() {
-        Visitor visitor = new Visitor();
-        visitor.setId(visitorId);
-        Trainer trainer = new Trainer();
-        trainer.setId(trainerId1);
+        User visitor = new User(visitorId);
+        User trainer = new User(trainerId1);
 
         AssignedTrainer assignedTrainer = new AssignedTrainer();
         assignedTrainer.setVisitor(visitor);
@@ -121,10 +119,8 @@ public class AssignedTrainerDaoImplTest {
         int id = atDao.create(assignedTrainer);
         assignedTrainer.setId(id);
 
-        Visitor visitor = new Visitor();
-        visitor.setId(visitorId);
-        Trainer trainer = new Trainer();
-        trainer.setId(trainerId2);
+        User visitor = new User(visitorId);
+        User trainer = new User(trainerId2);
 
         assignedTrainer.setTrainer(trainer);
         assignedTrainer.setBeginDate(LocalDate.of(2018, 12, 31));
@@ -150,7 +146,7 @@ public class AssignedTrainerDaoImplTest {
     public void testReadListVisitorsByTrainer(AssignedTrainer assignedTrainer) throws PersistentException {
         int id = atDao.create(assignedTrainer);
         assignedTrainer.setId(id);
-        List<Visitor> visitors = atDao.readListVisitorsByTrainer(assignedTrainer.getTrainer());
+        List<User> visitors = atDao.readListVisitorsByTrainer(assignedTrainer.getTrainer());
         atDao.delete(id);
         transaction.commit();
 

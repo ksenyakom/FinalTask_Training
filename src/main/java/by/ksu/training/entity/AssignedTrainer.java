@@ -4,24 +4,31 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class AssignedTrainer extends Entity{
-    private Visitor visitor;
-    private Trainer trainer;
+    private User visitor;
+    private User trainer;
     private LocalDate beginDate;
     private LocalDate endDate;
 
-    public Visitor getVisitor() {
+    public AssignedTrainer() {
+    }
+
+    public AssignedTrainer(Integer id) {
+        this.setId(id);
+    }
+
+    public User getVisitor() {
         return visitor;
     }
 
-    public void setVisitor(Visitor visitor) {
+    public void setVisitor(User visitor) {
         this.visitor = visitor;
     }
 
-    public Trainer getTrainer() {
+    public User getTrainer() {
         return trainer;
     }
 
-    public void setTrainer(Trainer trainer) {
+    public void setTrainer(User trainer) {
         this.trainer = trainer;
     }
 

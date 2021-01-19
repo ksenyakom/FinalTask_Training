@@ -66,7 +66,6 @@ public class DispatcherServlet extends HttpServlet {
                     if (forward.isRedirect()) {
                         String uri = req.getContextPath() + forward.getForward();
                         resp.sendRedirect(uri);
-
                     } else {
                         String successMessage = (String)req.getSession().getAttribute("success_message");
                         if (successMessage != null) {
@@ -75,7 +74,6 @@ public class DispatcherServlet extends HttpServlet {
                         }
                         String uri = "/WEB-INF/jsp/" + forward.getForward();
                         req.getRequestDispatcher(uri).forward(req, resp);
-
                     }
                 } else {
                     String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";

@@ -29,12 +29,12 @@
         <div class="col-sm-8 text-justify">
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
-                    <h4><fmt:message key="journal.table.name"/></h4>
+                    <h4><fmt:message key="table.name.journal"/></h4>
                     <tr class="active">
                         <th scope="col">№</th>
-                        <th scope="col"><fmt:message key="journal.table.head.training_name"/></th>
-                        <th scope="col"><fmt:message key="journal.table.head.user_login"/></th>
-                        <th scope="col"><fmt:message key="journal.table.head.date"/></th>
+                        <th scope="col"><fmt:message key="table.training_name"/></th>
+                        <th scope="col"><fmt:message key="table.visitor.login"/></th>
+                        <th scope="col"><fmt:message key="table.date"/></th>
                     </tr>
                     <c:forEach items="${lst}" var="assignedComplex" varStatus="status">
                         <tr>

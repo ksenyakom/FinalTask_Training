@@ -19,28 +19,39 @@ public final class CommandProvider {
 
     public CommandProvider() {
         repository.put(StartCommand.class, new StartCommand());
-        repository.put(LoginCommand.class, new LoginCommand());
-        repository.put(ShowUsersByRoleCommand.class, new ShowUsersByRoleCommand());
-        repository.put(RegistrationCommand.class, new RegistrationCommand());
-        repository.put(ShowJournalCommand.class, new ShowJournalCommand());
-        repository.put(ShowLoginCommand.class, new ShowLoginCommand());
-        repository.put(ShowRegistrationCommand.class, new ShowRegistrationCommand());
-        repository.put(LogoutCommand.class, new LogoutCommand());
-        repository.put(DeleteUserCommand.class, new DeleteUserCommand());
         repository.put(ChangeLanguageCommand.class, new ChangeLanguageCommand());
+
+        repository.put(LoginCommand.class, new LoginCommand());
+        repository.put(ShowLoginCommand.class, new ShowLoginCommand());
+        repository.put(LogoutCommand.class, new LogoutCommand());
+        repository.put(ShowUserEditLoginCommand.class, new ShowUserEditLoginCommand());
+        repository.put(SaveChangedLoginCommand.class, new SaveChangedLoginCommand());
+
+        repository.put(RegistrationCommand.class, new RegistrationCommand());
+        repository.put(ShowRegistrationCommand.class, new ShowRegistrationCommand());
+
+        repository.put(ShowUsersByRoleCommand.class, new ShowUsersByRoleCommand());
+        repository.put(DeleteUserCommand.class, new DeleteUserCommand());
+
+        repository.put(ShowJournalCommand.class, new ShowJournalCommand());
+
         repository.put(ShowAllCommonComplexCommand.class, new ShowAllCommonComplexCommand());
-        repository.put(ShowAllSubscriptionsCommand.class, new ShowAllSubscriptionsCommand());
+        repository.put(ShowVisitorAssignedComplexesCommand.class, new ShowVisitorAssignedComplexesCommand());
+
         repository.put(SubscriptionDeleteCommand.class, new SubscriptionDeleteCommand());
         repository.put(ShowSubscriptionEditCommand.class, new ShowSubscriptionEditCommand());
         repository.put(SubscriptionUpdateCommand.class, new SubscriptionUpdateCommand());
-        repository.put(ShowVisitorAssignedComplexesCommand.class, new ShowVisitorAssignedComplexesCommand());
-        repository.put(ShowUserEditLoginCommand.class, new ShowUserEditLoginCommand());
-        repository.put(SaveChangedLoginCommand.class, new SaveChangedLoginCommand());
+        repository.put(ShowAllSubscriptionsCommand.class, new ShowAllSubscriptionsCommand());
+        repository.put(ShowSubscriptionBuyCommand.class, new ShowSubscriptionBuyCommand());
+        repository.put(ShowVisitorSubscriptionCommand.class, new ShowVisitorSubscriptionCommand());
+        repository.put(SubscriptionSaveNewCommand.class, new SubscriptionSaveNewCommand());
+
         repository.put(SavePersonChangeCommand.class, new SavePersonChangeCommand());
         repository.put(ShowPersonEditCommand.class, new ShowPersonEditCommand());
-        repository.put(ShowVisitorSubscriptionCommand.class, new ShowVisitorSubscriptionCommand());
-        repository.put(ShowSubscriptionBuyCommand.class, new ShowSubscriptionBuyCommand());
-        repository.put(SubscriptionSaveNewCommand.class, new SubscriptionSaveNewCommand());
+
+        repository.put(ShowAssignedTrainerListCommand.class, new ShowAssignedTrainerListCommand());
+        repository.put(ShowAssignedTrainerSetPageCommand.class, new ShowAssignedTrainerSetPageCommand());
+        repository.put(SaveAssignedTrainerCommand.class, new SaveAssignedTrainerCommand());
 
     }
 
