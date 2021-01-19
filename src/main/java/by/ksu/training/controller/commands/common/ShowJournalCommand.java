@@ -44,8 +44,9 @@ public class ShowJournalCommand extends Command {
             request.setAttribute("lst", list);
 
         } catch (PersistentException e) {
-            logger.error("Error while show execute log", e);
-            return new Forward("oldIndex.jsp");
+            logger.error("Exception in command!!!", e);
+            request.setAttribute("err_message",e.getMessage());
+            return null;
         }
         return new Forward("journal.jsp");
     }

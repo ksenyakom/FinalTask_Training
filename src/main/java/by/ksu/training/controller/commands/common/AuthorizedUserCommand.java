@@ -1,5 +1,6 @@
-package by.ksu.training.controller.commands;
+package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.commands.Command;
 import by.ksu.training.entity.Role;
 
 import java.util.Arrays;

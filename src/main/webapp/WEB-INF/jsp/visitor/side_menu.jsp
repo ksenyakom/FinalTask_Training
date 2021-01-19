@@ -13,9 +13,10 @@
 <div class="col-sm-2 sidenav text-left">
 <%--    <p><a href='<c:url value="/user/list.html"/>'><fmt:message key="label.side_menu.admin.users"/></a></p>--%>
     <p><a href='<c:url value="/visitor/assigned_trainings.html"/>'>Мои тренировки</a></p>
-    <p><a href="#">Моя подписка</a></p>
-    <p><a href='<c:url value="/visitor/edit.html"/>'>Редактировать личные данные</a></p>
-    <p><a href='<c:url value="/user/edit.html"/>'>Изменить логин или пароль</a></p>
+    <p><a href='<c:url value="/visitor/subscription.html"/>'>Моя подписка</a></p>
+    <p><a href='<c:url value="/person/edit.html"/>'>Редактировать личные данные</a></p>
+    <p><a href='<c:url value="/user/edit_login.html"/>'>Изменить логин</a></p>
+    <p><a href='<c:url value="/user/edit_password.html"/>'>Изменить пароль</a></p>
     <p><a href="#">Мой тренер</a></p>
 </div>
 </body>

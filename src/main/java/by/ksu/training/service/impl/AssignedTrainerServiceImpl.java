@@ -17,7 +17,7 @@ public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedT
     }
 
     @Override
-    public AssignedTrainer findByIdentity(Integer id) throws PersistentException {
+    public AssignedTrainer findById(Integer id) throws PersistentException {
         AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
         return atDao.read(id);
     }

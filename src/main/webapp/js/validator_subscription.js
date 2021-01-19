@@ -17,4 +17,16 @@ function validateSubscriptionEdit(form) {
         document.getElementById("errorMessage").innerHTML = message;
         return false;
     }
+
+}
+function validateSubscriptionNew(form) {
+    var beginDate = form.beginDate.value;
+    var message = "";
+    if (!beginDate) {
+        message += "Дата не введена.";
+    }
+    if (message !== "") {
+        document.getElementById("errorMessage").innerHTML = message;
+        return false;
+    }
 }

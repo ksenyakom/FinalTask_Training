@@ -68,15 +68,21 @@ public class DispatcherServlet extends HttpServlet {
                         resp.sendRedirect(uri);
 
                     } else {
+                        String successMessage = (String)req.getSession().getAttribute("success_message");
+                        if (successMessage != null) {
+                            req.setAttribute("success_message",successMessage);
+                            req.getSession().removeAttribute("success_message");
+                        }
                         String uri = "/WEB-INF/jsp/" + forward.getForward();
                         req.getRequestDispatcher(uri).forward(req, resp);
+
                     }
                 } else {
                     String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
                     req.getRequestDispatcher(uri).forward(req, resp);
                 }
             } else {
-                req.getRequestDispatcher("/oldIndex.jsp").forward(req, resp);
+                req.getRequestDispatcher("/index.jsp").forward(req, resp);
                 //TODO
             }
         } catch (PersistentException e) {

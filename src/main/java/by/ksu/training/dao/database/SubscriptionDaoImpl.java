@@ -20,8 +20,10 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
 
     private static final String CREATE = "INSERT INTO `subscription`(`visitor_id`,`begin_date`,`end_date`,`price`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT `visitor_id`,`begin_date`,`end_date`,`price` FROM `subscription` WHERE `id` = ? ";
+    private static final String READ_BY_VISITOR = "SELECT `id`,`begin_date`,`end_date`,`price` FROM `subscription` WHERE `visitor_id` = ? ORDER BY `begin_date` DESC ";
     private static final String READ_ALL = "SELECT * FROM `subscription` ORDER BY `id`";
     private static final String READ_ALL_ACTIVE = "SELECT * FROM `subscription` WHERE `end_date` > NOW()  ORDER BY `id`";
+    private static final String READ_ACTIVE_BY_VISITOR = "SELECT `id`,`begin_date`,`end_date` FROM `subscription` WHERE `end_date` > NOW()  AND `visitor_id` = ?";
     private static final String UPDATE = "UPDATE `subscription` SET `visitor_id`=?,`begin_date`=?,`end_date`=?,`price` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `subscription` WHERE `id` = ?";
 
@@ -31,6 +33,28 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
             ResultSet resultSet = statement.executeQuery();
             List<Subscription> list = resultSetToList(resultSet);
             return list;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Subscription> readByUser(User user) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_BY_VISITOR)) {
+            statement.setInt(1, user.getId());
+            ResultSet resultSet = statement.executeQuery();
+            Subscription subscription = null;
+            List<Subscription> subscriptionList = new ArrayList<>();
+
+            while (resultSet.next()) {
+                subscription = new Subscription(resultSet.getInt("id"));
+                subscription.setVisitor(user);
+                subscription.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
+                subscription.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
+                subscription.setPrice(resultSet.getBigDecimal("price"));
+                subscriptionList.add(subscription);
+            }
+            return subscriptionList;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
@@ -83,6 +107,25 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
                 subscription.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
                 subscription.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
                 subscription.setPrice(resultSet.getBigDecimal("price"));
+            }
+            return subscription;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public Subscription readActiveByUser(User user) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_ACTIVE_BY_VISITOR)) {
+            statement.setInt(1, user.getId());
+            ResultSet resultSet = statement.executeQuery();
+            Subscription subscription = null;
+
+            if (resultSet.next()) {
+                subscription = new Subscription(resultSet.getInt("id"));
+                subscription.setVisitor(user);
+                subscription.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
+                subscription.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
             }
             return subscription;
         } catch (SQLException e) {

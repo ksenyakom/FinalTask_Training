@@ -25,7 +25,7 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
     }
 
     @Override
-    public User findByIdentity(Integer id) throws PersistentException {
+    public User findById(Integer id) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
         return userDao.read(id);
     }

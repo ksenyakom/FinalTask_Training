@@ -1,6 +1,5 @@
 package by.ksu.training.controller.commands.common;
 
-import by.ksu.training.controller.commands.AuthorizedUserCommand;
 import by.ksu.training.controller.commands.admin.ShowUsersByRoleCommand;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
@@ -22,8 +21,8 @@ import java.util.Set;
  * @Author Kseniya Oznobishina
  * @Date 05.01.2021
  */
-public class UserDeleteCommand extends AuthorizedUserCommand {
-    private static Logger logger = LogManager.getLogger(UserDeleteCommand.class);
+public class DeleteUserCommand extends AuthorizedUserCommand {
+    private static Logger logger = LogManager.getLogger(DeleteUserCommand.class);
     private static final String REMOVE = "remove";
 
     @Override

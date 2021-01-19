@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
     @Override
-    public Complex findByIdentity(Integer id) throws PersistentException {
+    public Complex findById(Integer id) throws PersistentException {
         ComplexDao complexDao = transaction.createDao(ComplexDao.class);
         return complexDao.read(id);
     }
@@ -59,7 +59,7 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
 
     private void readTrainerLogin(List<Complex> complexes) throws PersistentException {
         List<User> trainers = complexes.stream()
-                .map(complex -> complex.getTrainerDeveloped())
+                .map(Complex::getTrainerDeveloped)
                 .distinct()
                 .collect(Collectors.toList());
         UserDao userDao = transaction.createDao(UserDao.class);

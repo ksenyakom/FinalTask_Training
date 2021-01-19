@@ -16,7 +16,7 @@ public class ExerciseServiceImpl extends ServiceImpl implements ExerciseService 
     }
 
     @Override
-    public Exercise findByIdentity(Integer id) throws PersistentException {
+    public Exercise findById(Integer id) throws PersistentException {
         ExerciseDao dao = transaction.createDao(ExerciseDao.class);
         return dao.read(id);
     }

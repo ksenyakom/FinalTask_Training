@@ -21,13 +21,27 @@ public class SubscriptionServiceImpl extends ServiceImpl implements Subscription
     }
 
     @Override
-    public Subscription findByIdentity(Integer id) throws PersistentException {
+    public Subscription findById(Integer id) throws PersistentException {
         SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
         Subscription subscription = sDao.read(id);
         if (subscription != null) {
             List<Subscription> subscriptionList = List.of(subscription);
             readUserLogin(subscriptionList);
         }
+        return subscription;
+    }
+
+    @Override
+    public List<Subscription> findByUser(User user) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        List<Subscription> subscriptionList = sDao.readByUser(user);
+        return subscriptionList;
+    }
+
+    @Override
+    public Subscription findActiveByUser(User user) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        Subscription subscription = sDao.readActiveByUser(user);
         return subscription;
     }
 

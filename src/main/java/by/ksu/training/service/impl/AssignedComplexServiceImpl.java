@@ -5,7 +5,6 @@ import by.ksu.training.dao.ComplexDao;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
-import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
 import by.ksu.training.service.ServiceImpl;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedComplexService {
     @Override
-    public AssignedComplex findByIdentity(Integer id) throws PersistentException {
+    public AssignedComplex findById(Integer id) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
         return acDao.read(id);
     }

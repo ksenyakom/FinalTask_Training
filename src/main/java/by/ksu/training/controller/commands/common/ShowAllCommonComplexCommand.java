@@ -34,8 +34,9 @@ public class ShowAllCommonComplexCommand extends Command {
             request.setAttribute("lst", complexes);
 
         } catch (PersistentException e) {
-            logger.error("Error while show execute log", e);
-            return new Forward("oldIndex.jsp");
+            logger.error("Exception in command!!!", e);
+            request.setAttribute("err_message",e.getMessage());
+            return null;
         }
         return new Forward("complex/list.jsp");
     }

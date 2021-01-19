@@ -26,7 +26,7 @@ public class ShowSubscriptionEditCommand extends AdminCommand{
             SubscriptionService service = factory.getService(SubscriptionService.class);
             if (editId != null) {
                 int id = Integer.parseInt(editId);
-                Subscription subscription = service.findByIdentity(id);
+                Subscription subscription = service.findById(id);
 
                 request.setAttribute("subscription", subscription);
             }
@@ -35,7 +35,7 @@ public class ShowSubscriptionEditCommand extends AdminCommand{
             request.setAttribute("err_message",e.getMessage());
             return null;
         }
-        return new Forward("subscription/edit.jsp");
+        return new Forward("subscription/edit_login.jsp");
     }
 
     @Override

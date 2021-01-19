@@ -6,15 +6,9 @@ import by.ksu.training.service.EntityService;
 
 import java.util.List;
 
-public interface ComplexService extends EntityService {
-
-    Complex findByIdentity(Integer id) throws PersistentException;
+public interface ComplexService extends EntityService<Complex> {
 
     List<Complex> findAll() throws PersistentException;
-
-    void save(Complex complex) throws PersistentException;
-
-    void delete(Integer id) throws PersistentException;
 
     void findTitle(List<Complex> complexes) throws PersistentException;
 

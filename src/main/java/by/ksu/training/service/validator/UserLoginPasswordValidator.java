@@ -7,11 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author Kseniya Oznobishina
- * @Date 05.01.2021
+ * @Date 17.01.2021
  */
-public class UserValidator implements Validator<User> {
+public class UserLoginPasswordValidator implements Validator<User> {
     public static final String REGEX_LOGIN = "[A-Za-z0-9_\\-]{5,}";
-    public static final String REGEX_EMAIL = "^[a-zA-Z0-9_.+\\-]+@[a-zA-Z0-9\\-]+\\.[a-zA-Z0-9\\-.]+";
 
     @Override
     public User validate(HttpServletRequest request) throws IncorrectFormDataException {
@@ -29,13 +28,6 @@ public class UserValidator implements Validator<User> {
             user.setPassword(password);
         } else {
             throw new IncorrectFormDataException("password", password);
-        }
-
-        String email = request.getParameter("email");
-        if (email != null && email.matches(REGEX_EMAIL)) {
-            user.setEmail(email);
-        } else {
-            throw new IncorrectFormDataException("email", email);
         }
 
         return user;

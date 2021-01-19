@@ -26,6 +26,7 @@ public class LoginCommand extends Command {
                 User user = service.findByLoginAndPassword(login, password);
                 if (user != null) {
                     HttpSession session = request.getSession();
+                    user.setPassword(null);
                     session.setAttribute("authorizedUser", user);
                //     session.setAttribute("menu", menu.get(user.getRole()));
                     logger.info("user {} is logged in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());

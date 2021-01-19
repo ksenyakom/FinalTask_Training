@@ -3,7 +3,10 @@ package by.ksu.training.controller.commands;
 
 import by.ksu.training.controller.commands.admin.*;
 import by.ksu.training.controller.commands.common.*;
+import by.ksu.training.controller.commands.visitor.ShowSubscriptionBuyCommand;
 import by.ksu.training.controller.commands.visitor.ShowVisitorAssignedComplexesCommand;
+import by.ksu.training.controller.commands.visitor.ShowVisitorSubscriptionCommand;
+import by.ksu.training.controller.commands.visitor.SubscriptionSaveNewCommand;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +26,7 @@ public final class CommandProvider {
         repository.put(ShowLoginCommand.class, new ShowLoginCommand());
         repository.put(ShowRegistrationCommand.class, new ShowRegistrationCommand());
         repository.put(LogoutCommand.class, new LogoutCommand());
-        repository.put(UserDeleteCommand.class, new UserDeleteCommand());
+        repository.put(DeleteUserCommand.class, new DeleteUserCommand());
         repository.put(ChangeLanguageCommand.class, new ChangeLanguageCommand());
         repository.put(ShowAllCommonComplexCommand.class, new ShowAllCommonComplexCommand());
         repository.put(ShowAllSubscriptionsCommand.class, new ShowAllSubscriptionsCommand());
@@ -31,6 +34,13 @@ public final class CommandProvider {
         repository.put(ShowSubscriptionEditCommand.class, new ShowSubscriptionEditCommand());
         repository.put(SubscriptionUpdateCommand.class, new SubscriptionUpdateCommand());
         repository.put(ShowVisitorAssignedComplexesCommand.class, new ShowVisitorAssignedComplexesCommand());
+        repository.put(ShowUserEditLoginCommand.class, new ShowUserEditLoginCommand());
+        repository.put(SaveChangedLoginCommand.class, new SaveChangedLoginCommand());
+        repository.put(SavePersonChangeCommand.class, new SavePersonChangeCommand());
+        repository.put(ShowPersonEditCommand.class, new ShowPersonEditCommand());
+        repository.put(ShowVisitorSubscriptionCommand.class, new ShowVisitorSubscriptionCommand());
+        repository.put(ShowSubscriptionBuyCommand.class, new ShowSubscriptionBuyCommand());
+        repository.put(SubscriptionSaveNewCommand.class, new SubscriptionSaveNewCommand());
 
     }
 

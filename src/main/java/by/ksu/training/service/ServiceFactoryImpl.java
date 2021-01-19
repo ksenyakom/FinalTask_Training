@@ -22,8 +22,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
             else if (clazz == ComplexService.class) {service =  new ComplexServiceImpl();}
             else if (clazz == ExerciseService.class) {service = new ExerciseServiceImpl(); }
             else if (clazz == SubscriptionService.class) {service =  new SubscriptionServiceImpl();}
-            else if (clazz == TrainerService.class) {service =  new TrainerServiceImpl();}
-            else if (clazz == VisitorService.class) {service =  new VisitorServiceImpl();}
+            else if (clazz == PersonService.class) {service =  new PersonServiceImpl();}
             else if (clazz == UserService.class) {service =  new UserServiceImpl();}
             if (service != null) {
                 Transaction transaction = factory.createTransaction();
