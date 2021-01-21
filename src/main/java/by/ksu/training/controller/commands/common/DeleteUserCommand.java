@@ -1,6 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.admin.ShowUsersByRoleCommand;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -26,7 +27,7 @@ public class DeleteUserCommand extends AuthorizedUserCommand {
     private static final String REMOVE = "remove";
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         String[] usersId = request.getParameterValues(REMOVE);
         try {
 
@@ -36,8 +37,6 @@ public class DeleteUserCommand extends AuthorizedUserCommand {
                 //TODO Проверкку какую может?
                 userService.delete(id);
                 request.setAttribute("success_message", "Юзер удален успешно");
-                request.setAttribute("warn_message", "Юзер удален неуспешно");
-                request.setAttribute("err_message", "Юзер вообще не удален");
 
             }
 
@@ -53,7 +52,7 @@ public class DeleteUserCommand extends AuthorizedUserCommand {
             logger.error("Exception while delete user(s) {}", Arrays.toString(usersId), e);
         }
 
-        return new Forward("user/list.jsp");
+        return new ResponseState("user/list.jsp");
     }
 
     @Override

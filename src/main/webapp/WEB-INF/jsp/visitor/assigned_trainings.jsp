@@ -51,7 +51,8 @@
                                     <fmt:formatDate value="${parseDateExecuted}" type="date" dateStyle="short"/>
                                 </c:when>
                                 <c:otherwise>
-                                            <a href="#">Выполнить</a>
+                                    <a href='<c:url
+                                            value="../complex/execute.html?assigned_complexId=${assigned_complex.id}"/>'>Выполнить</a>
                                 </c:otherwise>
                             </c:choose>
                             </td>

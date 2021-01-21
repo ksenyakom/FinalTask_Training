@@ -36,6 +36,7 @@ public class LocalDateTag extends TagSupport {
     public int doStartTag() throws JspException {
         try {
 
+//            Locale locale = pageContext.getRequest().getLocale();
 
             Locale locale = null;
             if (language != null) {
@@ -48,7 +49,7 @@ public class LocalDateTag extends TagSupport {
             String stringDate = localDateToStringLocale(localDate, locale);
             //Та ли это локаль? или из куков доставать?
 
-        //    logger.debug("Local date {} using locale {} translated to: {}", localDate, locale , stringDate);
+            //    logger.debug("Local date {} using locale {} translated to: {}", localDate, locale , stringDate);
 
             pageContext.getOut().write(stringDate);
         } catch (IOException e) {
@@ -64,8 +65,9 @@ public class LocalDateTag extends TagSupport {
 
     /**
      * A method translates LocalDate to String according Locale.
+     *
      * @param localDate a date to translate,
-     * @param locale a locale, wich representation is needed,
+     * @param locale    a locale, wich representation is needed,
      * @return String representation of localDate.
      */
     public String localDateToStringLocale(LocalDate localDate, Locale locale) {

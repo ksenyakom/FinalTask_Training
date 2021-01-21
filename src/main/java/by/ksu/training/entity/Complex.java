@@ -55,6 +55,10 @@ public class Complex extends Entity {
         return listOfUnits.get(i);
     }
 
+    public List<ComplexUnit> getListOfUnits() {
+        return listOfUnits;
+    }
+
     public void setComplexUnit(ComplexUnit unit, int i) {
         listOfUnits.set(i, unit);
     }

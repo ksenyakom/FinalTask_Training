@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.Role;
 import by.ksu.training.exception.PersistentException;
@@ -17,8 +18,8 @@ public class StartCommand extends Command{
     private static Logger logger = LogManager.getLogger(StartCommand.class);
 
     @Override
-    public Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        return new Forward("/index.jsp",true);
+    public ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseState("/index.jsp",true);
 
     }
 

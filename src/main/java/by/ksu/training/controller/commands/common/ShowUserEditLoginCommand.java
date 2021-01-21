@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.state.ResponseState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +15,7 @@ public class ShowUserEditLoginCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(ShowUserEditLoginCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        return new Forward("user/edit_login.jsp");
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseState("user/edit_login.jsp");
     }
 }

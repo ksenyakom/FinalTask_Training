@@ -1,6 +1,6 @@
 package by.ksu.training.controller.commands.admin;
 
-import by.ksu.training.controller.commands.StartCommand;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -21,7 +21,7 @@ public class ShowUsersByRoleCommand extends AdminCommand {
     public static final String ROLE = "role";
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             String sRole = request.getParameter("role");
              if (sRole != null) {
@@ -35,6 +35,6 @@ public class ShowUsersByRoleCommand extends AdminCommand {
         } catch (PersistentException e) {
             logger.error("Exception in command", e);
         }
-        return new Forward("user/list.jsp");
+        return new ResponseState("user/list.jsp");
     }
 }

@@ -1,5 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.state.ResponseState;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,11 +12,11 @@ import javax.servlet.http.HttpSession;
  */
 public class LogoutCommand extends AuthorizedUserCommand {
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         session.setAttribute("authorizedUser", null);
         request.setAttribute("command", null);
-        return new Forward("/index.html", true);
+        return new ResponseState("/index.html", true);
     }
 
 

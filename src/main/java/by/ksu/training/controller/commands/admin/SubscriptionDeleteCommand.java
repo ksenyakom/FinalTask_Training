@@ -1,11 +1,10 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
-import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.SubscriptionService;
-import by.ksu.training.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +23,7 @@ public class SubscriptionDeleteCommand extends AdminCommand {
     private static final String REMOVE = "remove";
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         String[] subscriptionsId = request.getParameterValues(REMOVE);
 
         try {
@@ -46,7 +45,7 @@ public class SubscriptionDeleteCommand extends AdminCommand {
                 logger.error("Exception while delete subscription id = {}", Arrays.toString(subscriptionsId), e);
             }
 
-            return new Forward("subscription/list.jsp");
+            return new ResponseState("subscription/list.jsp");
         }
 
         @Override

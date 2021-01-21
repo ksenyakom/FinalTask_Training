@@ -28,6 +28,12 @@
             <rtexprvalue>true</rtexprvalue>
             <type>java.time.LocalDate</type>
         </attribute>
+        <attribute>
+            <name>language</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
 
 </taglib>

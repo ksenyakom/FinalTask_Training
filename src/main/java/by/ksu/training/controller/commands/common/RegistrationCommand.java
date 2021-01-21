@@ -1,6 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
@@ -24,7 +25,7 @@ public class RegistrationCommand extends Command {
     private static Logger logger = LogManager.getLogger(RegistrationCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         Validator<User> validator = new UserValidator();
         User user = null;
 
@@ -40,7 +41,7 @@ public class RegistrationCommand extends Command {
                 session.setAttribute("authorizedUser", user);
                 logger.info("user {} is created logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
                 request.setAttribute("command", null);
-                return new Forward("/index.html", true);
+                return new ResponseState("/index.html", true);
 
             } else {
                 request.setAttribute("message", "Пользователь с таким именем уже существует");

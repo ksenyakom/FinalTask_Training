@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class Exercise extends Entity {
-    public static List<String> types;
     private String title;
     private String adjusting;
     private String mistakes;
@@ -55,12 +54,9 @@ public class Exercise extends Entity {
     public String getType() {
         return type;
     }
-    public int getTypeId() {
-        return types.indexOf(type) +1;
-    }
 
-    public void setType(int i) {
-        this.type = types.get(i-1);
+    public void setType(String type) {
+        this.type = type;
 
     }
 

@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.visitor;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -9,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @Author Kseniya Oznobishina
@@ -19,7 +19,7 @@ public class ShowSubscriptionBuyCommand extends VisitorCommand {
     private static Logger logger = LogManager.getLogger(ShowSubscriptionBuyCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             SubscriptionService service = factory.getService(SubscriptionService.class);
             User user = (User) request.getSession().getAttribute("authorizedUser");
@@ -32,6 +32,6 @@ public class ShowSubscriptionBuyCommand extends VisitorCommand {
             request.setAttribute("err_message", e.getMessage());
             return null;
         }
-        return new Forward("subscription/buy.jsp");
+        return new ResponseState("subscription/buy.jsp");
     }
 }

@@ -1,14 +1,12 @@
 package by.ksu.training.controller.commands;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
-import by.ksu.training.entity.User;
 import by.ksu.training.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -41,46 +39,46 @@ public abstract class Command {
     }
 
 
-    protected abstract Command.Forward exec(HttpServletRequest request, HttpServletResponse response);
+    protected abstract ResponseState exec(HttpServletRequest request, HttpServletResponse response);
 
 
-    public static class Forward {
-        private String forward;
-        private boolean redirect;
-        Map<String,Object> attributes = new HashMap<>();
-
-        public Forward(String forward) {
-            this.forward = forward;
-        }
-
-        public Forward(String forward, boolean redirect) {
-            this.forward = forward;
-            this.redirect = redirect;
-        }
-
-        public String getForward() {
-            return forward;
-        }
-
-        public void setForward(String forward) {
-            this.forward = forward;
-        }
-
-        public boolean isRedirect() {
-            return redirect;
-        }
-
-        public void setRedirect(boolean redirect) {
-            this.redirect = redirect;
-        }
-
-        public Map<String, Object> getAttributes() {
-            return attributes;
-        }
-
-        public void setAttributes(Map<String, Object> attributes) {
-            this.attributes = attributes;
-        }
-    }
+//    public static class Forward {
+//        private String forward;
+//        private boolean redirect;
+//        Map<String,Object> attributes = new HashMap<>();
+//
+//        public Forward(String forward) {
+//            this.forward = forward;
+//        }
+//
+//        public Forward(String forward, boolean redirect) {
+//            this.forward = forward;
+//            this.redirect = redirect;
+//        }
+//
+//        public String getForward() {
+//            return forward;
+//        }
+//
+//        public void setForward(String forward) {
+//            this.forward = forward;
+//        }
+//
+//        public boolean isRedirect() {
+//            return redirect;
+//        }
+//
+//        public void setRedirect(boolean redirect) {
+//            this.redirect = redirect;
+//        }
+//
+//        public Map<String, Object> getAttributes() {
+//            return attributes;
+//        }
+//
+//        public void setAttributes(Map<String, Object> attributes) {
+//            this.attributes = attributes;
+//        }
+//    }
 
 }

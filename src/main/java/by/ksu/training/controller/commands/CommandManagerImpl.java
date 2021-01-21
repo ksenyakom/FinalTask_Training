@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ServiceFactory;
 
@@ -14,7 +15,7 @@ public class CommandManagerImpl implements CommandManager {
     }
 
     @Override
-    public Command.Forward execute(Command command, HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+    public ResponseState execute(Command command, HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         command.setFactory(factory);
         return command.exec(request,response);
     }

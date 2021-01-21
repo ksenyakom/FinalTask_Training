@@ -1,6 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.*;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.*;
@@ -21,7 +22,7 @@ public class ShowJournalCommand extends Command {
     private static Logger logger = LogManager.getLogger(ShowJournalCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             int periodDefault = 90;
             AssignedComplexService assignedComplexService = factory.getService(AssignedComplexService.class);
@@ -48,7 +49,7 @@ public class ShowJournalCommand extends Command {
             request.setAttribute("err_message",e.getMessage());
             return null;
         }
-        return new Forward("journal.jsp");
+        return new ResponseState("journal.jsp");
     }
 
     @Override

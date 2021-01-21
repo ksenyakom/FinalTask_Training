@@ -37,6 +37,7 @@ public final class CommandProvider {
 
         repository.put(ShowAllCommonComplexCommand.class, new ShowAllCommonComplexCommand());
         repository.put(ShowVisitorAssignedComplexesCommand.class, new ShowVisitorAssignedComplexesCommand());
+        repository.put(ShowExecuteComplexCommand.class, new ShowExecuteComplexCommand());
 
         repository.put(SubscriptionDeleteCommand.class, new SubscriptionDeleteCommand());
         repository.put(ShowSubscriptionEditCommand.class, new ShowSubscriptionEditCommand());
@@ -52,6 +53,7 @@ public final class CommandProvider {
         repository.put(ShowAssignedTrainerListCommand.class, new ShowAssignedTrainerListCommand());
         repository.put(ShowAssignedTrainerSetPageCommand.class, new ShowAssignedTrainerSetPageCommand());
         repository.put(SaveAssignedTrainerCommand.class, new SaveAssignedTrainerCommand());
+        repository.put(DeleteAssignedTrainerCommand.class, new DeleteAssignedTrainerCommand());
 
     }
 

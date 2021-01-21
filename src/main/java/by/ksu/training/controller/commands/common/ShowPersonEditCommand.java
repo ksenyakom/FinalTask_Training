@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Person;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -18,7 +19,7 @@ public class ShowPersonEditCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(ShowPersonEditCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             PersonService personService = factory.getService(PersonService.class);
             User user = (User) request.getSession().getAttribute("authorizedUser");
@@ -26,7 +27,7 @@ public class ShowPersonEditCommand extends AuthorizedUserCommand {
             if (person != null) {
                 request.setAttribute("person", person);
             }
-            return new Forward("person/edit.jsp");
+            return new ResponseState("person/edit.jsp");
 
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);

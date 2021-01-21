@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.exception.IncorrectFormDataException;
@@ -12,8 +13,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,7 +23,7 @@ public class SubscriptionUpdateCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(SubscriptionDeleteCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         Subscription subscription;
         try {
             Validator<Subscription> validator = new SubscriptionValidator();
@@ -47,7 +46,7 @@ public class SubscriptionUpdateCommand extends AdminCommand {
             return null;
         }
 
-        return new Forward("subscription/list.jsp");
+        return new ResponseState("subscription/list.jsp");
     }
 
     @Override

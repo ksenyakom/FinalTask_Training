@@ -1,12 +1,11 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
-import by.ksu.training.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Set;
 
 /**
@@ -15,8 +14,8 @@ import java.util.Set;
  */
 public class ShowRegistrationCommand extends Command {
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        return new Forward("registration.jsp");
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseState("registration.jsp");
     }
 
     @Override

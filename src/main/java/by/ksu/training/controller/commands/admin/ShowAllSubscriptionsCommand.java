@@ -1,11 +1,10 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
-import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.SubscriptionService;
-import by.ksu.training.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @Author Kseniya Oznobishina
@@ -25,7 +23,7 @@ public class ShowAllSubscriptionsCommand extends AdminCommand {
     public static final String ALL = "all";
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             String action = request.getParameter(ACTION);
             SubscriptionService service = factory.getService(SubscriptionService.class);
@@ -41,7 +39,7 @@ public class ShowAllSubscriptionsCommand extends AdminCommand {
             request.setAttribute("err_message",e.getMessage());
             return null;
         }
-        return new Forward("subscription/list.jsp");
+        return new ResponseState("subscription/list.jsp");
     }
 
     @Override

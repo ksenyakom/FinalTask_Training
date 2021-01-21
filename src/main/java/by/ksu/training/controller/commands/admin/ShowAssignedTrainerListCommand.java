@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedTrainerService;
@@ -23,7 +24,7 @@ public class ShowAssignedTrainerListCommand extends AdminCommand {
 
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             AssignedTrainerService atService = factory.getService(AssignedTrainerService.class);
             String action = request.getParameter(ACTION);
@@ -41,6 +42,6 @@ public class ShowAssignedTrainerListCommand extends AdminCommand {
             request.setAttribute("err_message", e.getMessage());
             return null;
         }
-        return new Forward("/assigned_trainer/list.jsp");
+        return new ResponseState("/assigned_trainer/list.jsp");
     }
 }

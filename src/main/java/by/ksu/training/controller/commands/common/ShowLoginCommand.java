@@ -1,9 +1,9 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
@@ -14,9 +14,9 @@ import java.util.Set;
  */
 public class ShowLoginCommand extends Command {
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         // TODO проверить куки,если там есть юзер, то положить его в request
-        return new Forward("login.jsp");
+        return new ResponseState("login.jsp");
 
     }
 

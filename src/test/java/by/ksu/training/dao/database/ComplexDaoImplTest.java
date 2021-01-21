@@ -64,7 +64,6 @@ public class ComplexDaoImplTest {
         user.setRole(Role.TRAINER);
         trainerId = userDao.create(user);
 
-        Exercise.types = List.of("common", "yoga"); //TODO где сделать инициализацию
 
         Exercise exercise = new Exercise();
         exercise.setTitle("Тадасана");
@@ -72,7 +71,7 @@ public class ComplexDaoImplTest {
         exercise.setMistakes("Mistakes.");
         exercise.setAudioPath("audio.mp3");
         exercise.setPicturePath("picture.img");
-        exercise.setType(1);
+        exercise.setType("yoga");
         exerciseId1 = exerciseDao.create(exercise);
 
         Exercise exercise2 = new Exercise();
@@ -81,7 +80,7 @@ public class ComplexDaoImplTest {
         exercise2.setMistakes("Mistakes shavasana.");
         exercise2.setAudioPath("audio1.mp3");
         exercise2.setPicturePath("picture1.img");
-        exercise2.setType(1);
+        exercise2.setType("yoga");
         exerciseId2 = exerciseDao.create(exercise2);
 
         Complex.ComplexUnit unit = new Complex.ComplexUnit();

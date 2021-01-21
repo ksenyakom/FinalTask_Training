@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
@@ -22,7 +23,7 @@ public class SaveChangedLoginCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(SaveChangedLoginCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         Validator<User> validator = new UserLoginPasswordValidator();
         User authorizedUser = null;
         try {
@@ -46,22 +47,22 @@ public class SaveChangedLoginCommand extends AuthorizedUserCommand {
                         //save in session
                         authorizedUser.setLogin(user.getLogin());
                         request.getSession().setAttribute("authorizedUser", authorizedUser);
-                        return new Forward("/index.jsp", true); //redirect to index
+                        return new ResponseState("/index.jsp", true); //redirect to index
                     } else {
                         request.setAttribute("warning_message", "Wrong password.");
-                        return new Forward("user/edit_login.jsp"); // returnBack
+                        return new ResponseState("user/edit_login.jsp"); // returnBack
                     }
                 } else {
                     request.setAttribute("warning_message", "Enter other login. Login already exist!!!");
-                    return new Forward("user/edit_login.jsp"); // returnBack
+                    return new ResponseState("user/edit_login.jsp"); // returnBack
                 }
             } else {
                 request.setAttribute("warning_message", "No login changed.");
-                return new Forward("user/edit_login.jsp"); // returnBack
+                return new ResponseState("user/edit_login.jsp"); // returnBack
             }
         } catch (IncorrectFormDataException e) {
             request.setAttribute("warning_message", "You entered incorrect data: " + e.getMessage());
-            return new Forward("user/edit_login.jsp"); // returnBack
+            return new ResponseState("user/edit_login.jsp"); // returnBack
         } catch (PersistentException e) {
             logger.error("Exception while changing Login of user {}", authorizedUser.getLogin(), e);
             request.setAttribute("error_message", "Exception in command!! " + e.getMessage());

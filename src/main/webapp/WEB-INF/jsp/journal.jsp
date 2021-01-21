@@ -12,7 +12,7 @@
 <fmt:setLocale value="${cookie.language.value}"/>
 <fmt:setBundle basename="properties.text"/>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="${cookie.language.value}">
 <head>
     <title><fmt:message key="title.journal"/></title>
     <c:import url="common/head.jsp"/>
@@ -42,13 +42,13 @@
                             <td>${ assignedComplex.complex.title }</td>
                             <td>${ assignedComplex.visitor.login }</td>
 <%--                            <fmt:formatDate value="${ assignedComplex.dateExecuted }" var="date"/>--%> <%--                            <td>--%>
-<%--                                <ctg:parse localDate="${ assignedComplex.dateExecuted }" language="${cookie.language.value}"/>--%>
+                            <td>   <ctg:parse localDate="${ assignedComplex.dateExecuted }" language="${cookie.language.value}" />
 <%--                            </td>--%>
-                            <td>
-                                <fmt:parseDate value="${assignedComplex.dateExecuted}" pattern="yyyy-MM-dd"
-                                               var="parsedDate" type="date"/>
-                                <fmt:formatDate value="${parsedDate}" type="date" dateStyle="short"/>
                             </td>
+<%--                                <fmt:parseDate value="${assignedComplex.dateExecuted}" pattern="yyyy-MM-dd"--%>
+<%--                                               var="parsedDate" type="date"/>--%>
+<%--                                <fmt:formatDate value="${parsedDate}" type="date" dateStyle="short"/>--%>
+
                         </tr>
                     </c:forEach>
                 </table>

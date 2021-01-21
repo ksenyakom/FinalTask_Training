@@ -33,8 +33,8 @@
                             key="label.show"/></label>
                     <div class="col-sm-6 col-md-4">
                         <select id="action" class="form-control" name="action">
-                            <option value="active"><fmt:message key="dropdown.subscription_list.active"/></option>
-                            <option value="all"><fmt:message key="dropdown.subscription_list.all"/></option>
+                            <option value="active"><fmt:message key="dropdown.active"/></option>
+                            <option value="all"><fmt:message key="dropdown.all"/></option>
                         </select>
                     </div>
                 </div>
@@ -71,8 +71,6 @@
                                     <fmt:formatDate value="${parsedEndDate}" type="date" dateStyle="short"/>
                                 </td>
                                 <td><fmt:formatNumber value="${ subscription.price }"/></td>
- <%--                                <td><button name="editId" value="${subscription.id}" class="btn btn-link"--%>
- <%--                                           onclick='<c:url value="/subscription/edit.html"/>'><fmt:message key="table.edit"/></button></td>--%>
                                 <td><a href='<c:url value="/subscription/edit.html?editId=${subscription.id}"/>'><fmt:message
                                         key="table.edit"/></a>
                                 </td>

@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.exception.PersistentException;
@@ -9,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,7 +20,7 @@ public class ShowSubscriptionEditCommand extends AdminCommand{
     private static Logger logger = LogManager.getLogger(ShowSubscriptionEditCommand.class);
     private static final String EDIT_ID = "editId";
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             String editId = request.getParameter(EDIT_ID);
             SubscriptionService service = factory.getService(SubscriptionService.class);
@@ -35,7 +35,7 @@ public class ShowSubscriptionEditCommand extends AdminCommand{
             request.setAttribute("err_message",e.getMessage());
             return null;
         }
-        return new Forward("subscription/edit_login.jsp");
+        return new ResponseState("subscription/edit_login.jsp");
     }
 
     @Override

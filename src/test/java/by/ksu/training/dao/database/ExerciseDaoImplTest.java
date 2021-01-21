@@ -41,7 +41,6 @@ public class ExerciseDaoImplTest {
         exerciseDao = transaction.createDao(ExerciseDao.class);
         transaction.commit();
 
-        Exercise.types = List.of("common", "yoga"); //TODO где сделать инициализацию
     }
 
     @AfterClass
@@ -57,7 +56,7 @@ public class ExerciseDaoImplTest {
         exercise.setMistakes("Mistakes.");
         exercise.setAudioPath("audio.mp3");
         exercise.setPicturePath("picture.img");
-        exercise.setType(1);
+        exercise.setType("yoga");
         return new Object[]{
                 exercise
         };

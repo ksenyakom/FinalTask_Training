@@ -1,6 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -17,7 +18,7 @@ public class LoginCommand extends Command {
     private static Logger logger = LogManager.getLogger(LoginCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         String login =  request.getParameter("login");
         String password = request.getParameter("password");
         try {
@@ -31,7 +32,7 @@ public class LoginCommand extends Command {
                //     session.setAttribute("menu", menu.get(user.getRole()));
                     logger.info("user {} is logged in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
                     request.setAttribute("command",null);
-                    return new Forward("/index.jsp",true);
+                    return new ResponseState("/index.jsp",true);
                 } else {
                     request.setAttribute("message", "Имя пользователя или пароль не опознанны");
                     logger.info("user {} unsuccessfully tried to log in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());

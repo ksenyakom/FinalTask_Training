@@ -1,6 +1,6 @@
 package by.ksu.training.controller.commands.visitor;
 
-import by.ksu.training.controller.commands.admin.ShowAllSubscriptionsCommand;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -20,7 +20,7 @@ public class ShowVisitorSubscriptionCommand extends VisitorCommand {
     private static Logger logger = LogManager.getLogger(ShowVisitorSubscriptionCommand.class);
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             SubscriptionService service = factory.getService(SubscriptionService.class);
             User user = (User) request.getSession().getAttribute("authorizedUser");
@@ -32,6 +32,6 @@ public class ShowVisitorSubscriptionCommand extends VisitorCommand {
             request.setAttribute("err_message", e.getMessage());
             return null;
         }
-        return new Forward("visitor/subscription.jsp");
+        return new ResponseState("visitor/subscription.jsp");
     }
 }

@@ -59,8 +59,6 @@
                 </div>
 
             <a href='<c:url value="/subscription/buy.html"/>' class="btn btn-success" role="button"><fmt:message key="button.buy"/></a>
-<%--            <button type="button" class="btn btn-success" formmethod="post" formaction="deleteSubscription.html"--%>
-<%--                    name="action" value="${param.get("action")}"><fmt:message key="table.remove"/></button>--%>
 
         </div>
         <div class="col-sm-2 sidenav">

@@ -1,6 +1,6 @@
 package by.ksu.training.controller.commands.admin;
 
-import by.ksu.training.entity.AssignedTrainer;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -22,7 +22,7 @@ public class ShowAssignedTrainerSetPageCommand extends AdminCommand {
     private static final String VISITOR_ID = "visitorId";
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             String stringId = request.getParameter(VISITOR_ID);
             if (stringId != null) {
@@ -49,6 +49,6 @@ public class ShowAssignedTrainerSetPageCommand extends AdminCommand {
             request.setAttribute("err_message",e.getMessage());
             return null;
         }
-        return new Forward("assigned_trainer/set.jsp");
+        return new ResponseState("assigned_trainer/set.jsp");
     }
 }

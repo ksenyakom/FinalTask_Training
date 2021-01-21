@@ -14,17 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
-    private static  Logger logger = LogManager.getLogger(ExerciseDaoImpl.class);
+    private static Logger logger = LogManager.getLogger(ExerciseDaoImpl.class);
 
-    private static  String CREATE =
-            "INSERT INTO `exercise`(`title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`,`type_id`) VALUES(?,?,?,?,?,?)";
-    private static  String READ_BY_ID = "SELECT * FROM `exercise` WHERE `id`= ?";
-    private static  String READ_All = "SELECT * FROM `exercise` ORDER BY `title`";
-    private static  String UPDATE =
-            "UPDATE `exercise` SET `title`=?,`adjusting`=?,`mistakes`=?,`picture_path`=?,`audio_path`=?,`type_id`=? WHERE `id` = ?";
-    private static  String DELETE = "DELETE FROM `exercise` WHERE `id`= ?";
-
-
+    private static String CREATE =
+            "INSERT INTO `exercise`(`title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`,`type_id`) VALUES(?,?,?,?,?,(select `id` from `exercise_type` where `type` = ?))";
+    //    private static  String READ_BY_ID = "SELECT * FROM `exercise` WHERE `id`= ?";
+    private static String READ_BY_ID = "SELECT `title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`, `type` FROM `exercise` `e` join `exercise_type` `t` on e.type_id = t.id  WHERE e.id= ?";
+    private static String READ_All = "SELECT `id`,``title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`, `type` FROM `exercise` `e` join `exercise_type` `t` on e.type_id = t.id  ORDER BY `title`";
+    private static String UPDATE =
+            "UPDATE `exercise` SET `title`=?,`adjusting`=?,`mistakes`=?,`picture_path`=?,`audio_path`=?,`type_id`=(select `id` from `exercise_type` where `type` = ?) WHERE `id` = ?";
+    private static String DELETE = "DELETE FROM `exercise` WHERE `id`= ?";
 
 
     @Override
@@ -42,7 +41,7 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
                 exercise.setMistakes(resultSet.getString("mistakes"));
                 exercise.setPicturePath(resultSet.getString("picture_path"));
                 exercise.setAudioPath(resultSet.getString("audio_path"));
-                exercise.setType(resultSet.getInt("type_id"));
+                exercise.setType(resultSet.getString("type"));
                 list.add(exercise);
             }
             return list;
@@ -53,15 +52,36 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
     }
 
     @Override
+    public void readByExercise(List<Exercise> exercises) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
+            for (Exercise exercise : exercises) {
+                statement.setInt(1, exercise.getId());
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        exercise.setTitle(resultSet.getString("title"));
+                        exercise.setAdjusting(resultSet.getString("adjusting"));
+                        exercise.setMistakes(resultSet.getString("mistakes"));
+                        exercise.setPicturePath(resultSet.getString("picture_path"));
+                        exercise.setAudioPath(resultSet.getString("audio_path"));
+                        exercise.setType(resultSet.getString("type"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
     public Integer create(Exercise entity) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, entity.getTitle());
             statement.setString(2, entity.getAdjusting());
             statement.setString(3, entity.getMistakes());
             statement.setString(4, entity.getPicturePath());
             statement.setString(5, entity.getAudioPath());
-            statement.setInt(6, entity.getTypeId());
+            statement.setString(6, entity.getType());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             logger.debug("inserted exercise {}", entity);
@@ -94,7 +114,7 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
                 exercise.setMistakes(resultSet.getString("mistakes"));
                 exercise.setPicturePath(resultSet.getString("picture_path"));
                 exercise.setAudioPath(resultSet.getString("audio_path"));
-                exercise.setType(resultSet.getInt("type_id"));
+                exercise.setType(resultSet.getString("type"));
             }
             return exercise;
 
@@ -111,7 +131,7 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
             statement.setString(3, entity.getMistakes());
             statement.setString(4, entity.getPicturePath());
             statement.setString(5, entity.getAudioPath());
-            statement.setInt(6, entity.getTypeId());
+            statement.setString(6, entity.getType());
             statement.setInt(7, entity.getId());
             statement.executeUpdate();
         } catch (SQLException e) {

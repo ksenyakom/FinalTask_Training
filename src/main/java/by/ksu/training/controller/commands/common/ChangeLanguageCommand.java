@@ -1,6 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +21,7 @@ public class ChangeLanguageCommand extends Command {
     public static final String PAGE = "page";
 
     @Override
-    protected Forward exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         String language = request.getParameter(LANGUAGE);
         String page = request.getParameter(PAGE);
 
@@ -36,7 +37,7 @@ public class ChangeLanguageCommand extends Command {
         }
 
         logger.debug("Redirect to page: {}", page);
-        return new Forward(page, true);
+        return new ResponseState(page, true);
     }
 
     @Override
