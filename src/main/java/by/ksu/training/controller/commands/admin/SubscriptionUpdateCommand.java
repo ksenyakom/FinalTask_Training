@@ -1,5 +1,9 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
@@ -16,42 +20,34 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**
+ * Updates subscription with values came in request.
+ *
  * @Author Kseniya Oznobishina
  * @Date 16.01.2021
+ * @see  by.ksu.training.entity.Subscription
  */
 public class SubscriptionUpdateCommand extends AdminCommand {
-    private static Logger logger = LogManager.getLogger(SubscriptionDeleteCommand.class);
+    private static Logger logger = LogManager.getLogger(SubscriptionUpdateCommand.class);
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         Subscription subscription;
         try {
             Validator<Subscription> validator = new SubscriptionValidator();
-             subscription = validator.validate(request);
+            subscription = validator.validate(request);
             SubscriptionService service = factory.getService(SubscriptionService.class);
             service.save(subscription);
-            request.setAttribute("success_message","Запись успешно обновлена");
+            request.setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.updated");
 
-//            String action = request.getParameter(ShowAllSubscriptionsCommand.ACTION);
-//            if (action != null) {
-//                List<Subscription> subscriptionList = action.equalsIgnoreCase(ShowAllSubscriptionsCommand.ALL) ?
-//                        service.findAll() :
-//                        service.findAllActive();
-//
-//                request.setAttribute("lst", subscriptionList);
-//            }
-        } catch(PersistentException | IncorrectFormDataException e){
-            logger.error("Exception while update subscription", e);
-            request.setAttribute("err_message",e.getMessage());
-            return null;
+            return new RedirectState("subscription/list.html");
+        } catch (IncorrectFormDataException e) {
+            logger.error("Exception in command!!!", e);
+            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
+            return new ForwardState("subscription/edit.jsp");
+        }catch (PersistentException e) {
+            logger.error("Exception in command!!!", e);
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            return new ErrorState();
         }
-
-        return new ResponseState("subscription/list.jsp");
-    }
-
-    @Override
-    public Set<Role> getAllowedRoles () {
-        return null;
-        //TODO
     }
 }

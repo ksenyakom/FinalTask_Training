@@ -1,11 +1,18 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
+import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.UserService;
+import by.ksu.training.service.validator.UserLoginPasswordValidator;
+import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,36 +26,32 @@ public class LoginCommand extends Command {
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        String login =  request.getParameter("login");
-        String password = request.getParameter("password");
         try {
-            if (login != null && password != null) {
-                UserService service = factory.getService(UserService.class);
-                User user = service.findByLoginAndPassword(login, password);
-                if (user != null) {
-                    HttpSession session = request.getSession();
-                    user.setPassword(null);
-                    session.setAttribute("authorizedUser", user);
-               //     session.setAttribute("menu", menu.get(user.getRole()));
-                    logger.info("user {} is logged in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-                    request.setAttribute("command",null);
-                    return new ResponseState("/index.jsp",true);
-                } else {
-                    request.setAttribute("message", "Имя пользователя или пароль не опознанны");
-                    logger.info("user {} unsuccessfully tried to log in from {} ({}:{})", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-                }
+            Validator<User> validator = new UserLoginPasswordValidator();
+            User testUser = validator.validate(request);
+            UserService service = factory.getService(UserService.class);
+            User user = service.findByLoginAndPassword(testUser.getLogin(), testUser.getPassword());
+            if (user != null) {
+                HttpSession session = request.getSession();
+                user.setPassword(null);
+                session.setAttribute("authorizedUser", user);
+                logger.info("user {} is logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+
+                return new RedirectState("/index.jsp");
+            } else {
+                request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.wrong_login_or_password");
+                logger.info("user {} unsuccessfully tried to log in from {} ({}:{})", testUser.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+
+                return new ForwardState("login.jsp");
             }
+        } catch (IncorrectFormDataException e) {
+            logger.error("Exception in command!!!", e);
+            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
+            return new ForwardState("login.jsp");
         } catch (PersistentException e) {
-            logger.error("Exception while Login of user {}",login, e);
+            logger.error("Exception in command!!!", e);
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            return new ErrorState();
         }
-
-        return null;
-
-      //  return new Forward("/oldIndex.jsp");
-    }
-
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null;
     }
 }

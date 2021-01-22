@@ -6,7 +6,6 @@ import by.ksu.training.entity.Role;
 import java.util.Set;
 
 public abstract class AdminCommand extends Command {
-  //  public AdminCommand() {setAllowedRoles(Set.of(Role.ADMINISTRATOR));}
-    public AdminCommand() {setAllowedRoles(null);} // TODO delete this
+    public AdminCommand() {setAllowedRoles(Set.of(Role.ADMINISTRATOR));}
 
 }

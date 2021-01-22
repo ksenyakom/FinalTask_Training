@@ -27,15 +27,15 @@
             <h2><fmt:message key="title.complex.execute"/></h2>
             <p><fmt:message key="table.training_title"/> : ${complex.title}</p>
             <p><fmt:message key="table.date_expected"/> : ${assigned_complex.dateExpected}</p>
+            <c:url value="/assigned_complex/update_date_executed.html" var="myURL">
+                <c:param name="assignedComplexId" value="${assigned_complex.id}"/>
+            </c:url>
             <div class="container">
-                <button class="btn btn-success" disabled><fmt:message key="button.start"/></button>
-                <button class="btn btn-success" disabled><fmt:message key="button.pause"/></button>
-                <c:url value="/assigned_complex/update_date_execute.html" var="myURL">
-                    <c:param name = "assigned_complexId" value = "${assigned_complex.id}"/>
-                </c:url>
-            <form  method="post" action=${myURL}>
-                <button class="btn btn-success" type="submit"><fmt:message key="button.finish"/></button>
-            </form>
+                <form method="post" action=${myURL}>
+                    <button class="btn btn-success" disabled><fmt:message key="button.start"/></button>
+                    <button class="btn btn-success" disabled><fmt:message key="button.pause"/></button>
+                    <button class="btn btn-success" type="submit"><fmt:message key="button.finish"/></button>
+                </form>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">

@@ -42,7 +42,7 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         User user = userDao.readByLogin(login);
         // Check that an unencrypted password matches one that has
 // previously been hashed
-        if (BCrypt.checkpw(password, user.getPassword())) {
+        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             return user;
         } else {
             return null;

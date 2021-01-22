@@ -1,10 +1,17 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
+import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.SubscriptionService;
+import by.ksu.training.service.validator.SubscriptionValidator;
+import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,42 +22,38 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Deletes subscriptions with id in parameter REMOVE.
+ *
  * @Author Kseniya Oznobishina
  * @Date 14.01.2021
+ * @see Subscription
  */
 public class SubscriptionDeleteCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(SubscriptionDeleteCommand.class);
-    private static final String REMOVE = "remove";
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        String[] subscriptionsId = request.getParameterValues(REMOVE);
-
         try {
+            Validator<Subscription> validator = new SubscriptionValidator();
+            List<Integer> listId = validator.validateRemoveId(request);
             SubscriptionService service = factory.getService(SubscriptionService.class);
-            for (String stringId : subscriptionsId) {
-                int id = Integer.parseInt(stringId);
+            for (Integer id : listId) {
                 service.delete(id);
             }
 
-                String action = request.getParameter(ShowAllSubscriptionsCommand.ACTION);
-                if (action != null) {
-                    List<Subscription> subscriptionList = action.equalsIgnoreCase(ShowAllSubscriptionsCommand.ALL) ?
-                            service.findAll() :
-                            service.findAllActive();
+            request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.delete");
+            String action = request.getParameter(AttrName.ACTION);
+            String parameter = action == null ? "" : "?" + AttrName.ACTION + "=" + action;
+            return new RedirectState("subscription/list.html" + parameter);
 
-                    request.setAttribute("lst", subscriptionList);
-                }
-            } catch(PersistentException e){
-                logger.error("Exception while delete subscription id = {}", Arrays.toString(subscriptionsId), e);
-            }
-
-            return new ResponseState("subscription/list.jsp");
-        }
-
-        @Override
-        public Set<Role> getAllowedRoles () {
-            return null;
-            //TODO
+        } catch (IncorrectFormDataException e) {
+            logger.error("Exception in command!!!", e);
+            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
+            return new ForwardState("subscription/list.jsp");
+        } catch (PersistentException e) {
+            logger.error("Exception in command!!!", e);
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            return new ErrorState();
         }
     }
+}

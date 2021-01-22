@@ -1,6 +1,10 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
@@ -11,6 +15,7 @@ import by.ksu.training.service.validator.UserValidator;
 import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Attr;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,24 +45,18 @@ public class RegistrationCommand extends Command {
                 HttpSession session = request.getSession();
                 session.setAttribute("authorizedUser", user);
                 logger.info("user {} is created logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-                request.setAttribute("command", null);
-                return new ResponseState("/index.html", true);
+                return new RedirectState("/index.jsp");
 
             } else {
-                request.setAttribute("message", "Пользователь с таким именем уже существует");
+                request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.login_already_exist");
                 logger.info("user {} already exist", user.getLogin());
-                return null;
+                return new ForwardState("registration.jsp");
             }
         } catch (PersistentException | IncorrectFormDataException e) {
-            request.setAttribute("message", "Невозможно зарегестрировать нового пользователя, обратитесь к администратору");
             logger.error("user {} unsuccessfully tried to register from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-            return null;
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            return new ErrorState();
         }
     }
 
-
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null;
-    }
 }

@@ -1,5 +1,6 @@
-package by.ksu.training.controller.commands.common;
+package by.ksu.training.controller.commands.authorized_user;
 
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +17,6 @@ public class ShowUserEditLoginCommand extends AuthorizedUserCommand {
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        return new ResponseState("user/edit_login.jsp");
+        return new ForwardState("user/edit_login.jsp");
     }
 }

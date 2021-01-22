@@ -37,7 +37,7 @@
                         <select id="action" class="form-control" name="action">
                             <option value="active"><fmt:message key="dropdown.active"/></option>
                             <option value="all"><fmt:message key="dropdown.all"/></option>
-                            <option value="visitors_without_trainer"><fmt:message key="dropdown.visitors_without_trainer"/></option>
+<%--                            <option value="visitors_without_trainer"><fmt:message key="dropdown.visitors_without_trainer"/></option>--%>
                         </select>
                     </div>
                 </div>

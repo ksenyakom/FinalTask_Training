@@ -1,5 +1,8 @@
-package by.ksu.training.controller.commands.common;
+package by.ksu.training.controller.commands.authorized_user;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Person;
 import by.ksu.training.entity.User;
@@ -27,15 +30,12 @@ public class ShowPersonEditCommand extends AuthorizedUserCommand {
             if (person != null) {
                 request.setAttribute("person", person);
             }
-            return new ResponseState("person/edit.jsp");
+            return new ForwardState("person/edit.jsp");
 
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("err_message",e.getMessage());
-            return null;
+            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
+            return new ErrorState();
         }
-
-
-
     }
 }

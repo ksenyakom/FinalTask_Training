@@ -1,5 +1,6 @@
-package by.ksu.training.controller.commands.common;
+package by.ksu.training.controller.commands.authorized_user;
 
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ public class LogoutCommand extends AuthorizedUserCommand {
         HttpSession session = request.getSession();
         session.setAttribute("authorizedUser", null);
         request.setAttribute("command", null);
-        return new ResponseState("/index.html", true);
+        return new ForwardState("index.jsp", true);
     }
 
 

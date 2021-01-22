@@ -1,6 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 
@@ -15,11 +16,6 @@ import java.util.Set;
 public class ShowRegistrationCommand extends Command {
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        return new ResponseState("registration.jsp");
-    }
-
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null;
+        return new ForwardState("registration.jsp");
     }
 }

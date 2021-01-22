@@ -1,5 +1,9 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.exception.IncorrectFormDataException;
@@ -14,11 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Saves assignment of trainer for visitor.
+ *
  * @Author Kseniya Oznobishina
  * @Date 19.01.2021
+ * @see AssignedTrainer
  */
 public class SaveAssignedTrainerCommand extends AdminCommand {
-    private static Logger logger = LogManager.getLogger(ShowAssignedTrainerListCommand.class);
+    private static Logger logger = LogManager.getLogger(SaveAssignedTrainerCommand.class);
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
@@ -29,18 +36,17 @@ public class SaveAssignedTrainerCommand extends AdminCommand {
             AssignedTrainerService atService = factory.getService(AssignedTrainerService.class);
             atService.save(assignedTrainer);
 
-            request.getSession().setAttribute("success_message", "Trainer assigned successfully.");
+            request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.trainer_assigned");
 
-
+            return new RedirectState("assigned_trainer/list.html");
         } catch (IncorrectFormDataException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("warning_message", e.getMessage());
-            new ResponseState("assigned_trainer/set.jsp"); //return back
+            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
+            return new ForwardState("assigned_trainer/set.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("err_message", e.getMessage());
-            return null;
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            return new ErrorState();
         }
-        return new ResponseState("/assigned_trainer/list.html", true);
     }
 }

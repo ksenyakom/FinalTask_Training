@@ -1,5 +1,8 @@
 package by.ksu.training.controller.commands.visitor;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
@@ -19,11 +22,11 @@ import java.math.BigDecimal;
  * @Author Kseniya Oznobishina
  * @Date 18.01.2021
  */
-public class SubscriptionSaveNewCommand extends VisitorCommand{
-    private static Logger logger = LogManager.getLogger(SubscriptionSaveNewCommand.class);
-    private static final String PERIOD = "period";
+public class SaveNewSubscriptionCommand extends VisitorCommand{
+    private static Logger logger = LogManager.getLogger(SaveNewSubscriptionCommand.class);
 
     private  static int[] prices = {100, 150, 200}; //todo move to class PriceService
+
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         Subscription subscription;
@@ -31,24 +34,24 @@ public class SubscriptionSaveNewCommand extends VisitorCommand{
             Validator<Subscription> validator = new NewSubscriptionValidator();
             subscription = validator.validate(request);
 
-            String period = request.getParameter(PERIOD);
+            String period = request.getParameter(AttrName.PERIOD);
             int months = Integer.parseInt(period);
             subscription.setPrice(new BigDecimal(prices[months-1]));
 
-            User user = (User) request.getSession().getAttribute("authorizedUser");
+            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
             subscription.setVisitor(user);
 
             SubscriptionService service = factory.getService(SubscriptionService.class);
             service.save(subscription);
-            request.getSession().setAttribute("success_message","Подписка успешно оформлена"); // опять потеряю сообщение
-
+            request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE,"message.success.subscription_bought");
+            return new RedirectState("visitor/subscription.html");
         } catch(PersistentException | IncorrectFormDataException e){
-            logger.error("Exception while update subscription", e);
-            request.setAttribute("err_message",e.getMessage());
-            return null;
+            logger.error("Exception while buying subscription", e);
+            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
+            return new ErrorState();
         }
 
-        return new ResponseState("/visitor/subscription.html",true);
+
     }
 
 }

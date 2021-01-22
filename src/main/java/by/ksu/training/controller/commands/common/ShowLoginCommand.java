@@ -1,6 +1,7 @@
 package by.ksu.training.controller.commands.common;
 
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 
@@ -16,12 +17,6 @@ public class ShowLoginCommand extends Command {
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         // TODO проверить куки,если там есть юзер, то положить его в request
-        return new ResponseState("login.jsp");
-
-    }
-
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null;
+        return new ForwardState("login.jsp");
     }
 }

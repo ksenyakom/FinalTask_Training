@@ -1,5 +1,8 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
@@ -14,36 +17,32 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Finds subscriptions according user choice: all or only active.
+ *
  * @Author Kseniya Oznobishina
  * @Date 14.01.2021
+ * @see Subscription
  */
 public class ShowAllSubscriptionsCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowAllSubscriptionsCommand.class);
-    public static final String ACTION = "action";
-    public static final String ALL = "all";
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String action = request.getParameter(ACTION);
+            String action = request.getParameter(AttrName.ACTION);
             SubscriptionService service = factory.getService(SubscriptionService.class);
             if (action != null) {
-                List<Subscription> subscriptionList = action.equalsIgnoreCase(ALL)
+                List<Subscription> subscriptionList = action.equalsIgnoreCase(AttrName.ALL)
                         ? service.findAll()
                         : service.findAllActive();
 
                 request.setAttribute("lst", subscriptionList);
             }
+            return new ForwardState("subscription/list.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("err_message",e.getMessage());
-            return null;
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            return new ErrorState();
         }
-        return new ResponseState("subscription/list.jsp");
-    }
-
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null; //TODO
     }
 }

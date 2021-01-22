@@ -1,5 +1,9 @@
-package by.ksu.training.controller.commands.common;
+package by.ksu.training.controller.commands.authorized_user;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Person;
 import by.ksu.training.entity.User;
@@ -28,18 +32,19 @@ public class SavePersonChangeCommand extends AuthorizedUserCommand {
             Person person = validator.validate(request);
             PersonService personService = factory.getService(PersonService.class);
             personService.save(person);
-            request.setAttribute("success_message", "Data saved successfully"); //TODo видимо я теряю это сообщение
-            return new ResponseState("/index.jsp", true);
+
+            request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.person_saved");
+
+            return new RedirectState("index.jsp");
 
         } catch (IncorrectFormDataException e) {
-            request.setAttribute("warning_message", "You entered incorrect data: " + e.getMessage());
-            return new ResponseState("person/edit.jsp"); // returnBack
+            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
+            return new ForwardState("person/edit.jsp");
         } catch (PersistentException e) {
             logger.error("Exception while changing person data of user {}",
-                    ((User)request.getSession().getAttribute("authorizedUser")).getLogin(), e);
-            request.setAttribute("error_message", "Exception in command!! " + e.getMessage());
-            return null; //error state
+                    ((User) request.getSession().getAttribute("authorizedUser")).getLogin(), e);
+            request.setAttribute(AttrName.ERROR_MESSAGE, "Exception in command!! " + e.getMessage());
+            return new ErrorState();
         }
-
     }
 }

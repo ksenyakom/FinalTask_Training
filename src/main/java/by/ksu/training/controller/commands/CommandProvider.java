@@ -2,11 +2,9 @@ package by.ksu.training.controller.commands;
 
 
 import by.ksu.training.controller.commands.admin.*;
+import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
-import by.ksu.training.controller.commands.visitor.ShowSubscriptionBuyCommand;
-import by.ksu.training.controller.commands.visitor.ShowVisitorAssignedComplexesCommand;
-import by.ksu.training.controller.commands.visitor.ShowVisitorSubscriptionCommand;
-import by.ksu.training.controller.commands.visitor.SubscriptionSaveNewCommand;
+import by.ksu.training.controller.commands.visitor.*;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,6 +36,7 @@ public final class CommandProvider {
         repository.put(ShowAllCommonComplexCommand.class, new ShowAllCommonComplexCommand());
         repository.put(ShowVisitorAssignedComplexesCommand.class, new ShowVisitorAssignedComplexesCommand());
         repository.put(ShowExecuteComplexCommand.class, new ShowExecuteComplexCommand());
+        repository.put(UpdateAssignedComplexCommand.class, new UpdateAssignedComplexCommand());
 
         repository.put(SubscriptionDeleteCommand.class, new SubscriptionDeleteCommand());
         repository.put(ShowSubscriptionEditCommand.class, new ShowSubscriptionEditCommand());
@@ -45,7 +44,7 @@ public final class CommandProvider {
         repository.put(ShowAllSubscriptionsCommand.class, new ShowAllSubscriptionsCommand());
         repository.put(ShowSubscriptionBuyCommand.class, new ShowSubscriptionBuyCommand());
         repository.put(ShowVisitorSubscriptionCommand.class, new ShowVisitorSubscriptionCommand());
-        repository.put(SubscriptionSaveNewCommand.class, new SubscriptionSaveNewCommand());
+        repository.put(SaveNewSubscriptionCommand.class, new SaveNewSubscriptionCommand());
 
         repository.put(SavePersonChangeCommand.class, new SavePersonChangeCommand());
         repository.put(ShowPersonEditCommand.class, new ShowPersonEditCommand());

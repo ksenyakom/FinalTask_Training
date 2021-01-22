@@ -1,6 +1,9 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.Role;
@@ -23,23 +26,18 @@ public class ShowAllCommonComplexCommand extends Command {
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-
         try {
             ComplexService complexService = factory.getService(ComplexService.class);
             List<Complex> complexes = complexService.findAllCommonComplexMetaData();
 
             request.setAttribute("lst", complexes);
 
+            return new ForwardState("complex/list.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("err_message",e.getMessage());
-            return null;
+            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
+            return new ErrorState();
         }
-        return new ResponseState("complex/list.jsp");
-    }
 
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null;
     }
 }

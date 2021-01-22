@@ -54,6 +54,8 @@
         </div>
         <br>
         <p id="errorMessage" class="text-danger"></p>
+        <p class="text-danger"><fmt:message key="${warning_message}"/></p>
+
         <br>
 
         <button type="submit" class="btn btn-success">Регистрация</button>

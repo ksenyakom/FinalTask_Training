@@ -44,6 +44,10 @@
         </div>
         <br>
         <p id="errorMessage" class="text-danger"></p>
+        <c:if test="${not empty warning_message}">
+            <p class="text-danger"><fmt:message key="${warning_message}"/></p>
+        </c:if>
+
         <br>
         <button type="submit" class="btn btn-success"><fmt:message key="button.sing_in"/></button>
     </div>

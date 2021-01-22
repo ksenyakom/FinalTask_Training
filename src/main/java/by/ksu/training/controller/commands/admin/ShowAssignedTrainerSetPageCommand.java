@@ -1,5 +1,8 @@
 package by.ksu.training.controller.commands.admin;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
@@ -19,36 +22,43 @@ import java.util.List;
  */
 public class ShowAssignedTrainerSetPageCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowAssignedTrainerSetPageCommand.class);
-    private static final String VISITOR_ID = "visitorId";
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String stringId = request.getParameter(VISITOR_ID);
+            String stringId = request.getParameter(AttrName.VISITOR_ID);
             if (stringId != null) {
                 int id = Integer.parseInt(stringId);
+
                 User visitor = new User(id);
+
                 UserService userService = factory.getService(UserService.class);
                 List<User> trainers = userService.findUserByRole(Role.TRAINER);
                 AssignedTrainerService atService = factory.getService(AssignedTrainerService.class);
                 User trainer = atService.findTrainerByVisitor(visitor);
                 if (trainer != null) {
                     userService.findLogin(List.of(visitor, trainer));
-                    request.setAttribute("trainer", trainer);
+                    request.setAttribute(AttrName.TRAINER, trainer);
                 } else {
                     userService.findLogin(List.of(visitor));
                 }
-                request.setAttribute("visitor", visitor);
+
+                request.setAttribute(AttrName.VISITOR, visitor);
                 request.setAttribute("lst", trainers);
             } else {
-                request.setAttribute("err_message","No user chosen.");
+                request.setAttribute(AttrName.ERROR_MESSAGE,"message.warning.no_user");
             }
-            //показать страницу назначения тренера
-        } catch (PersistentException | NumberFormatException e) {
+
+            return new ForwardState("assigned_trainer/set.jsp");
+        } catch ( NumberFormatException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("err_message",e.getMessage());
-            return null;
+            request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.parameter_not_correct");
+            return new ForwardState("assigned_trainer/list.jsp");
+        }catch (PersistentException e) {
+            logger.error("Exception in command!!!", e);
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            return new ErrorState();
         }
-        return new ResponseState("assigned_trainer/set.jsp");
+
     }
 }

@@ -8,6 +8,9 @@ import by.ksu.training.exception.IncorrectFormDataException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Author Kseniya Oznobishina
@@ -16,6 +19,7 @@ import java.time.LocalDate;
 public class AssignedTrainerValidator implements Validator<AssignedTrainer> {
     private static final String VISITOR_ID = "visitorId";
     private static final String TRAINER_ID = "trainerId";
+
 
     @Override
     public AssignedTrainer validate(HttpServletRequest request) throws IncorrectFormDataException {
@@ -30,7 +34,7 @@ public class AssignedTrainerValidator implements Validator<AssignedTrainer> {
             } else {
                 throw new IncorrectFormDataException(VISITOR_ID, visitorId);
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new IncorrectFormDataException(VISITOR_ID, visitorId);
         }
 
@@ -41,7 +45,7 @@ public class AssignedTrainerValidator implements Validator<AssignedTrainer> {
             } else {
                 throw new IncorrectFormDataException(TRAINER_ID, trainerId);
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new IncorrectFormDataException(TRAINER_ID, trainerId);
         }
 

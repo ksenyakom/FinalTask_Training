@@ -1,5 +1,8 @@
 package by.ksu.training.controller.commands.visitor;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
@@ -23,15 +26,15 @@ public class ShowVisitorSubscriptionCommand extends VisitorCommand {
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             SubscriptionService service = factory.getService(SubscriptionService.class);
-            User user = (User) request.getSession().getAttribute("authorizedUser");
+            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
             List<Subscription> subscriptionList = service.findByUser(user);
-
             request.setAttribute("lst", subscriptionList);
+
+            return new ForwardState("visitor/subscription.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("err_message", e.getMessage());
-            return null;
+            request.setAttribute(AttrName.AUTHORIZED_USER, e.getMessage());
+            return new ErrorState();
         }
-        return new ResponseState("visitor/subscription.jsp");
     }
 }

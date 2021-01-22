@@ -102,13 +102,13 @@ public class DispatcherServlet extends HttpServlet {
                 if (state.getClass() == ErrorState.class) {
                     req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
                 } else if (state.getClass() == RedirectState.class) {
-                    String uri = req.getContextPath() + state.getUrl();
+                    String uri = req.getContextPath() + "/" + state.getUrl();
                     resp.sendRedirect(uri);
                 } else if (state.getClass() == ForwardState.class) {
-                    String successMessage = (String) req.getSession().getAttribute("success_message");
+                    String successMessage = (String) req.getSession().getAttribute(AttrName.SUCCESS_MESSAGE);
                     if (successMessage != null) {
-                        req.setAttribute("success_message", successMessage);
-                        req.getSession().removeAttribute("success_message");
+                        req.setAttribute(AttrName.SUCCESS_MESSAGE, successMessage);
+                        req.getSession().removeAttribute(AttrName.SUCCESS_MESSAGE);
                     }
                     String uri = "/WEB-INF/jsp/" + state.getUrl();
                     req.getRequestDispatcher(uri).forward(req, resp);
@@ -118,7 +118,7 @@ public class DispatcherServlet extends HttpServlet {
                 }
 
             } else {
-                req.setAttribute("warning_message", "No such command!!");
+                req.setAttribute(AttrName.WARNING_MESSAGE, "No such command!!");
                 req.getRequestDispatcher("/index.jsp").forward(req, resp);
                 //TODO
             }

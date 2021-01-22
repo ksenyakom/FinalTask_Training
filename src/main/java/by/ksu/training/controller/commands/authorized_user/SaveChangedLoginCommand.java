@@ -1,5 +1,9 @@
-package by.ksu.training.controller.commands.common;
+package by.ksu.training.controller.commands.authorized_user;
 
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
@@ -41,38 +45,32 @@ public class SaveChangedLoginCommand extends AuthorizedUserCommand {
                         user.setId(authorizedUser.getId());
                         user.setRole(authorizedUser.getRole());
                         service.save(user);
-                        logger.info("user {} has changed login to {}",
-                                authorizedUser.getLogin(), user.getLogin());
+                        logger.info("user {} has changed login to {}",  authorizedUser.getLogin(), user.getLogin());
 
                         //save in session
                         authorizedUser.setLogin(user.getLogin());
                         request.getSession().setAttribute("authorizedUser", authorizedUser);
-                        return new ResponseState("/index.jsp", true); //redirect to index
+                        return new RedirectState("index.jsp");
                     } else {
-                        request.setAttribute("warning_message", "Wrong password.");
-                        return new ResponseState("user/edit_login.jsp"); // returnBack
+                        request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.wrong_password");
+                        return new ForwardState("user/edit_login.jsp");
                     }
                 } else {
-                    request.setAttribute("warning_message", "Enter other login. Login already exist!!!");
-                    return new ResponseState("user/edit_login.jsp"); // returnBack
+                    request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.login_already_exist");
+                    return new ForwardState("user/edit_login.jsp");
                 }
             } else {
-                request.setAttribute("warning_message", "No login changed.");
-                return new ResponseState("user/edit_login.jsp"); // returnBack
+                request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.login_did_not_changed");
+                return new ForwardState("user/edit_login.jsp");
             }
         } catch (IncorrectFormDataException e) {
-            request.setAttribute("warning_message", "You entered incorrect data: " + e.getMessage());
-            return new ResponseState("user/edit_login.jsp"); // returnBack
+            request.setAttribute(AttrName.WARNING_MESSAGE, "You entered incorrect data: " + e.getMessage());
+            return new ForwardState("user/edit_login.jsp");
         } catch (PersistentException e) {
             logger.error("Exception while changing Login of user {}", authorizedUser.getLogin(), e);
-            request.setAttribute("error_message", "Exception in command!! " + e.getMessage());
-            return null; //error state
+            request.setAttribute(AttrName.ERROR_MESSAGE, "Exception in command!! " + e.getMessage());
+            return new ErrorState();
         }
-    }
-
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null;
     }
 }
 

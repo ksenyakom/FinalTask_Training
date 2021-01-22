@@ -1,6 +1,9 @@
 package by.ksu.training.controller.commands.common;
 
+import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.commands.Command;
+import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.*;
 import by.ksu.training.exception.PersistentException;
@@ -20,13 +23,14 @@ import java.util.stream.Collectors;
  */
 public class ShowJournalCommand extends Command {
     private static Logger logger = LogManager.getLogger(ShowJournalCommand.class);
+    private static final int periodDefault = 90;
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int periodDefault = 90;
             AssignedComplexService assignedComplexService = factory.getService(AssignedComplexService.class);
             List<AssignedComplex> list = assignedComplexService.findExecutedForPeriod(periodDefault);
+//           remove to service
             List<User> users = list.stream()
                     .map(AssignedComplex::getVisitor)
                     .distinct()
@@ -41,19 +45,16 @@ public class ShowJournalCommand extends Command {
 
             ComplexService complexService = factory.getService(ComplexService.class);
             complexService.findTitle(complexes);
-
+//
             request.setAttribute("lst", list);
 
+            return new ForwardState("journal.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute("err_message",e.getMessage());
-            return null;
+            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
+            return new ErrorState();
         }
-        return new ResponseState("journal.jsp");
+
     }
 
-    @Override
-    public Set<Role> getAllowedRoles() {
-        return null;
-    }
 }

@@ -2,11 +2,9 @@ package by.ksu.training.controller.filter;
 
 import by.ksu.training.controller.commands.*;
 import by.ksu.training.controller.commands.admin.*;
+import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
-import by.ksu.training.controller.commands.visitor.ShowSubscriptionBuyCommand;
-import by.ksu.training.controller.commands.visitor.ShowVisitorAssignedComplexesCommand;
-import by.ksu.training.controller.commands.visitor.ShowVisitorSubscriptionCommand;
-import by.ksu.training.controller.commands.visitor.SubscriptionSaveNewCommand;
+import by.ksu.training.controller.commands.visitor.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,9 +22,7 @@ public class CommandFromUriFilter implements Filter {
     private static final Map<String, Class<? extends Command>> commandsPost = new ConcurrentHashMap<>();
     private CommandProvider commandProvider;
 
-    static { // не забывать ложить класс в CommandProvider!!!!
-        //TODO можно это перенести в init???
-
+    static {
         commandsGet.put("/", StartCommand.class);
         commandsGet.put("/index", StartCommand.class);
         commandsGet.put("/login", ShowLoginCommand.class);
@@ -53,12 +49,12 @@ public class CommandFromUriFilter implements Filter {
         commandsPost.put("/person/save_changes", SavePersonChangeCommand.class);
         commandsPost.put("/subscription/deleteSubscription", SubscriptionDeleteCommand.class);
         commandsPost.put("/subscription/update", SubscriptionUpdateCommand.class);
-        commandsPost.put("/subscription/save_new", SubscriptionSaveNewCommand.class);
+        commandsPost.put("/subscription/save_new", SaveNewSubscriptionCommand.class);
         commandsPost.put("/registration", RegistrationCommand.class);
         commandsPost.put("/login", LoginCommand.class);
         commandsPost.put("/assigned_trainer/save", SaveAssignedTrainerCommand.class);
         commandsPost.put("/assigned_trainer/delete", DeleteAssignedTrainerCommand.class);
-      //  commandsPost.put("/assigned_complex/update_date_execute", .class);
+        commandsPost.put("/assigned_complex/update_date_executed", UpdateAssignedComplexCommand.class);
     }
 
     @Override
@@ -76,20 +72,17 @@ public class CommandFromUriFilter implements Filter {
 
             if (commandClass.isPresent()) {
                 Command command = commandProvider.getCommand(commandClass.get());
-                if (command == null) { //TODO remove after finish project
-                    request.setAttribute("err_message","Добавь команду "+ commandName +" в CommandProvider!!!!!!");
-                } else {
-                    command.setName(commandName);
-                    httpRequest.setAttribute("command", command);
-                }
+
+                command.setName(commandName);
+                httpRequest.setAttribute("command", command);
                 chain.doFilter(request, response);
 
             } else {
                 logger.error("It is impossible to create command object:{}", commandName);
                 httpRequest.setAttribute("err_message",
                         String.format("Requested uri cannot be processed by server %s", httpRequest.getRequestURI()));
-                  httpRequest.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
-               // httpRequest.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
+                httpRequest.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
+                // httpRequest.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
             }
         } else {
             logger.error("It is impossible to use HTTP filter");

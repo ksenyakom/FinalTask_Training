@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands.visitor;
 
+import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
@@ -29,7 +30,7 @@ public class ShowVisitorAssignedComplexesCommand extends VisitorCommand {
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("authorizedUser");
+            User user = (User) session.getAttribute(AttrName.AUTHORIZED_USER);
 
             AssignedComplexService acService = factory.getService(AssignedComplexService.class);
             List<AssignedComplex> assignedComplexes = acService.findUnexecutedByUser(user);
@@ -40,7 +41,7 @@ public class ShowVisitorAssignedComplexesCommand extends VisitorCommand {
             return new ForwardState("visitor/assigned_trainings.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!!", e);
-            request.setAttribute("err_message", e.getMessage());
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
             return new ErrorState();
         }
     }
