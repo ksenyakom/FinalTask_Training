@@ -16,7 +16,9 @@ public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedC
     @Override
     public AssignedComplex findById(Integer id) throws PersistentException {
         AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.read(id);
+        AssignedComplex assignedComplex = acDao.read(id);
+        readComplexTitle(List.of(assignedComplex));
+        return assignedComplex;
     }
     @Override
     public AssignedComplex find(AssignedComplex assignedComplex) throws PersistentException {

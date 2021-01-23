@@ -46,10 +46,10 @@ public class LocalDateTag extends TagSupport {
             if (locale == null) {
                 locale = Locale.getDefault();
             }
-            String stringDate = localDateToStringLocale(localDate, locale);
-            //Та ли это локаль? или из куков доставать?
-
-            //    logger.debug("Local date {} using locale {} translated to: {}", localDate, locale , stringDate);
+            String stringDate = "";
+            if (localDate != null) {
+               stringDate = localDateToStringLocale(localDate, locale);
+            }
 
             pageContext.getOut().write(stringDate);
         } catch (IOException e) {

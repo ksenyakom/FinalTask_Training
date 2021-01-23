@@ -25,6 +25,11 @@ public class PersonValidator implements Validator<Person> {
     private static final String ACHIEVEMENTS = "achievements";
 
     @Override
+    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+        return null;
+    }
+
+    @Override
     public Person validate(HttpServletRequest request) throws IncorrectFormDataException {
         Person person = new Person();
 

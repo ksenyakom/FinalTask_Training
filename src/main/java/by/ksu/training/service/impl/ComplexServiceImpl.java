@@ -27,6 +27,18 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
         return complexes;
     }
 
+    /**
+     * A method finds all complexes available for visitor: all common complexes and special developed for him.
+     * @param visitor - user, for who we find complexes
+     * @return - list of available complexes
+     * @throws PersistentException - when exception occur in dao layout.
+     */
+    @Override
+    public List<Complex> findComplexesMetaDataByUser(User visitor) throws PersistentException {
+        ComplexDao complexDao = transaction.createDao(ComplexDao.class);
+        return complexDao.readComplexMetaDataByUser(visitor);
+    }
+
     @Override
     public void findTitle(List<Complex> complexes) throws PersistentException {
         ComplexDao complexDao = transaction.createDao(ComplexDao.class);

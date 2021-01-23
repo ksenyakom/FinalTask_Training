@@ -33,7 +33,7 @@ public class ShowVisitorSubscriptionCommand extends VisitorCommand {
             return new ForwardState("visitor/subscription.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.AUTHORIZED_USER, e.getMessage());
+            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
             return new ErrorState();
         }
     }

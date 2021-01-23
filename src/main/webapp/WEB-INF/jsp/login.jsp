@@ -44,8 +44,8 @@
         </div>
         <br>
         <p id="errorMessage" class="text-danger"></p>
-        <c:if test="${not empty warning_message}">
-            <p class="text-danger"><fmt:message key="${warning_message}"/></p>
+        <c:if test="${not empty warningMessage}">
+            <p class="text-danger"><fmt:message key="${warningMessage}"/></p>
         </c:if>
 
         <br>

@@ -16,6 +16,12 @@ public class NewSubscriptionValidator implements Validator{
     private static final String BEGIN_DATE = "beginDate";
     private static final String PREVIOUS_END_DAY = "previousEndDate";
     private static final String PERIOD = "period";
+
+    @Override
+    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+        return null;
+    }
+
     @Override
     public Entity validate(HttpServletRequest request) throws IncorrectFormDataException {
         Subscription subscription = new Subscription();

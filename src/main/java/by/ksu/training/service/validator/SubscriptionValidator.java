@@ -21,7 +21,12 @@ public class SubscriptionValidator implements Validator<Subscription> {
     private static final String PRICE = "price";
     private static final String SUBSCRIPTION_ID = "subscriptionId";
     private static final String VISITOR_ID = "visitorId";
-//yyyy-mm-dd
+
+    @Override
+    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+        return null;
+    }
+
     @Override
     public Subscription validate(HttpServletRequest request) throws IncorrectFormDataException {
         Subscription subscription = new Subscription();

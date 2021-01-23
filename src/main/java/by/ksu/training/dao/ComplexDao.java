@@ -1,6 +1,7 @@
 package by.ksu.training.dao;
 
 import by.ksu.training.entity.Complex;
+import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface ComplexDao extends Dao<Complex>{
     void readTitle(List<Complex> complexes) throws PersistentException;
 
     List<Complex> readAllCommonComplexMetaData() throws PersistentException;
+
+    List<Complex> readComplexMetaDataByUser(User visitor) throws PersistentException;
 }

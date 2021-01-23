@@ -5,6 +5,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
+
 <fmt:setLocale value="${cookie.language.value}"/>
 <fmt:setBundle basename="properties.text"/>
 <!DOCTYPE html>
@@ -61,15 +63,10 @@
                             <tr>
                                 <td>${ status.count }</td>
                                 <td>${ subscription.visitor.login }</td>
-                                <td><fmt:parseDate value="${subscription.beginDate}" pattern="yyyy-MM-dd"
-                                                   var="parsedBeginDate" type="date"/>
-                                    <fmt:formatDate value="${parsedBeginDate}" type="date" dateStyle="short"/>
-                                </td>
-                                <td>
-                                    <fmt:parseDate value="${subscription.endDate}" pattern="yyyy-MM-dd"
-                                                   var="parsedEndDate" type="date"/>
-                                    <fmt:formatDate value="${parsedEndDate}" type="date" dateStyle="short"/>
-                                </td>
+                                <td><ctg:parse localDate="${ subscription.beginDate }"
+                                               language="${cookie.language.value}"/></td>
+                                <td><ctg:parse localDate="${ subscription.endDate }"
+                                               language="${cookie.language.value}"/></td>
                                 <td><fmt:formatNumber value="${ subscription.price }"/></td>
                                 <td><a href='<c:url value="/subscription/edit.html?editId=${subscription.id}"/>'><fmt:message
                                         key="table.edit"/></a>
@@ -78,7 +75,7 @@
                             </tr>
                         </c:forEach>
                     </table>
-                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="deleteSubscription.html"
+                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="delete.html"
                             name="action" value="${param.get("action")}">
                         <fmt:message key="table.remove"/></button>
                 </div>

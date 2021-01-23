@@ -26,9 +26,13 @@
         <div class="col-sm-8 text-justify">
             <h2><fmt:message key="title.complex.execute"/></h2>
             <p><fmt:message key="table.training_title"/> : ${complex.title}</p>
-            <p><fmt:message key="table.date_expected"/> : ${assigned_complex.dateExpected}</p>
+            <p><fmt:message key="table.date_expected"/> : ${assignedComplex.dateExpected}</p>
+            <c:if test="${not empty warningMessage}">
+                <p class="text-danger"><fmt:message key="${warningMessage}"/></p>
+            </c:if>
+
             <c:url value="/assigned_complex/update_date_executed.html" var="myURL">
-                <c:param name="assignedComplexId" value="${assigned_complex.id}"/>
+                <c:param name="assignedComplexId" value="${assignedComplex.id}"/>
             </c:url>
             <div class="container">
                 <form method="post" action=${myURL}>

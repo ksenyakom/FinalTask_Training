@@ -4,6 +4,7 @@ import by.ksu.training.controller.commands.*;
 import by.ksu.training.controller.commands.admin.*;
 import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
+import by.ksu.training.controller.commands.trainer.*;
 import by.ksu.training.controller.commands.visitor.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,19 +43,26 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/assigned_trainer/list", ShowAssignedTrainerListCommand.class);
         commandsGet.put("/assigned_trainer/set", ShowAssignedTrainerSetPageCommand.class);
         commandsGet.put("/complex/execute", ShowExecuteComplexCommand.class);
+        commandsGet.put("/visitor/list", ShowVisitorsByTrainerCommand.class);
+        commandsGet.put("/assigned_complex/list", ShowAssignedComplexesCommand.class);
+        commandsGet.put("/assigned_complex/add", ShowAssignedComplexAddPageCommand.class);
+        commandsGet.put("/assigned_complex/edit", ShowAssignedComplexEditPageCommand.class);
 
 
         commandsPost.put("/user/deleteUser", DeleteUserCommand.class);
         commandsPost.put("/user/save_changes_login", SaveChangedLoginCommand.class);
         commandsPost.put("/person/save_changes", SavePersonChangeCommand.class);
-        commandsPost.put("/subscription/deleteSubscription", SubscriptionDeleteCommand.class);
-        commandsPost.put("/subscription/update", SubscriptionUpdateCommand.class);
+        commandsPost.put("/subscription/delete", DeleteSubscriptionCommand.class);
+        commandsPost.put("/subscription/update", UpdateSubscriptionCommand.class);
         commandsPost.put("/subscription/save_new", SaveNewSubscriptionCommand.class);
         commandsPost.put("/registration", RegistrationCommand.class);
         commandsPost.put("/login", LoginCommand.class);
         commandsPost.put("/assigned_trainer/save", SaveAssignedTrainerCommand.class);
         commandsPost.put("/assigned_trainer/delete", DeleteAssignedTrainerCommand.class);
-        commandsPost.put("/assigned_complex/update_date_executed", UpdateAssignedComplexCommand.class);
+        commandsPost.put("/assigned_complex/update_date_executed", UpdateDateExecutedAssignedComplexCommand.class);
+        commandsPost.put("/assigned_complex/add", AddAssignedComplexCommand.class);
+        commandsPost.put("/assigned_complex/delete", DeleteAssignedComplexCommand.class);
+        commandsPost.put("/assigned_complex/update", UpdateAssignedComplexCommand.class);
     }
 
     @Override

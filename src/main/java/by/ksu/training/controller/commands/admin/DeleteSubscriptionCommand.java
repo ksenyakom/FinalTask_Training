@@ -5,7 +5,6 @@ import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
-import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
@@ -17,9 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Deletes subscriptions with id in parameter REMOVE.
@@ -28,8 +25,8 @@ import java.util.Set;
  * @Date 14.01.2021
  * @see Subscription
  */
-public class SubscriptionDeleteCommand extends AdminCommand {
-    private static Logger logger = LogManager.getLogger(SubscriptionDeleteCommand.class);
+public class DeleteSubscriptionCommand extends AdminCommand {
+    private static Logger logger = LogManager.getLogger(DeleteSubscriptionCommand.class);
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {

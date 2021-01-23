@@ -21,7 +21,7 @@ public class AssignedTrainerDaoImpl extends BaseDaoImpl implements AssignedTrain
             "INSERT INTO `assigned_trainer`(`visitor_id`,`trainer_id`,`begin_date`,`end_date`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `assigned_trainer` WHERE `id` = ? ";
     private static final String READ_ALL = "SELECT * FROM `assigned_trainer`";
-    private static final String READ_VISITORS_BY_TRAINER = "SELECT `visitor_id` FROM `assigned_trainer` WHERE `trainer_id` = ? ";
+    private static final String READ_VISITORS_BY_TRAINER = "SELECT `visitor_id` FROM `assigned_trainer` WHERE `trainer_id` = ? and `end_date` IS NULL";
     private static final String READ_CURRENT_TRAINER_BY_VISITOR =
             "SELECT `trainer_id` FROM `assigned_trainer` WHERE `visitor_id` = ? and `end_date` IS NULL";
     private static final String READ_CURRENT_BY_VISITOR =

@@ -27,8 +27,10 @@ public interface Validator<Type extends Entity> {
         }
     }
 
-//    Integer validateId(HttpServletRequest request) throws IncorrectFormDataException;
+    Integer validateId(HttpServletRequest request) throws IncorrectFormDataException;
 //    {
+//String stringId = request.getParameter();
+//    if (stringId != null)
 //        try {
 //            return Integer.parseInt(stringId);
 //        } catch (NumberFormatException e) {

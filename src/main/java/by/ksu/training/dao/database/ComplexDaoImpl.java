@@ -18,6 +18,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     private static final String CREATE = "INSERT INTO `complex`(`title`,`trainer_id`,`visitor_id`,`rating`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `complex` WHERE `id` = ? ";
     private static final String READ_ALL_COMMON_METADATA = "SELECT `id`,`title`,`trainer_id`,`rating` FROM `complex` WHERE `visitor_id` IS NULL ORDER  BY `rating` DESC";
+    private static final String READ_METADATA_BY_VISITOR = "SELECT `id`,`title`,`visitor_id` FROM `complex` WHERE `visitor_id` IS NULL OR `visitor_id` = ? ORDER  BY `visitor_id` DESC";
     private static final String READ_TITLE_BY_ID = "SELECT `title` FROM `complex` WHERE `id` = ? ";
     private static final String READ_ALL = "SELECT * FROM `complex` ORDER BY `id`";
     private static final String UPDATE_COMPLEX = "UPDATE `complex` SET `title`=?,`trainer_id`=?,`visitor_id`=?,`rating`=? WHERE `id` = ?";
@@ -76,8 +77,9 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 complex.setTitle(resultSet.getString("title"));
 
                 Integer id = resultSet.getInt("trainer_id");
-                trainer = trainerMap.containsKey(id) ? trainerMap.get(id) : new User(id);
-                trainerMap.putIfAbsent(id, trainer);
+                trainer = trainerMap.merge(id, new User(id), (oldValue, newValue) -> oldValue);
+//                trainer = trainerMap.containsKey(id) ? trainerMap.get(id) : new User(id);
+//                trainerMap.putIfAbsent(id, trainer);
                 complex.setTrainerDeveloped(trainer);
 
                 complex.setRating(resultSet.getFloat("rating"));
@@ -85,7 +87,36 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 list.add(complex);
             }
             return list;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
 
+    /**
+     * A method finds all complexes available for visitor: all common complexes and special developed for him.
+     * @param visitor - user, for who we find complexes
+     * @return - list of available complexes
+     * @throws PersistentException - when exception occur.
+     */
+    @Override
+    public List<Complex> readComplexMetaDataByUser(User visitor) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_METADATA_BY_VISITOR)) {
+            statement.setInt(1, visitor.getId());
+            ResultSet resultSet = statement.executeQuery();
+            List<Complex> list = new ArrayList<>();
+            Complex complex = null;
+
+            while (resultSet.next()) {
+                complex = new Complex(resultSet.getInt("id"));
+                complex.setTitle(resultSet.getString("title"));
+
+                int visitorId = resultSet.getInt("visitor_id");
+                if (!resultSet.wasNull()) {
+                    complex.setVisitorFor(visitor);
+                }
+                list.add(complex);
+            }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }

@@ -4,6 +4,7 @@ package by.ksu.training.controller.commands;
 import by.ksu.training.controller.commands.admin.*;
 import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
+import by.ksu.training.controller.commands.trainer.*;
 import by.ksu.training.controller.commands.visitor.*;
 
 import java.util.Map;
@@ -36,15 +37,17 @@ public final class CommandProvider {
         repository.put(ShowAllCommonComplexCommand.class, new ShowAllCommonComplexCommand());
         repository.put(ShowVisitorAssignedComplexesCommand.class, new ShowVisitorAssignedComplexesCommand());
         repository.put(ShowExecuteComplexCommand.class, new ShowExecuteComplexCommand());
-        repository.put(UpdateAssignedComplexCommand.class, new UpdateAssignedComplexCommand());
+        repository.put(UpdateDateExecutedAssignedComplexCommand.class, new UpdateDateExecutedAssignedComplexCommand());
 
-        repository.put(SubscriptionDeleteCommand.class, new SubscriptionDeleteCommand());
+        repository.put(DeleteSubscriptionCommand.class, new DeleteSubscriptionCommand());
         repository.put(ShowSubscriptionEditCommand.class, new ShowSubscriptionEditCommand());
-        repository.put(SubscriptionUpdateCommand.class, new SubscriptionUpdateCommand());
+        repository.put(UpdateSubscriptionCommand.class, new UpdateSubscriptionCommand());
         repository.put(ShowAllSubscriptionsCommand.class, new ShowAllSubscriptionsCommand());
         repository.put(ShowSubscriptionBuyCommand.class, new ShowSubscriptionBuyCommand());
         repository.put(ShowVisitorSubscriptionCommand.class, new ShowVisitorSubscriptionCommand());
         repository.put(SaveNewSubscriptionCommand.class, new SaveNewSubscriptionCommand());
+        repository.put(ShowVisitorsByTrainerCommand.class, new ShowVisitorsByTrainerCommand());
+
 
         repository.put(SavePersonChangeCommand.class, new SavePersonChangeCommand());
         repository.put(ShowPersonEditCommand.class, new ShowPersonEditCommand());
@@ -53,6 +56,16 @@ public final class CommandProvider {
         repository.put(ShowAssignedTrainerSetPageCommand.class, new ShowAssignedTrainerSetPageCommand());
         repository.put(SaveAssignedTrainerCommand.class, new SaveAssignedTrainerCommand());
         repository.put(DeleteAssignedTrainerCommand.class, new DeleteAssignedTrainerCommand());
+
+        repository.put(ShowAssignedComplexesCommand.class, new ShowAssignedComplexesCommand());
+        repository.put(ShowAssignedComplexAddPageCommand.class, new ShowAssignedComplexAddPageCommand());
+        repository.put(AddAssignedComplexCommand.class, new AddAssignedComplexCommand());
+        repository.put(DeleteAssignedComplexCommand.class, new DeleteAssignedComplexCommand());
+        repository.put(ShowAssignedComplexEditPageCommand.class, new ShowAssignedComplexEditPageCommand());
+        repository.put(UpdateAssignedComplexCommand.class, new UpdateAssignedComplexCommand());
+
+
+
 
     }
 

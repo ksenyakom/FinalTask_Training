@@ -14,5 +14,7 @@ public interface AssignedTrainerService extends EntityService<AssignedTrainer> {
 
     List<AssignedTrainer> findAllWithoutTrainer() throws PersistentException;
 
-    User findTrainerByVisitor(User visitor)throws PersistentException;
+    User findTrainerByVisitor(User visitor) throws PersistentException;
+
+    List<User> findVisitorsByTrainer(User trainer) throws PersistentException;
 }

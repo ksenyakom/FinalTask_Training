@@ -29,7 +29,7 @@
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <caption>
-                        <h4><fmt:message key="complex.table.name.assigned"/></h4>
+                        <h4><fmt:message key="table.name.assigned"/></h4>
                     </caption>
                     <tr class="active">
                         <th scope="col">№</th>
@@ -37,22 +37,22 @@
                         <th scope="col"><fmt:message key="complex.table.date_expected"/></th>
                         <th scope="col"><fmt:message key="complex.table.date_executed"/></th>
                     </tr>
-                    <c:forEach items="${lst}" var="assigned_complex" varStatus="status">
+                    <c:forEach items="${lst}" var="assignedComplex" varStatus="status">
                         <tr>
                             <td>${ status.count }</td>
-                            <td>${ assigned_complex.complex.title }</td>
-                            <td><fmt:parseDate value="${assigned_complex.dateExpected}" pattern="yyyy-MM-dd"
+                            <td>${ assignedComplex.complex.title }</td>
+                            <td><fmt:parseDate value="${assignedComplex.dateExpected}" pattern="yyyy-MM-dd"
                                                var="parseDateExpected" type="date"/>
                                 <fmt:formatDate value="${parseDateExpected}" type="date" dateStyle="short"/></td>
                             <td><c:choose>
-                                <c:when test="${not empty assigned_complex.dateExecuted}">
-                                    <fmt:parseDate value="${assigned_complex.dateExecuted}" pattern="yyyy-MM-dd"
+                                <c:when test="${not empty assignedComplex.dateExecuted}">
+                                    <fmt:parseDate value="${assignedComplex.dateExecuted}" pattern="yyyy-MM-dd"
                                                    var="parseDateExecuted" type="date"/>
                                     <fmt:formatDate value="${parseDateExecuted}" type="date" dateStyle="short"/>
                                 </c:when>
                                 <c:otherwise>
                                     <a href='<c:url
-                                            value="../complex/execute.html?assigned_complexId=${assigned_complex.id}"/>'>Выполнить</a>
+                                            value="../complex/execute.html?assignedComplexId=${assignedComplex.id}"/>'>Выполнить</a>
                                 </c:otherwise>
                             </c:choose>
                             </td>

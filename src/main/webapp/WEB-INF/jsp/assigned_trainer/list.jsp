@@ -5,6 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <fmt:setLocale value="${cookie.language.value}"/>
 <fmt:setBundle basename="properties.text"/>
 <!DOCTYPE html>
@@ -64,15 +65,8 @@
                                 <td>${ status.count }</td>
                                 <td>${ assign.trainer.login }</td>
                                 <td>${ assign.visitor.login }</td>
-                                <td><fmt:parseDate value="${assign.beginDate}" pattern="yyyy-MM-dd"
-                                                   var="parsedBeginDate" type="date"/>
-                                    <fmt:formatDate value="${parsedBeginDate}" type="date" dateStyle="short"/>
-                                </td>
-                                <td>
-                                    <fmt:parseDate value="${assign.endDate}" pattern="yyyy-MM-dd"
-                                                   var="parsedEndDate" type="date"/>
-                                    <fmt:formatDate value="${parsedEndDate}" type="date" dateStyle="short"/>
-                                </td>
+                                <td><ctg:parse localDate="${ assign.beginDate }" language="${cookie.language.value}"/></td>
+                                <td><ctg:parse localDate="${ assign.endDate }" language="${cookie.language.value}"/></td>
                                 <td>
                                     <c:if test="${empty assign.endDate}">
                                     <a href='<c:url value="/assigned_trainer/set.html?visitorId=${assign.visitor.id}"/>'>

@@ -33,9 +33,9 @@
                     </caption>
                     <tr class="active">
                         <th scope="col">№</th>
-                        <th scope="col"><fmt:message key="complex.table.training_title"/></th>
-                        <th scope="col"><fmt:message key="complex.table.trainer_developed"/></th>
-                        <th scope="col"><fmt:message key="complex.table.rating"/></th>
+                        <th scope="col"><fmt:message key="table.training_title"/></th>
+                        <th scope="col"><fmt:message key="table.trainer_developed"/></th>
+                        <th scope="col"><fmt:message key="table.rating"/></th>
                     </tr>
                     <c:forEach items="${lst}" var="complex" varStatus="status">
                         <tr>

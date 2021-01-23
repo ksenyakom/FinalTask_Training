@@ -20,9 +20,8 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>
-                    <p class="text-danger">${ err_message }</p>
-                    <p class="text-warning">${ warn_message }</p>
-                    <p class="text-success">${ success_message }</p>
+                    <p class="text-warning">${ warningMessage }</p>
+                    <p class="text-success">${ successMessage }</p>
 
             <h4 class="text-center"><fmt:message key="title.user.list"/></h4>
             <br>

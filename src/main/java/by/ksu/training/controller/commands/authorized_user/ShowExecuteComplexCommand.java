@@ -7,10 +7,13 @@ import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
+import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
 import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.ExerciseService;
+import by.ksu.training.service.validator.AssignedComplexValidator;
+import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,12 +33,13 @@ public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("authorizedUser");
+            User user = (User) session.getAttribute(AttrName.AUTHORIZED_USER);
 
-            String assignedComplexId = request.getParameter(AttrName.ASSIGNED_COMPLEX_ID);
-            int acId = Integer.parseInt(assignedComplexId);
+            Validator<AssignedComplex> validator = new AssignedComplexValidator();
+
+            int assignedComplexId = validator.validateId(request);
             AssignedComplexService acService = factory.getService(AssignedComplexService.class);
-            AssignedComplex assignedComplex = acService.findById(acId);
+            AssignedComplex assignedComplex = acService.findById(assignedComplexId);
 
             Complex complex = null;
             if (assignedComplex != null && user != null && user.getId().equals(assignedComplex.getVisitor().getId())) {
@@ -51,8 +55,8 @@ public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
                     .distinct()
                     .collect(Collectors.toList()));
 
-            request.setAttribute("assigned_complex", assignedComplex);
-            request.setAttribute("complex", complex);
+            request.setAttribute(AttrName.ASSIGNED_COMPLEX, assignedComplex);
+            request.setAttribute(AttrName.COMPLEX, complex);
 
             return new ForwardState("complex/execute.jsp");
         } catch (
@@ -60,6 +64,9 @@ public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
             logger.error("Exception in command!!!!", e);
             request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
             return new ErrorState();
+        } catch (IncorrectFormDataException e) {
+            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
+            return new ForwardState("/complex/execute.jsp");
         }
 
     }

@@ -24,8 +24,10 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>
-            <p class="text-warning">${ warn_message }</p>
-            <p class="text-success">${ success_message }</p>
+                <c:if test="${not empty warningMessage}"><p class="text-warning"><fmt:message
+                        key="${ warningMessage }"/></p></c:if>
+                <c:if test="${not empty successMessage}"><p class="text-success"><fmt:message
+                        key="${ successMessage }"/></p></c:if>
             <p class="text-success"><fmt:message key="label.visitor"/> ${ visitor.login }</p>
             <p class="text-success"><fmt:message key="label.trainer"/>
                 <c:if test="${not empty trainer}">

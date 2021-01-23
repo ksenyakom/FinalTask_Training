@@ -22,7 +22,7 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
     private static final String READ_BY_ID = "SELECT `visitor_id`,`begin_date`,`end_date`,`price` FROM `subscription` WHERE `id` = ? ";
     private static final String READ_BY_VISITOR = "SELECT `id`,`begin_date`,`end_date`,`price` FROM `subscription` WHERE `visitor_id` = ? ORDER BY `begin_date` DESC ";
     private static final String READ_ALL = "SELECT * FROM `subscription` ORDER BY `id`";
-    private static final String READ_ALL_ACTIVE = "SELECT * FROM `subscription` WHERE `end_date` > NOW()  ORDER BY `id`";
+    private static final String READ_ALL_ACTIVE = "SELECT * FROM `subscription` WHERE `end_date` > NOW() and `begin_date`<= NOW() ORDER BY `id`";
     private static final String READ_ACTIVE_BY_VISITOR = "SELECT `id`,`begin_date`,`end_date` FROM `subscription` WHERE `end_date` > NOW()  AND `visitor_id` = ?";
     private static final String UPDATE = "UPDATE `subscription` SET `visitor_id`=?,`begin_date`=?,`end_date`=?,`price` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `subscription` WHERE `id` = ?";

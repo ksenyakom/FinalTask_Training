@@ -14,6 +14,11 @@ public class UserLoginPasswordValidator implements Validator<User> {
     public static final String REGEX_LOGIN = "[A-Za-z0-9_\\-]{5,}";
 
     @Override
+    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+        return null;
+    }
+
+    @Override
     public User validate(HttpServletRequest request) throws IncorrectFormDataException {
         User user = new User();
 

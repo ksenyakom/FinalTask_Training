@@ -36,6 +36,12 @@ public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedT
     }
 
     @Override
+    public List<User> findVisitorsByTrainer(User trainer) throws PersistentException {
+        AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
+        return atDao.readListVisitorsByTrainer(trainer);
+    }
+
+    @Override
     public List<AssignedTrainer> findAllActive() throws PersistentException {
         SubscriptionDao subscriptionDao = transaction.createDao(SubscriptionDao.class);
         List<Subscription> subscriptionList = subscriptionDao.readAllActive();
