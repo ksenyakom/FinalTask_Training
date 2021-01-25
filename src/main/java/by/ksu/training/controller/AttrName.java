@@ -10,6 +10,7 @@ public class AttrName {
     public static final String SUBSCRIPTION = "subscription";
     public static final String ASSIGNED_COMPLEX = "assignedComplex";
     public static final String COMPLEX = "complex";
+    public static final String EXERCISE = "exercise";
 
     public static final String ACTION = "action";
     public static final String ROLE = "role";
@@ -39,7 +40,13 @@ public class AttrName {
     public static final String COMPLEX_ID = "complexId";
     public static final String VISITOR_ID = "visitorId";
     public static final String TRAINER_ID = "trainerId";
+    public static final String EXERCISE_ID= "exerciseId";
 
     public static final String EDIT_ID = "editId";
     public static final String DATE_EXPECTED = "dateExpected";
+
+    public static final String MISTAKES = "mistakes";
+    public static final String EXERCISE_TYPE = "exerciseType";
+    public static final String TITLE = "title";
+    public static final String ADJUSTING = "adjusting";
 }

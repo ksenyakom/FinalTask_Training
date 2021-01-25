@@ -17,7 +17,8 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.*;
+import java.util.function.BiConsumer;
 
 public class DispatcherServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger(DispatcherServlet.class);
@@ -48,46 +49,6 @@ public class DispatcherServlet extends HttpServlet {
         doProcess(req, resp);
     }
 
-    private void doProcessold(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        try {
-//            Command command = (Command) req.getAttribute("command");
-//            ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
-//
-//            if (command != null) {
-//                CommandManager commandManager = CommandManagerFactory.getManager(serviceFactory);
-//                Command.Forward forward = commandManager.execute(command, req, resp);
-//                commandManager.close();
-//                String message = (String) req.getAttribute("err_message");
-//                if (message != null) {
-//                    //  resp.sendError(404, message);
-//                    req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
-//
-//                } else if (forward != null) {
-//                    if (forward.isRedirect()) {
-//                        String uri = req.getContextPath() + forward.getForward();
-//                        resp.sendRedirect(uri);
-//                    } else {
-//                        String successMessage = (String) req.getSession().getAttribute("success_message");
-//                        if (successMessage != null) {
-//                            req.setAttribute("success_message", successMessage);
-//                            req.getSession().removeAttribute("success_message");
-//                        }
-//                        String uri = "/WEB-INF/jsp/" + forward.getForward();
-//                        req.getRequestDispatcher(uri).forward(req, resp);
-//                    }
-//                } else {
-//                    String uri = "/WEB-INF/jsp" + command.getName() + ".jsp";
-//                    req.getRequestDispatcher(uri).forward(req, resp);
-//                }
-//            } else {
-//                req.getRequestDispatcher("/index.jsp").forward(req, resp);
-//                //TODO
-//            }
-//        } catch (PersistentException e) {
-//            e.printStackTrace();
-//            //TODo
-//        }
-    }
 
     private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {

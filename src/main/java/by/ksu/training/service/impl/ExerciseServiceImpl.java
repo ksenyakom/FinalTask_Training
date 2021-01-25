@@ -16,6 +16,12 @@ public class ExerciseServiceImpl extends ServiceImpl implements ExerciseService 
     }
 
     @Override
+    public List<String> findExerciseTypes() throws PersistentException {
+        ExerciseDao dao = transaction.createDao(ExerciseDao.class);
+        return dao.readExerciseTypes();
+    }
+
+    @Override
     public void find(List<Exercise> exercises) throws PersistentException {
         ExerciseDao dao = transaction.createDao(ExerciseDao.class);
         dao.readByExercise(exercises);

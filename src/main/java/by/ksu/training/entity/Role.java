@@ -14,4 +14,8 @@ public enum  Role {
         return Role.values()[identity];
     }
 
+    public String getName() {
+        return name();
+    }
+
 }

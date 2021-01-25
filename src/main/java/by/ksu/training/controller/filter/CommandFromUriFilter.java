@@ -2,6 +2,7 @@ package by.ksu.training.controller.filter;
 
 import by.ksu.training.controller.commands.*;
 import by.ksu.training.controller.commands.admin.*;
+import by.ksu.training.controller.commands.admin_and_trainer.ShowExerciseListCommand;
 import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
 import by.ksu.training.controller.commands.trainer.*;
@@ -47,6 +48,9 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/assigned_complex/list", ShowAssignedComplexesCommand.class);
         commandsGet.put("/assigned_complex/add", ShowAssignedComplexAddPageCommand.class);
         commandsGet.put("/assigned_complex/edit", ShowAssignedComplexEditPageCommand.class);
+        commandsGet.put("/exercise/list", ShowExerciseListCommand.class);
+        commandsGet.put("/exercise/add", ShowExerciseAddPageCommand.class);
+        commandsGet.put("/exercise/edit", ShowExerciseEditCommand.class);
 
 
         commandsPost.put("/user/deleteUser", DeleteUserCommand.class);
@@ -63,6 +67,9 @@ public class CommandFromUriFilter implements Filter {
         commandsPost.put("/assigned_complex/add", AddAssignedComplexCommand.class);
         commandsPost.put("/assigned_complex/delete", DeleteAssignedComplexCommand.class);
         commandsPost.put("/assigned_complex/update", UpdateAssignedComplexCommand.class);
+        commandsPost.put("/exercise/delete", DeleteExerciseCommand.class);
+        commandsPost.put("/exercise/add", AddExerciseCommand.class);
+        commandsPost.put("/exercise/edit", SaveExerciseCommand.class);
     }
 
     @Override

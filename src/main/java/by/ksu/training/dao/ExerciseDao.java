@@ -9,4 +9,7 @@ public interface ExerciseDao extends Dao<Exercise>{
     List<Exercise> read() throws PersistentException;
 
     void readByExercise(List<Exercise> exercises) throws PersistentException;
+
+    List<String> readExerciseTypes() throws PersistentException;
+
 }

@@ -10,4 +10,6 @@ public interface ExerciseService extends EntityService<Exercise> {
     List<Exercise> findAll() throws PersistentException;
 
     void find(List<Exercise> exercises) throws PersistentException;
+
+    List<String> findExerciseTypes() throws PersistentException;
 }

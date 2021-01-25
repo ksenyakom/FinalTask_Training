@@ -61,21 +61,21 @@
         </div>
         <br>
         <c:choose>
-            <c:when test="${sessionScope.authorizedUser.role == Trainer}">
+            <c:when test="${sessionScope.authorizedUser.role.name().equals('TRAINER')}">
                 <div class="form-group">
                     <label for="achievements">Comment:</label>
                     <textarea class="form-control" rows="5" id="achievements"
                               name="achievements">${person.achievements}</textarea>
                 </div>
             </c:when>
-            <c:when test="${sessionScope.authorizedUser.role == Visitor}">
+            <c:otherwise>
                 <div class="checkbox">
                     <label for="share">
                         <input type="checkbox" name="share" value="true"
                                id="share" checked="${person.achievements}"><fmt:message key="checkbox.remember_me"/>
                     </label>
                 </div>
-            </c:when>
+            </c:otherwise>
         </c:choose>
 
         <p id="errorMessage" class="text-danger"></p>

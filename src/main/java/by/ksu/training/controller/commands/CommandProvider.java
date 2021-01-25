@@ -2,6 +2,7 @@ package by.ksu.training.controller.commands;
 
 
 import by.ksu.training.controller.commands.admin.*;
+import by.ksu.training.controller.commands.admin_and_trainer.ShowExerciseListCommand;
 import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
 import by.ksu.training.controller.commands.trainer.*;
@@ -63,6 +64,13 @@ public final class CommandProvider {
         repository.put(DeleteAssignedComplexCommand.class, new DeleteAssignedComplexCommand());
         repository.put(ShowAssignedComplexEditPageCommand.class, new ShowAssignedComplexEditPageCommand());
         repository.put(UpdateAssignedComplexCommand.class, new UpdateAssignedComplexCommand());
+
+        repository.put(ShowExerciseListCommand.class, new ShowExerciseListCommand());
+        repository.put(DeleteExerciseCommand.class, new DeleteExerciseCommand());
+        repository.put(ShowExerciseAddPageCommand.class, new ShowExerciseAddPageCommand());
+        repository.put(AddExerciseCommand.class, new AddExerciseCommand());
+        repository.put(ShowExerciseEditCommand.class, new ShowExerciseEditCommand());
+        repository.put(SaveExerciseCommand.class, new SaveExerciseCommand());
 
 
 

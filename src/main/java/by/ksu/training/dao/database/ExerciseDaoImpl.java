@@ -20,7 +20,8 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
             "INSERT INTO `exercise`(`title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`,`type_id`) VALUES(?,?,?,?,?,(select `id` from `exercise_type` where `type` = ?))";
     //    private static  String READ_BY_ID = "SELECT * FROM `exercise` WHERE `id`= ?";
     private static String READ_BY_ID = "SELECT `title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`, `type` FROM `exercise` `e` join `exercise_type` `t` on e.type_id = t.id  WHERE e.id= ?";
-    private static String READ_All = "SELECT `id`,``title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`, `type` FROM `exercise` `e` join `exercise_type` `t` on e.type_id = t.id  ORDER BY `title`";
+    private static String READ_All = "SELECT e.id,`title`,`adjusting`,`mistakes`,`picture_path`,`audio_path`, `type` FROM `exercise` `e` join `exercise_type` `t` on e.type_id = t.id  ORDER BY `title`";
+    private static String READ_EXERCISE_TYPES = "SELECT `type` FROM `exercise_type` ORDER BY `id`";
     private static String UPDATE =
             "UPDATE `exercise` SET `title`=?,`adjusting`=?,`mistakes`=?,`picture_path`=?,`audio_path`=?,`type_id`=(select `id` from `exercise_type` where `type` = ?) WHERE `id` = ?";
     private static String DELETE = "DELETE FROM `exercise` WHERE `id`= ?";
@@ -67,6 +68,21 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
                     }
                 }
             }
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<String> readExerciseTypes() throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_EXERCISE_TYPES)) {
+            ResultSet resultSet = statement.executeQuery();
+            List<String> list = new ArrayList<>();
+
+            while (resultSet.next()) {
+                list.add(resultSet.getString("type"));
+            }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }

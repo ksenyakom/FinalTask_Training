@@ -15,12 +15,17 @@ public class FilePath {
     public static String dataBasePropertiesPath;
     private static String dataBasePropertiesFile = "database.properties";
     private static String dataBasePropertiesFolder = "properties";
-    //   public static String xsdFile;
+    private static final String imgFolder = "img";
+    private static final String audioFolder = "audio";
+    public static String imgFolderPath;
+    public static String audioFolderPath;
 
     static {
         try {
             String mainPathProperties = initMainPath(dataBasePropertiesFolder);
             dataBasePropertiesPath = String.valueOf(Paths.get(mainPathProperties, dataBasePropertiesFile));
+//            imgFolderPath = initMainPath(imgFolder);
+//            audioFolderPath = initMainPath(audioFolder);
 
         } catch (ServiceException e) {
             e.printStackTrace();
@@ -34,6 +39,13 @@ public class FilePath {
 //        xsdFile = getPath(xsdSchemaFile);
     }
 
+    public static String getImgPath(String filename) {
+        return String.valueOf(Paths.get(imgFolderPath,"exercises", filename));
+    }
+
+    public static String getAudioPath(String filename) {
+        return String.valueOf(Paths.get(audioFolderPath, filename));
+    }
 
     public static String initMainPath(String folder) throws ServiceException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();

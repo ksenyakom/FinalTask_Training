@@ -15,8 +15,8 @@ import java.util.Set;
 public abstract class Command {
     private Set<Role> allowedRoles = new HashSet<>();
     private String name;
-
     protected ServiceFactory factory;
+
 
     public Set<Role> getAllowedRoles() {
         return allowedRoles;
@@ -26,7 +26,6 @@ public abstract class Command {
         this.allowedRoles = allowedRoles;
     }
 
-
     public String getName() {
         return name;
     }
@@ -34,51 +33,11 @@ public abstract class Command {
     public void setName(String name) {
         this.name = name;
     }
+
     public void setFactory(ServiceFactory factory) {
         this.factory = factory;
     }
 
 
     protected abstract ResponseState exec(HttpServletRequest request, HttpServletResponse response);
-
-
-//    public static class Forward {
-//        private String forward;
-//        private boolean redirect;
-//        Map<String,Object> attributes = new HashMap<>();
-//
-//        public Forward(String forward) {
-//            this.forward = forward;
-//        }
-//
-//        public Forward(String forward, boolean redirect) {
-//            this.forward = forward;
-//            this.redirect = redirect;
-//        }
-//
-//        public String getForward() {
-//            return forward;
-//        }
-//
-//        public void setForward(String forward) {
-//            this.forward = forward;
-//        }
-//
-//        public boolean isRedirect() {
-//            return redirect;
-//        }
-//
-//        public void setRedirect(boolean redirect) {
-//            this.redirect = redirect;
-//        }
-//
-//        public Map<String, Object> getAttributes() {
-//            return attributes;
-//        }
-//
-//        public void setAttributes(Map<String, Object> attributes) {
-//            this.attributes = attributes;
-//        }
-//    }
-
 }

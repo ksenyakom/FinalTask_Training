@@ -1,3 +1,4 @@
+
 USE `yoga_db`;
 
 CREATE TABLE `user`
