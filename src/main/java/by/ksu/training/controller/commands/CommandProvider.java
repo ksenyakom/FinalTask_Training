@@ -2,7 +2,7 @@ package by.ksu.training.controller.commands;
 
 
 import by.ksu.training.controller.commands.admin.*;
-import by.ksu.training.controller.commands.admin_and_trainer.ShowExerciseListCommand;
+import by.ksu.training.controller.commands.admin_and_trainer.*;
 import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
 import by.ksu.training.controller.commands.trainer.*;
@@ -71,6 +71,16 @@ public final class CommandProvider {
         repository.put(AddExerciseCommand.class, new AddExerciseCommand());
         repository.put(ShowExerciseEditCommand.class, new ShowExerciseEditCommand());
         repository.put(SaveExerciseCommand.class, new SaveExerciseCommand());
+
+        repository.put(ShowMyComplexesCommand.class, new ShowMyComplexesCommand());
+        repository.put(DeleteComplexCommand.class, new DeleteComplexCommand());
+        repository.put(ShowEditComplexPageCommand.class, new ShowEditComplexPageCommand());
+        repository.put(ShowAddExerciseInComplex.class, new ShowAddExerciseInComplex());
+        repository.put(AddExerciseInComplexCommand.class, new AddExerciseInComplexCommand());
+        repository.put(DeleteExerciseInComplexCommand.class, new DeleteExerciseInComplexCommand());
+        repository.put(UpdateEditedComplexCommand.class, new UpdateEditedComplexCommand());;
+        repository.put(ShowAddComplexPageCommand.class, new ShowAddComplexPageCommand());;
+        repository.put(SaveNewComplexCommand.class, new SaveNewComplexCommand());;
 
 
 

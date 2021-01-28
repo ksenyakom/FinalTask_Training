@@ -1,5 +1,8 @@
 package by.ksu.training.controller.state;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A class representing state of servlet response
  * @Author Kseniya Oznobishina
@@ -7,7 +10,8 @@ package by.ksu.training.controller.state;
  */
 public class ResponseState implements State {
     protected String url;
-    protected boolean temp;
+    private Map<String, Object> attributes = new HashMap<>();
+
 
     public ResponseState(){}
 
@@ -23,8 +27,7 @@ public class ResponseState implements State {
         this.url = url;
     }
 
-    public ResponseState(String url, boolean temp) {
-        this.url = url;
-        this.temp = temp;
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 }

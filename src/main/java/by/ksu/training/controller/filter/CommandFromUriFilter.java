@@ -1,8 +1,9 @@
 package by.ksu.training.controller.filter;
 
+import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.commands.*;
 import by.ksu.training.controller.commands.admin.*;
-import by.ksu.training.controller.commands.admin_and_trainer.ShowExerciseListCommand;
+import by.ksu.training.controller.commands.admin_and_trainer.*;
 import by.ksu.training.controller.commands.authorized_user.*;
 import by.ksu.training.controller.commands.common.*;
 import by.ksu.training.controller.commands.trainer.*;
@@ -51,11 +52,15 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/exercise/list", ShowExerciseListCommand.class);
         commandsGet.put("/exercise/add", ShowExerciseAddPageCommand.class);
         commandsGet.put("/exercise/edit", ShowExerciseEditCommand.class);
-
+        commandsGet.put("/complex/my_complexes", ShowMyComplexesCommand.class);
+        commandsGet.put("/complex/edit", ShowEditComplexPageCommand.class);
+        commandsGet.put("/complex/add_exercise_in_complex", ShowAddExerciseInComplex.class);
+        commandsGet.put("/complex/add", ShowAddComplexPageCommand.class);
 
         commandsPost.put("/user/deleteUser", DeleteUserCommand.class);
         commandsPost.put("/user/save_changes_login", SaveChangedLoginCommand.class);
         commandsPost.put("/person/save_changes", SavePersonChangeCommand.class);
+        commandsPost.put("/subscription/delete", DeleteSubscriptionCommand.class);
         commandsPost.put("/subscription/delete", DeleteSubscriptionCommand.class);
         commandsPost.put("/subscription/update", UpdateSubscriptionCommand.class);
         commandsPost.put("/subscription/save_new", SaveNewSubscriptionCommand.class);
@@ -70,6 +75,12 @@ public class CommandFromUriFilter implements Filter {
         commandsPost.put("/exercise/delete", DeleteExerciseCommand.class);
         commandsPost.put("/exercise/add", AddExerciseCommand.class);
         commandsPost.put("/exercise/edit", SaveExerciseCommand.class);
+        commandsPost.put("/complex/delete", DeleteComplexCommand.class);
+        commandsPost.put("/complex/add_exercise_in_complex", AddExerciseInComplexCommand.class);
+        commandsPost.put("/complex/delete_exercise_in_complex", DeleteExerciseInComplexCommand.class);
+        commandsPost.put("/complex/update", UpdateEditedComplexCommand.class);
+        commandsPost.put("/complex/save", SaveNewComplexCommand.class);
+
     }
 
     @Override
@@ -94,7 +105,7 @@ public class CommandFromUriFilter implements Filter {
 
             } else {
                 logger.error("It is impossible to create command object:{}", commandName);
-                httpRequest.setAttribute("err_message",
+                httpRequest.setAttribute(AttrName.ERROR_MESSAGE,
                         String.format("Requested uri cannot be processed by server %s", httpRequest.getRequestURI()));
                 httpRequest.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
                 // httpRequest.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);

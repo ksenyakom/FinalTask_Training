@@ -39,7 +39,7 @@ public class SaveExerciseCommand extends AdminCommand{
             Exercise exercise = validator.validate(request);
             exercise.setId(validator.validateId(request));
             String oldPicturePath = request.getParameter("picturePath");
-
+//TODO перенести в сервис
             //picture
             Part filePart = request.getPart("picture"); // Retrieves <input type="file" name="file">
             if (filePart != null) {
@@ -52,8 +52,7 @@ public class SaveExerciseCommand extends AdminCommand{
                 exercise.setPicturePath("/img/exercises/" + fileName);
                 String oldPath = request.getServletContext().getRealPath(oldPicturePath);
                 Path deleteOld = Paths.get(oldPath);
-                Files.delete(deleteOld); //TODO словить возможные ошибки и обработать корректно
-
+                Files.delete(deleteOld);
             }
 
             exercise.setAudioPath("/audio/");//TODO

@@ -4,6 +4,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <%--Локализация--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${cookie.language.value}"/>
@@ -41,18 +42,17 @@
                         <tr>
                             <td>${ status.count }</td>
                             <td>${ assignedComplex.complex.title }</td>
-                            <td><fmt:parseDate value="${assignedComplex.dateExpected}" pattern="yyyy-MM-dd"
-                                               var="parseDateExpected" type="date"/>
-                                <fmt:formatDate value="${parseDateExpected}" type="date" dateStyle="short"/></td>
+                            <td><ctg:parse localDate="${ assignedComplex.dateExpected }"
+                                           language="${cookie.language.value}"/></td>
                             <td><c:choose>
                                 <c:when test="${not empty assignedComplex.dateExecuted}">
-                                    <fmt:parseDate value="${assignedComplex.dateExecuted}" pattern="yyyy-MM-dd"
-                                                   var="parseDateExecuted" type="date"/>
-                                    <fmt:formatDate value="${parseDateExecuted}" type="date" dateStyle="short"/>
+                                    <ctg:parse localDate="${ assignedComplex.dateExecuted }"
+                                               language="${cookie.language.value}"/>
                                 </c:when>
                                 <c:otherwise>
                                     <a href='<c:url
-                                            value="../complex/execute.html?assignedComplexId=${assignedComplex.id}"/>'>Выполнить</a>
+                                            value="../complex/execute.html?assignedComplexId=${assignedComplex.id}"/>'>
+                                            <fmt:message key="table.execute"/></a>
                                 </c:otherwise>
                             </c:choose>
                             </td>

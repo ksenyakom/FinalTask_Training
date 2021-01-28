@@ -20,8 +20,10 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>
-                    <p class="text-warning">${ warningMessage }</p>
-                    <p class="text-success">${ successMessage }</p>
+                <c:if test="${not empty warningMessage}">
+                    <p class="text-danger"><fmt:message key="${warningMessage}"/></p></c:if>
+                <c:if test="${not empty successMessage}">
+                    <p class="text-success"><fmt:message key="${successMessage}"/></p></c:if>
 
             <h4 class="text-center"><fmt:message key="title.user.list"/></h4>
             <br>

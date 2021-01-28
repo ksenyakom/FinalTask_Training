@@ -22,6 +22,18 @@ public class ExerciseServiceImpl extends ServiceImpl implements ExerciseService 
     }
 
     @Override
+    public int findTotalCount() throws PersistentException {
+        ExerciseDao dao = transaction.createDao(ExerciseDao.class);
+        return dao.readCount() ;
+    }
+
+    @Override
+    public List<Exercise> find(int currentPage, int recordsPerPage) throws PersistentException {
+        ExerciseDao dao = transaction.createDao(ExerciseDao.class);
+        return dao.read(currentPage, recordsPerPage);
+    }
+
+    @Override
     public void find(List<Exercise> exercises) throws PersistentException {
         ExerciseDao dao = transaction.createDao(ExerciseDao.class);
         dao.readByExercise(exercises);

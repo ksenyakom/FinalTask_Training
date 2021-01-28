@@ -26,6 +26,22 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
             "UPDATE `exercise` SET `title`=?,`adjusting`=?,`mistakes`=?,`picture_path`=?,`audio_path`=?,`type_id`=(select `id` from `exercise_type` where `type` = ?) WHERE `id` = ?";
     private static String DELETE = "DELETE FROM `exercise` WHERE `id`= ?";
 
+    private static String READ_COUNT = "SELECT COUNT(id) FROM `exercise`";
+    private static String READ_LIMIT  = "SELECT * FROM `exercise` `e` join `exercise_type` `t` on e.type_id = t.id  ORDER BY `title` LIMIT ?, ?";
+
+
+    @Override
+    public int readCount() throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_COUNT)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
 
     @Override
     public List<Exercise> read() throws PersistentException {
@@ -47,6 +63,32 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
             }
             return list;
 
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Exercise> read(int currentPage, int recordsPerPage) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_LIMIT)) {
+            statement.setInt(1, (currentPage-1)*recordsPerPage);
+            statement.setInt(2, recordsPerPage);
+            ResultSet resultSet = statement.executeQuery();
+            Exercise exercise = null;
+            List<Exercise> list = new ArrayList<>();
+
+            while (resultSet.next()) {
+                exercise = new Exercise();
+                exercise.setId(resultSet.getInt("id"));
+                exercise.setTitle(resultSet.getString("title"));
+                exercise.setAdjusting(resultSet.getString("adjusting"));
+                exercise.setMistakes(resultSet.getString("mistakes"));
+                exercise.setPicturePath(resultSet.getString("picture_path"));
+                exercise.setAudioPath(resultSet.getString("audio_path"));
+                exercise.setType(resultSet.getString("type"));
+                list.add(exercise);
+            }
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
@@ -116,7 +158,6 @@ public class ExerciseDaoImpl extends BaseDaoImpl implements ExerciseDao {
 
     @Override
     public Exercise read(Integer id) throws PersistentException {
-
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();

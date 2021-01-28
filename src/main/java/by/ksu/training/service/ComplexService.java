@@ -15,5 +15,11 @@ public interface ComplexService extends EntityService<Complex> {
 
     List<Complex> findAllCommonComplexMetaData() throws PersistentException;
 
-    List<Complex> findComplexesMetaDataByUser(User visitor)  throws PersistentException;
+    List<Complex> findComplexesMetaDataByUser(User visitor) throws PersistentException;
+
+    List<Complex> findAllMetaData() throws PersistentException;
+
+    List<Complex> findIndividualComplexMetaDataByUsers(List<User> visitorsOfTrainer) throws PersistentException;
+
+    boolean checkTitleExist(String title) throws PersistentException;
 }

@@ -28,8 +28,30 @@ public class ShowExerciseListCommand extends AdminAndTrainerCommand {
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
+            final int recordsPerPage  = 5;
+            request.setAttribute("recordsPerPage",recordsPerPage);                              //3
             ExerciseService exerciseService = factory.getService(ExerciseService.class);
-            List<Exercise> exerciseList = exerciseService.findAll();
+
+            //count number of pages
+            String numberOfPages = request.getParameter("noOfPages");
+            if (numberOfPages == null) {
+                int count = exerciseService.findTotalCount();
+                int noOfPages = count / recordsPerPage + (count % recordsPerPage > 0 ? 1 : 0);
+             request.setAttribute("noOfPages", noOfPages);                                      //1
+            }
+
+            // receive currentPage number
+            String page = request.getParameter("currentPage");
+            int currentPage;
+            if (page == null) {
+                currentPage = 1;
+            } else {
+                currentPage = Integer.parseInt(page); //todo exception catch
+            }
+
+            request.setAttribute("currentPage", currentPage);                                   //2
+
+            List<Exercise> exerciseList = exerciseService.find(currentPage, recordsPerPage);
 
             request.setAttribute("lst", exerciseList);
 

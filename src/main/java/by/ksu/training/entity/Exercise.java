@@ -11,6 +11,13 @@ public class Exercise extends Entity {
     private String audioPath;
     private String type;
 
+    public Exercise() {
+    }
+
+    public Exercise(Integer id) {
+        this.setId(id);
+    }
+
     public String getTitle() {
         return title;
     }

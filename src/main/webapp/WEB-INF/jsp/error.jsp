@@ -17,15 +17,15 @@
         alt="<fmt:message key="picture.caption.lotus_hands_up"/>"/></p>
 <c:choose>
 
-    <c:when test="${not empty err_message}">
-        <H2>${err_message}</H2>
+    <c:when test="${not empty errorMessage}">
+        <H2>${errorMessage}</H2>
     </c:when>
     <c:when test="${not empty pageContext.errorData.requestURI}">
         <H2>Запрошенная страница ${pageContext.errorData.requestURI} не найдена на сервере</H2>
     </c:when>
     <c:otherwise>Непредвиденная ошибка приложения</c:otherwise>
 </c:choose>
-<a href='<c:url value="/index.html"/>'><fmt:message key="label.main_menu.main"/></a>
+<a href='<c:url value="/index.jsp"/>'><fmt:message key="label.main_menu.main"/></a>
 
 </body>
 </html>

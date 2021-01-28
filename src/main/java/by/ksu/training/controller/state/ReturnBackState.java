@@ -11,8 +11,4 @@ public class ReturnBackState extends ResponseState {
         super(url);
     }
 
-    public ReturnBackState(String url, boolean temp) {
-        super(url);
-        this.temp = temp;
-    }
 }

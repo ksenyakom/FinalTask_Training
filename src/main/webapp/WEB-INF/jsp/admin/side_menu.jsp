@@ -16,7 +16,7 @@
     <p><a href='<c:url value="/assigned_trainer/list.html"/>'><fmt:message key="label.side_menu.admin.trainer-visitor_search"/></a></p>
     <p><a href='<c:url value="/subscription/list.html"/>'><fmt:message key="label.side_menu.admin.subscription"/></a></p>
     <p><a href='<c:url value="/exercise/list.html"/>'><fmt:message key="label.side_menu.exercise_list"/></a></p>
-    <p><a href="#">Link</a></p>
+    <p><a href='<c:url value="/complex/my_complexes.html"/>'><fmt:message key="label.side_menu.trainings"/></a></p>
 </div>
 </body>
 </html>

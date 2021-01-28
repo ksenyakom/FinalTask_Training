@@ -24,7 +24,6 @@
         <c:import url="/WEB-INF/jsp/common/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
-            <h2>О йоге jsp</h2>
 
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">

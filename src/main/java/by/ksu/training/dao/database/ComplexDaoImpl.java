@@ -19,6 +19,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     private static final String READ_BY_ID = "SELECT * FROM `complex` WHERE `id` = ? ";
     private static final String READ_ALL_COMMON_METADATA = "SELECT `id`,`title`,`trainer_id`,`rating` FROM `complex` WHERE `visitor_id` IS NULL ORDER  BY `rating` DESC";
     private static final String READ_METADATA_BY_VISITOR = "SELECT `id`,`title`,`visitor_id` FROM `complex` WHERE `visitor_id` IS NULL OR `visitor_id` = ? ORDER  BY `visitor_id` DESC";
+    private static final String READ_INDIVIDUAL_METADATA_BY_VISITOR = "SELECT `id`,`title`,`trainer_id`,`rating` FROM `complex` WHERE `visitor_id` = ? ORDER  BY `visitor_id`";
     private static final String READ_TITLE_BY_ID = "SELECT `title` FROM `complex` WHERE `id` = ? ";
     private static final String READ_ALL = "SELECT * FROM `complex` ORDER BY `id`";
     private static final String UPDATE_COMPLEX = "UPDATE `complex` SET `title`=?,`trainer_id`=?,`visitor_id`=?,`rating`=? WHERE `id` = ?";
@@ -35,6 +36,22 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     //TODO alias - workbanch ругается
     private static final String UPDATE_LIST_OF_EXERCISES_DELETE_REMAIN = "DELETE FROM `exercise_in_complex` WHERE `complex_id` = ? AND `serial_number` > ?";
     private static final String DELETE_LIST_OF_EXERCISES = "DELETE FROM `exercise_in_complex`  WHERE `complex_id` = ?";
+    private static final String CHECK_BY_TITLE = "SELECT 1 FROM `complex` WHERE `title`=? limit 1";
+
+
+    @Override
+    public boolean checkTitleExist(String title) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(CHECK_BY_TITLE)) {
+            statement.setString(1, title);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) == 1;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
 
     @Override
     public Integer create(Complex entity) throws PersistentException {
@@ -77,10 +94,10 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 complex.setTitle(resultSet.getString("title"));
 
                 Integer id = resultSet.getInt("trainer_id");
-                trainer = trainerMap.merge(id, new User(id), (oldValue, newValue) -> oldValue);
-//                trainer = trainerMap.containsKey(id) ? trainerMap.get(id) : new User(id);
-//                trainerMap.putIfAbsent(id, trainer);
-                complex.setTrainerDeveloped(trainer);
+                if (!resultSet.wasNull()) {
+                    trainer = trainerMap.merge(id, new User(id), (oldValue, newValue) -> oldValue);
+                    complex.setTrainerDeveloped(trainer);
+                }
 
                 complex.setRating(resultSet.getFloat("rating"));
 
@@ -93,7 +110,49 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     }
 
     /**
+     * A method finds all individual complexes for list of visitors.
+     *
+     * @param visitors - users, for who we find complexes
+     * @return - list of complexes
+     * @throws PersistentException - when exception occur.
+     */
+
+    @Override
+    public List<Complex> readIndividualComplexMetaDataByVisitors(List<User> visitors) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_INDIVIDUAL_METADATA_BY_VISITOR)) {
+            List<Complex> list = new ArrayList<>();
+            Map<Integer, User> trainerMap = new HashMap<>();
+            Integer id;
+            User trainer;
+
+            for (User visitor : visitors) {
+                statement.setInt(1, visitor.getId());
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    Complex complex = null;
+                    while (resultSet.next()) {
+                        complex = new Complex(resultSet.getInt("id"));
+                        complex.setTitle(resultSet.getString("title"));
+                        complex.setVisitorFor(visitor);
+                        id = resultSet.getInt("trainer_id");
+                        if (!resultSet.wasNull()) {
+                            trainer = trainerMap.merge(id, new User(id), (oldValue, newValue) -> oldValue);
+                            complex.setTrainerDeveloped(trainer);
+                        }
+
+                        complex.setRating(resultSet.getFloat("rating"));
+                        list.add(complex);
+                    }
+                }
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    /**
      * A method finds all complexes available for visitor: all common complexes and special developed for him.
+     *
      * @param visitor - user, for who we find complexes
      * @return - list of available complexes
      * @throws PersistentException - when exception occur.
@@ -134,10 +193,16 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         deleteComplex(id);
     }
 
+    @Override
     public Integer createComplex(Complex entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getTitle());
-            statement.setInt(2, entity.getTrainerDeveloped().getId());
+            //TODO trainer and visitor might be null
+            if (entity.getTrainerDeveloped() == null) {
+                statement.setNull(2, Types.INTEGER);
+            } else {
+                statement.setInt(2, entity.getVisitorFor().getId());
+            }
             if (entity.getVisitorFor() == null) {
                 statement.setNull(3, Types.INTEGER);
             } else {
@@ -160,6 +225,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         }
     }
 
+    @Override
     public void createListExercisesForComplex(Complex complex) throws PersistentException {
         Complex.ComplexUnit unit = null;
         for (int i = 0; i < complex.sizeOfComplexUnitList(); i++) {
@@ -178,6 +244,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         }
     }
 
+    @Override
     public Complex readComplex(Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
@@ -188,14 +255,21 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 complex = new Complex();
                 complex.setId(id);
                 complex.setTitle(resultSet.getString("title"));
-                User trainer = new User(resultSet.getInt("trainer_id"));
-                complex.setTrainerDeveloped(trainer);
+
+                int trainerId = resultSet.getInt("trainer_id");
+                User trainer = null;
+                if (!resultSet.wasNull()) {
+                    trainer = new User(trainerId);
+                    complex.setTrainerDeveloped(trainer);
+                }
+
                 int visitorId = resultSet.getInt("visitor_id");
                 User visitor = null;
                 if (!resultSet.wasNull()) {
                     visitor = new User(visitorId);
+                    complex.setVisitorFor(visitor);
                 }
-                complex.setVisitorFor(visitor);
+
                 complex.setRating(resultSet.getFloat("rating"));
             }
             return complex;
@@ -222,24 +296,33 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         }
     }
 
+    @Override
     public List<Complex> readComplex() throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_ALL)) {
             ResultSet resultSet = statement.executeQuery();
             List<Complex> list = new ArrayList<>();
+            Map<Integer, User> trainerMap = new HashMap<>();
+            Map<Integer, User> visitorMap = new HashMap<>();
+
             Complex complex = null;
 
             while (resultSet.next()) {
                 complex = new Complex();
                 complex.setId(resultSet.getInt("id"));
                 complex.setTitle(resultSet.getString("title"));
-                User trainer = new User(resultSet.getInt("trainer_id"));
-                complex.setTrainerDeveloped(trainer);
+
+                int trainerId = resultSet.getInt("trainer_id");
+                User trainer = null;
+                if (!resultSet.wasNull()) { //TODO проверить везде
+                    trainer = trainerMap.merge(trainerId, new User(trainerId), (oldValue, newValue) -> oldValue);
+                    complex.setTrainerDeveloped(trainer);
+                }
                 int visitorId = resultSet.getInt("visitor_id");
                 User visitor = null;
                 if (!resultSet.wasNull()) {
-                    visitor = new User(visitorId);
+                    visitor = visitorMap.merge(visitorId, new User(visitorId), (oldValue, newValue) -> oldValue);
+                    complex.setVisitorFor(visitor);
                 }
-                complex.setVisitorFor(visitor);
                 complex.setRating(resultSet.getFloat("rating"));
                 list.add(complex);
             }
@@ -250,6 +333,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         }
     }
 
+    @Override
     public List<Complex.ComplexUnit> readListOfUnitsByComplexId(Integer complexId) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_LIST_OF_EXERCISES_BY_COMPLEX_ID)) {
             statement.setInt(1, complexId);
@@ -273,10 +357,15 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
 
     }
 
+    @Override
     public void updateComplex(Complex entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_COMPLEX)) {
             statement.setString(1, entity.getTitle());
-            statement.setInt(2, entity.getTrainerDeveloped().getId());
+            if (entity.getTrainerDeveloped() == null) {
+                statement.setNull(2, Types.INTEGER);
+            } else {
+                statement.setInt(2, entity.getTrainerDeveloped().getId());
+            }
             if (entity.getVisitorFor() == null) {
                 statement.setNull(3, Types.INTEGER);
             } else {
@@ -290,6 +379,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         }
     }
 
+    @Override
     public void updateListOfExercises(Complex complex) throws PersistentException {
         Complex.ComplexUnit unit = null;
         for (int i = 0; i < complex.sizeOfComplexUnitList(); i++) {
@@ -318,6 +408,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
 
     }
 
+    @Override
     public void deleteComplex(Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
             statement.setInt(1, id);
@@ -327,6 +418,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
         }
     }
 
+    @Override
     public void deleteListOfExercises(Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_LIST_OF_EXERCISES)) {
             statement.setInt(1, id);

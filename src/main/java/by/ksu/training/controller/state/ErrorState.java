@@ -11,8 +11,5 @@ public class ErrorState extends ResponseState {
         super(url);
     }
 
-    public ErrorState(String url, boolean temp) {
-        super(url);
-        this.temp = temp;
-    }
+
 }

@@ -12,7 +12,7 @@
 <body>
 <div class="col-sm-2 sidenav text-left">
     <p><a href='<c:url value="/visitor/list.html"/>'>Мои подопечные</a></p>
-    <p><a href='<c:url value="#"/>'>Мои тренировки</a></p>
+    <p><a href='<c:url value="/complex/my_complexes.html"/>'><fmt:message key="label.side_menu.trainings"/></a></p>
     <p><a href='<c:url value="/exercise/list.html"/>'><fmt:message key="label.side_menu.exercise_list"/></a></p>
     <p><a href='<c:url value="/person/edit.html"/>'>Редактировать личные данные</a></p>
     <p><a href='<c:url value="/user/edit_login.html"/>'>Изменить логин</a></p>

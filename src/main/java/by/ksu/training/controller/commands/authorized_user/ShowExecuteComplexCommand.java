@@ -6,6 +6,7 @@ import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
+import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
@@ -13,6 +14,7 @@ import by.ksu.training.service.AssignedComplexService;
 import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.ExerciseService;
 import by.ksu.training.service.validator.AssignedComplexValidator;
+import by.ksu.training.service.validator.ComplexValidator;
 import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,36 +30,36 @@ import java.util.stream.Collectors;
  */
 public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(ShowExecuteComplexCommand.class);
-//TODO привести в порядок, убрать лишнее в сервис
+
+    //TODO привести в порядок, убрать лишнее в сервис
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
         try {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute(AttrName.AUTHORIZED_USER);
-
-            Validator<AssignedComplex> validator = new AssignedComplexValidator();
-
-            int assignedComplexId = validator.validateId(request);
-            AssignedComplexService acService = factory.getService(AssignedComplexService.class);
-            AssignedComplex assignedComplex = acService.findById(assignedComplexId);
-
             Complex complex = null;
-            if (assignedComplex != null && user != null && user.getId().equals(assignedComplex.getVisitor().getId())) {
-                ComplexService complexService = factory.getService(ComplexService.class);
-                complex = complexService.findById(assignedComplex.getComplex().getId());
+            if (user.getRole() == Role.VISITOR) {
+                Validator<AssignedComplex> validator = new AssignedComplexValidator();
+                AssignedComplexService acService = factory.getService(AssignedComplexService.class);
+                int assignedComplexId = validator.validateId(request);
+                AssignedComplex assignedComplex = acService.findById(assignedComplexId);
+
+                if (assignedComplex != null && user.getId().equals(assignedComplex.getVisitor().getId())) {
+                    ComplexService complexService = factory.getService(ComplexService.class);
+                    complex = complexService.findById(assignedComplex.getComplex().getId());
+                } else {
+                    throw new PersistentException("Wrong parameter request");
+                }
+                request.setAttribute(AttrName.ASSIGNED_COMPLEX, assignedComplex);
             } else {
-                throw new PersistentException("Wrong parameter request");
+                //for role admin and trainer
+                Validator<Complex> validator = new ComplexValidator();
+                int complexId = validator.validateId(request);
+                ComplexService complexService = factory.getService(ComplexService.class);
+                complex = complexService.findById(complexId);
             }
 
-            ExerciseService exerciseService = factory.getService(ExerciseService.class);
-            exerciseService.find(complex.getListOfUnits().stream()
-                    .map(unit -> unit.getExercise())
-                    .distinct()
-                    .collect(Collectors.toList()));
-
-            request.setAttribute(AttrName.ASSIGNED_COMPLEX, assignedComplex);
             request.setAttribute(AttrName.COMPLEX, complex);
-
             return new ForwardState("complex/execute.jsp");
         } catch (
                 PersistentException e) {

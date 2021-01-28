@@ -45,8 +45,6 @@ public class ShowVisitorsByTrainerCommand extends TrainerCommand {
                         .filter(subscription -> activeVisitorsId.contains(subscription.getVisitor().getId()))
                         .collect(Collectors.toList());
 
-
-
                 request.setAttribute("lst", activeVisitorSubscriptionList);
                 return new ForwardState("visitor/list.jsp");
             } else {

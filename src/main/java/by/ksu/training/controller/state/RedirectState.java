@@ -11,8 +11,5 @@ public class RedirectState extends ResponseState {
     public RedirectState(String url) {
         super(url);
     }
-    public RedirectState(String url, boolean temp) {
-        super(url);
-        this.temp = temp;
-    }
+
 }

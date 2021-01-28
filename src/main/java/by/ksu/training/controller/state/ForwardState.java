@@ -12,8 +12,4 @@ public class ForwardState extends ResponseState {
         super(url);
     }
 
-    public ForwardState(String url, boolean temp) {
-        super(url);
-        this.temp = temp;
-    }
 }

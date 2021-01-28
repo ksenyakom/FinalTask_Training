@@ -33,7 +33,11 @@
         </c:choose>
         <%--Content of the page --%>
         <div class="col-sm-10 text-justify">
-            <h2><fmt:message key="title.exercise_list"/></h2>
+            <h2><fmt:message key="title.exercise_list"/> ПРИВЕЕЕЕЕТТТ</h2>
+            жывлашщ
+            <c:set var="number" value="${ (currentPage -1) * recordsPerPage }" scope="page"/>
+            <p>Номер  ${number} </p>
+
             <c:if test="${not empty warningMessage}">
                 <p class="text-danger"><fmt:message key="${warningMessage}"/></p>
             </c:if>
@@ -41,20 +45,20 @@
                 <p class="text-success"><fmt:message key="${successMessage}"/></p>
             </c:if>
 
-            <%--            <c:url value="/assigned_complex/update_date_executed.html" var="myURL">--%>
-            <%--                <c:param name="assignedComplexId" value="${assignedComplex.id}"/>--%>
-            <%--            </c:url>--%>
+
             <form onsubmit="return validateDelete(this)">
                 <div class="table-responsive">
+                    <c:if test="${isAdmin}">
+                        <a href='<c:url value="add.html"/>' class="btn btn-success" role="button"><fmt:message
+                                key="button.add"/></a>
+                    </c:if>
                     <table class="table table-hover table-bordered">
                         <caption>
-                            <a href='<c:url value="add.html"/>' class="btn btn-success" role="button"><fmt:message
-                                    key="button.add"/></a>
                         </caption>
                         <tr class="active">
                             <th scope="col">№</th>
                             <th scope="col"><fmt:message key="table.title"/></th>
-                            <th scope="col"><fmt:message key="table.tuning"/></th>
+                            <th scope="col"><fmt:message key="table.adjusting"/></th>
                             <th scope="col"><fmt:message key="table.mistakes"/></th>
                             <th scope="col"><fmt:message key="table.picture"/></th>
                             <th scope="col"><fmt:message key="table.audio"/></th>
@@ -64,9 +68,10 @@
                                 <th scope="col"><fmt:message key="table.remove"/></th>
                             </c:if>
                         </tr>
+
                         <c:forEach items="${lst}" var="exercise" varStatus="status">
                             <tr>
-                                <td>${ status.count }</td>
+                                <td>${ number + status.count }</td>
                                 <td>${ exercise.title }</td>
                                 <td>${ exercise.adjusting }</td>
                                 <td>${ exercise.mistakes }</td>
@@ -92,11 +97,46 @@
                     </c:if>
                 </div>
             </form>
+
+
+
+            <nav aria-label="Navigation for countries">
+                <ul class="pagination">
+                    <c:if test="${currentPage != 1}">
+                        <li class="page-item"><a class="page-link"
+                                                 href="list.html?recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}">Previous</a>
+                        </li>
+                    </c:if>
+
+                    <c:forEach begin="1" end="${noOfPages}" var="i">
+                        <c:choose>
+                            <c:when test="${currentPage eq i}">
+                                <li class="page-item active"><a class="page-link">
+                                        ${i} <span class="sr-only">(current)</span></a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page-item"><a class="page-link"
+                                                         href="list.html?recordsPerPage=${recordsPerPage}&currentPage=${i}">${i}</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                    <c:if test="${currentPage lt noOfPages}">
+                        <li class="page-item"><a class="page-link"
+                                                 href="list.html?recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}">Next</a>
+                        </li>
+                    </c:if>
+                </ul>
+            </nav>
         </div>
 
     </div>
 </div>
 
+
+<br>
 <c:import url="/WEB-INF/jsp/common/footer.jsp"/>
 
 </body>

@@ -52,7 +52,20 @@ public class DispatcherServlet extends HttpServlet {
 
     private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            HttpSession session = req.getSession(false);
+            if(session != null) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> attributes = (Map<String, Object>)session.getAttribute("redirectedData");
+                if(attributes != null) {
+                    for(String key : attributes.keySet()) {
+                        req.setAttribute(key, attributes.get(key));
+                    }
+                    session.removeAttribute("redirectedData");
+                }
+            }
+
             Command command = (Command) req.getAttribute("command");
+            //TODO move to another place
             ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
 
             if (command != null) {
@@ -60,13 +73,18 @@ public class DispatcherServlet extends HttpServlet {
                 ResponseState state = commandManager.execute(command, req, resp);
                 commandManager.close();
 
+                if(session != null && state != null && !state.getAttributes().isEmpty()) {
+                    session.setAttribute("redirectedData", state.getAttributes());
+                }
+
                 if (state.getClass() == ErrorState.class) {
                     req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
                 } else if (state.getClass() == RedirectState.class) {
                     String uri = req.getContextPath() + "/" + state.getUrl();
                     resp.sendRedirect(uri);
                 } else if (state.getClass() == ForwardState.class) {
-                    String successMessage = (String) req.getSession().getAttribute(AttrName.SUCCESS_MESSAGE);
+                    //в командах переккинуть меседжи в state.attributes
+                   String successMessage = (String) req.getSession().getAttribute(AttrName.SUCCESS_MESSAGE);
                     if (successMessage != null) {
                         req.setAttribute(AttrName.SUCCESS_MESSAGE, successMessage);
                         req.getSession().removeAttribute(AttrName.SUCCESS_MESSAGE);
@@ -84,7 +102,9 @@ public class DispatcherServlet extends HttpServlet {
                 //TODO
             }
         } catch (PersistentException e) {
-            req.setAttribute("error_message", e.getMessage());
+//            logger.error("Exception in command!!!!", e);
+//            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            req.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
             req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
         }
     }

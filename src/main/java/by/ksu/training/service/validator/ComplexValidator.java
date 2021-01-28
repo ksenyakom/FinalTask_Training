@@ -14,8 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 public class ComplexValidator implements Validator<Complex> {
     @Override
     public Complex validate(HttpServletRequest request) throws IncorrectFormDataException {
-//
-        return null;
+        Complex complex = new Complex();
+
+        String title = request.getParameter(AttrName.TITLE);
+        if (title != null && title.length() > 0 && title.length() < 255) {
+            complex.setTitle(title);
+        } else {
+            throw new IncorrectFormDataException(AttrName.TITLE, title);
+        }
+        return complex;
     }
 
     @Override
