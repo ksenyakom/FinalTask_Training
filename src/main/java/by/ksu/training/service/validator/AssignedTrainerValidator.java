@@ -20,7 +20,7 @@ import java.util.List;
 public class AssignedTrainerValidator implements Validator<AssignedTrainer> {
 
     @Override
-    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+    public Integer validateId(HttpServletRequest request)  {
         return null;
     }
 

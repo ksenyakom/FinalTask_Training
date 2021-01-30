@@ -10,9 +10,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title><fmt:message key="title.complex_edit"/></title>
     <%@ include file="../common/head.jsp" %>
     <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/validator_complex.js"/>"></script>
+
+    <title><fmt:message key="title.complex_edit"/></title>
 </head>
 <body>
 <%@ include file="../common/main_menu.jsp" %>
@@ -24,28 +26,22 @@
         <div class="col-sm-11">
             <%--Message--%>
             <h3 class="text-center"><fmt:message key="title.complex_edit"/></h3>
-            <c:if test="${not empty warningMessage}"><p class="text-warning"><fmt:message
-                    key="${ warningMessage }"/></p></c:if>
-            <c:if test="${not empty successMessage}"><p class="text-success"><fmt:message
-                    key="${ successMessage }"/></p></c:if>
+                <%@ include file="../common/messages.jsp" %>
 
-
-
-
-            <c:url value="update.html" var="myURL">
-                <c:param name="complexId" value="${ complex.id }"/>
-            </c:url>
-            <form action='${ myURL }' method="post" enctype="multipart/form-data" onsubmit="">
+            <form action='<c:url value="edit.html"/>' method="post" enctype="multipart/form-data" onsubmit="return validateComplex(this)">
+                <input type="hidden" name="complexId" value="${ complex.id }">
+                <c:if test="${not empty complex.visitorFor}">
+                    <input type="hidden" name="visitorId" value="${complex.visitorFor}"></c:if>
                 <label for="title"><fmt:message key="label.complex_title"/></label>
                 <input type="text" class="form-control" id="title" name="title" value="${complex.title}"/>
                 <br>
                 <fmt:message key="label.status"/>
                 <c:choose>
-                    <c:when test="${empty visitor}">
+                    <c:when test="${empty complex.visitorFor}">
                         <fmt:message key="label.common"/>
                     </c:when>
                     <c:otherwise>
-                        <fmt:message key="label.visitor_for"/> ${ visitor.login }
+                        <fmt:message key="label.visitor_for"/> ${ complex.visitorFor.login }
                     </c:otherwise>
                 </c:choose>
                 <br>

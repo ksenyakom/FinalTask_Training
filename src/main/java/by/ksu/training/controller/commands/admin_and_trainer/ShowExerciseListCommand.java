@@ -26,40 +26,38 @@ public class ShowExerciseListCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowExerciseListCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            final int recordsPerPage  = 5;
-            request.setAttribute("recordsPerPage",recordsPerPage);                              //3
-            ExerciseService exerciseService = factory.getService(ExerciseService.class);
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        final int recordsPerPage = 5;
 
-            //count number of pages
-            String numberOfPages = request.getParameter("noOfPages");
-            if (numberOfPages == null) {
-                int count = exerciseService.findTotalCount();
-                int noOfPages = count / recordsPerPage + (count % recordsPerPage > 0 ? 1 : 0);
-             request.setAttribute("noOfPages", noOfPages);                                      //1
-            }
+        ExerciseService exerciseService = factory.getService(ExerciseService.class);
 
-            // receive currentPage number
-            String page = request.getParameter("currentPage");
-            int currentPage;
-            if (page == null) {
-                currentPage = 1;
-            } else {
-                currentPage = Integer.parseInt(page); //todo exception catch
-            }
-
-            request.setAttribute("currentPage", currentPage);                                   //2
-
-            List<Exercise> exerciseList = exerciseService.find(currentPage, recordsPerPage);
-
-            request.setAttribute("lst", exerciseList);
-
-            return new ForwardState("exercise/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+        //count number of pages
+        String numberOfPages = request.getParameter("noOfPages");
+        if (numberOfPages == null) {
+            int count = exerciseService.findTotalCount();
+            int noOfPages = count / recordsPerPage + (count % recordsPerPage > 0 ? 1 : 0);
+            numberOfPages =""+ noOfPages;
         }
+
+        // receive currentPage number
+        String page = request.getParameter("currentPage");
+        int currentPage;
+        if (page == null) {
+            currentPage = 1;
+        } else {
+            try {
+                currentPage = Integer.parseInt(page);
+            }catch (NumberFormatException e) {
+                throw new PersistentException("Current page number can not be read, found:"+page);
+            }
+        }
+        request.setAttribute("noOfPages", numberOfPages);                                      //1
+        request.setAttribute("currentPage", currentPage);                                   //2
+        request.setAttribute("recordsPerPage", recordsPerPage);                              //3
+        List<Exercise> exerciseList = exerciseService.find(currentPage, recordsPerPage);
+        request.setAttribute("lst", exerciseList);
+        logger.debug("User looks page exercises/list");
+
+        return new ForwardState("exercise/list.jsp");
     }
 }

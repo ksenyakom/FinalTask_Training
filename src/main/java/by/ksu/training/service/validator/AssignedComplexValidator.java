@@ -6,6 +6,7 @@ import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
+import by.ksu.training.exception.PersistentException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -54,16 +55,29 @@ public class AssignedComplexValidator implements Validator<AssignedComplex> {
     }
 
     @Override
-    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+    public Integer validateId(HttpServletRequest request) throws PersistentException {
         String stringId = request.getParameter(AttrName.ASSIGNED_COMPLEX_ID);
+        if (stringId == null || stringId.isEmpty()) {
+            throw new PersistentException(String.format("Record id was not found: %s", AttrName.ASSIGNED_COMPLEX_ID));
+        }
         try {
-            if (stringId != null) {
-                return Integer.parseInt(stringId);
-            } else {
-                throw new IncorrectFormDataException("id", stringId);
-            }
+            return Integer.parseInt(stringId);
         } catch (NumberFormatException e) {
-            throw new IncorrectFormDataException("id", stringId);
+            throw new PersistentException(String.format("Record id cannot be read: %s, was found %s", AttrName.ASSIGNED_COMPLEX_ID, stringId));
         }
     }
+
+//    @Override
+//    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+//        String stringId = request.getParameter(AttrName.ASSIGNED_COMPLEX_ID);
+//        try {
+//            if (stringId != null) {
+//                return Integer.parseInt(stringId);
+//            } else {
+//                throw new IncorrectFormDataException("id", stringId);
+//            }
+//        } catch (NumberFormatException e) {
+//            throw new IncorrectFormDataException("id", stringId);
+//        }
+//    }
 }

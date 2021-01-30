@@ -2,7 +2,6 @@
   Author: Ksiniya Oznobishina 
   Date: 23.01.2021
 --%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--Локализация--%>
@@ -13,13 +12,15 @@
 <html lang="ru">
 <head>
     <title><fmt:message key="title.exercise_list"/></title>
+    <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
     <%@include file="/WEB-INF/jsp/common/head.jsp" %>
 </head>
+
 <body>
 <c:set var="isAdmin"
        value="${sessionScope.authorizedUser.role.name().equals('ADMINISTRATOR')}"/>
 <c:import url="/WEB-INF/jsp/common/main_menu.jsp"/>
-
+<c:set var="number" value="${ (currentPage -1) * recordsPerPage }" scope="page"/>
 <div class="container-fluid text-center">
     <div class="row content">
         <%--side menu of the page--%>
@@ -31,22 +32,12 @@
                 <c:import url="/WEB-INF/jsp/trainer/side_menu.jsp"/>
             </c:otherwise>
         </c:choose>
+
         <%--Content of the page --%>
         <div class="col-sm-10 text-justify">
-            <h2><fmt:message key="title.exercise_list"/> ПРИВЕЕЕЕЕТТТ</h2>
-            жывлашщ
-            <c:set var="number" value="${ (currentPage -1) * recordsPerPage }" scope="page"/>
-            <p>Номер  ${number} </p>
-
-            <c:if test="${not empty warningMessage}">
-                <p class="text-danger"><fmt:message key="${warningMessage}"/></p>
-            </c:if>
-            <c:if test="${not empty successMessage}">
-                <p class="text-success"><fmt:message key="${successMessage}"/></p>
-            </c:if>
-
-
-            <form onsubmit="return validateDelete(this)">
+            <h2><fmt:message key="title.exercise_list"/></h2>
+            <%@ include file="../common/messages.jsp" %>
+            <form onsubmit="return validateDelete(this)" enctype="multipart/form-data">
                 <div class="table-responsive">
                     <c:if test="${isAdmin}">
                         <a href='<c:url value="add.html"/>' class="btn btn-success" role="button"><fmt:message
@@ -98,13 +89,12 @@
                 </div>
             </form>
 
-
-
             <nav aria-label="Navigation for countries">
                 <ul class="pagination">
                     <c:if test="${currentPage != 1}">
                         <li class="page-item"><a class="page-link"
-                                                 href="list.html?recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}">Previous</a>
+                                                 href="list.html?recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}"><fmt:message
+                                key="label.previous"/></a>
                         </li>
                     </c:if>
 
@@ -125,7 +115,8 @@
 
                     <c:if test="${currentPage lt noOfPages}">
                         <li class="page-item"><a class="page-link"
-                                                 href="list.html?recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}">Next</a>
+                                                 href="list.html?recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}"><fmt:message
+                                key="label.next"/></a>
                         </li>
                     </c:if>
                 </ul>

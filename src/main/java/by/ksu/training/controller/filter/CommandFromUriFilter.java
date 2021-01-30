@@ -61,7 +61,6 @@ public class CommandFromUriFilter implements Filter {
         commandsPost.put("/user/save_changes_login", SaveChangedLoginCommand.class);
         commandsPost.put("/person/save_changes", SavePersonChangeCommand.class);
         commandsPost.put("/subscription/delete", DeleteSubscriptionCommand.class);
-        commandsPost.put("/subscription/delete", DeleteSubscriptionCommand.class);
         commandsPost.put("/subscription/update", UpdateSubscriptionCommand.class);
         commandsPost.put("/subscription/save_new", SaveNewSubscriptionCommand.class);
         commandsPost.put("/registration", RegistrationCommand.class);
@@ -74,11 +73,11 @@ public class CommandFromUriFilter implements Filter {
         commandsPost.put("/assigned_complex/update", UpdateAssignedComplexCommand.class);
         commandsPost.put("/exercise/delete", DeleteExerciseCommand.class);
         commandsPost.put("/exercise/add", AddExerciseCommand.class);
-        commandsPost.put("/exercise/edit", SaveExerciseCommand.class);
+        commandsPost.put("/exercise/edit", UpdateExerciseCommand.class);
         commandsPost.put("/complex/delete", DeleteComplexCommand.class);
         commandsPost.put("/complex/add_exercise_in_complex", AddExerciseInComplexCommand.class);
         commandsPost.put("/complex/delete_exercise_in_complex", DeleteExerciseInComplexCommand.class);
-        commandsPost.put("/complex/update", UpdateEditedComplexCommand.class);
+        commandsPost.put("/complex/edit", UpdateEditedComplexCommand.class);
         commandsPost.put("/complex/save", SaveNewComplexCommand.class);
 
     }

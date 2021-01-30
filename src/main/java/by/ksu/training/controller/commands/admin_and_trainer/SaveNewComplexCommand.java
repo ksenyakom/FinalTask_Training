@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * Saves entered complex, provides check if title exist.
@@ -26,43 +27,37 @@ import javax.servlet.http.HttpServletResponse;
 public class SaveNewComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(SaveNewComplexCommand.class);
 
+
+
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<Complex> validator = new ComplexValidator();
+        ComplexService complexService = factory.getService(ComplexService.class);
+        Complex complex = null;
+
         try {
-            Validator<Complex> validator = new ComplexValidator();
-            Complex newComplex = validator.validate(request); // only title for now
-
-            ComplexService complexService = factory.getService(ComplexService.class);
-
-            boolean existTitle = complexService.checkTitleExist(newComplex.getTitle());
+            complex = validator.validate(request);
+            boolean existTitle = complexService.checkTitleExist(complex.getTitle());
             if (existTitle) {
                 ResponseState state = new RedirectState("complex/add.html");
                 state.getAttributes().put(AttrName.WARNING_MESSAGE, "message.warning.training_title_already_exist");
-                state.getAttributes().put(AttrName.TITLE, newComplex.getTitle());
+                state.getAttributes().put(AttrName.COMPLEX, complex);
                 return state;
             } else {
                 User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-                if (user.getRole() == Role.TRAINER) {
-                    int visitorId = validator.validateIntAttr(AttrName.VISITOR_ID, request);
-                    newComplex.setVisitorFor(new User(visitorId));
-                    newComplex.setTrainerDeveloped(user);
-                }
-                complexService.save(newComplex);
+                complexService.save(complex);
                 ResponseState state = new RedirectState("complex/my_complexes.html");
                 state.getAttributes().put(AttrName.SUCCESS_MESSAGE, "message.success.complex_creation");
-                //TODO change
-                logger.info("!!!!!!!!!!!!!!User {} created new complex id = {}", user.getLogin(), newComplex.getId() );
+                logger.info("User {} created new complex id = {}", user.getLogin(), complex.getId() );
                 return state;
             }
 
         } catch (IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ForwardState("complex/add.html");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+            logger.debug("User entered invalid data.", e);
+            ResponseState state =  new RedirectState("complex/add.html");
+            state.getAttributes().put(AttrName.WARNING_MAP, validator.getWarningMap());
+            state.getAttributes().put(AttrName.COMPLEX,validator.getInvalid());
+            return state;
         }
     }
 

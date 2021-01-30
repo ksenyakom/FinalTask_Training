@@ -11,9 +11,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title><fmt:message key="title.complex_add"/></title>
     <%@ include file="../common/head.jsp" %>
     <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/validator_complex.js"/>"></script>
+    <title><fmt:message key="title.complex_add"/></title>
 </head>
 <body>
 <%@ include file="../common/main_menu.jsp" %>
@@ -22,23 +23,15 @@
 <div class="container-fluid">
     <div class="row content">
 
-        <div class="col-sm-1">
-        </div>
+        <div class="col-sm-1"></div>
         <div class="col-sm-11">
-            <%--Message--%>
             <h3 class="text-center"><fmt:message key="title.complex_add"/></h3>
-            <c:if test="${not empty warningMessage}"><p class="text-warning"><fmt:message
-                    key="${ warningMessage }"/></p></c:if>
-            <c:if test="${not empty successMessage}"><p class="text-success"><fmt:message
-                    key="${ successMessage }"/></p></c:if>
+            <%@ include file="../common/messages.jsp" %>
 
-
-            <c:url value="save.html" var="myURL">
-                <%--                <c:param name="complexId" value="${ complex.id }"/>--%>
-            </c:url>
-            <form action='${ myURL }' method="post" enctype="multipart/form-data" onsubmit="">
+            <form action='<c:url value="save.html"/>' method="post" enctype="multipart/form-data"
+                  onsubmit="return validateComplex(this)">
                 <label for="title"><fmt:message key="label.complex_title"/></label>
-                <input type="text" class="form-control" id="title" name="title" value="${title}"/>
+                <input type="text" class="form-control" id="title" name="title" value="${complex.title}"/>
                 <br>
                 <fmt:message key="label.status"/>
                 <c:choose>
@@ -67,10 +60,9 @@
                 </c:choose>
                 <br>
                 <br>
-
                 <button type="submit" class="btn btn-success"><fmt:message key="button.create"/></button>
             </form>
-
+            <p id="errorMessage" class="text-danger"></p>
         </div>
     </div>
 </div>

@@ -30,8 +30,7 @@ import java.util.List;
 public class ShowAssignedComplexEditPageCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowAssignedComplexEditPageCommand.class);
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
             Validator<AssignedComplex> validator = new AssignedComplexValidator();
             int id = validator.validateId(request);
             AssignedComplexService service = factory.getService(AssignedComplexService.class);
@@ -45,10 +44,5 @@ public class ShowAssignedComplexEditPageCommand extends TrainerCommand {
             request.setAttribute(AttrName.ASSIGNED_COMPLEX, assignedComplex);
 
             return new ForwardState("assigned_complex/edit.jsp");
-        } catch (PersistentException | IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
     }
 }

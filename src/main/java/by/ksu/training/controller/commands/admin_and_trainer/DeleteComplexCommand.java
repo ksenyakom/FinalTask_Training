@@ -37,60 +37,58 @@ public class DeleteComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(DeleteComplexCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<Complex> validator = new ComplexValidator();
+        ComplexService complexService = factory.getService(ComplexService.class);
         try {
-            Validator<Complex> validator = new ComplexValidator();
+            // check if authorized user can remove this complex
             List<Integer> listId = validator.validateRemoveId(request);
-
-            // check if authorized user can remove complex
             User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-            ComplexService complexService = factory.getService(ComplexService.class);
-
-            if (user.getRole() == Role.ADMINISTRATOR) {
-                // for admin
-                for (Integer id : listId) {
-                    Complex complex = complexService.findById(id);
-                    if (complex != null && complex.getVisitorFor() == null) {
-                        complexService.delete(id);
-                    } else {
-                        request.setAttribute(AttrName.ERROR_MESSAGE,
-                                String.format("You are not allowed to delete this record: %s",
-                                        complex == null ? "no such record" : complex.getTitle()));
-                        return new ErrorState();
-                    }
-                }
-            } else {
-                // for trainer
-                AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-                for (Integer id : listId) {
-                    Complex complex = complexService.findById(id);
-                    if (complex != null && complex.getVisitorFor() != null) {
-                        User trainerOfVisitor = assignedTrainerService.findTrainerByVisitor(complex.getVisitorFor());
-                        if (trainerOfVisitor!= null && user.getId().equals(trainerOfVisitor.getId())) {
+            if (!listId.isEmpty()) {
+                if (user.getRole() == Role.ADMINISTRATOR) {
+                    // for admin
+                    for (Integer id : listId) {
+                        Complex complex = complexService.findById(id);
+                        if (complex != null && complex.getVisitorFor() == null) {
                             complexService.delete(id);
-                        }else {
-                            request.setAttribute(AttrName.ERROR_MESSAGE,
-                                    String.format("You are not allowed to delete this record: %s", complex.getTitle()));
-                            return new ErrorState();
+                            logger.debug("User {} deleted complex(s) id = {}", user.getLogin(), id);
+                        } else {
+                            ResponseState state = new ErrorState();
+                            state.getAttributes().put(AttrName.ERROR_MESSAGE,String.format("You are not allowed to delete this record: %s",
+                                            complex == null ? "no such record" : complex.getTitle()));
+                            return state;
                         }
-                    } else {
-                        request.setAttribute(AttrName.ERROR_MESSAGE,
-                                String.format("You are not allowed to delete this record: %s",
-                                        complex == null ? "no such record" : complex.getTitle()));
-                        return new ErrorState();
+                    }
+                } else {
+                    // for trainer
+                    AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
+                    for (Integer id : listId) {
+                        Complex complex = complexService.findById(id);
+                        if (complex != null && complex.getVisitorFor() != null) {
+                            User trainerOfVisitor = assignedTrainerService.findTrainerByVisitor(complex.getVisitorFor());
+                            if (trainerOfVisitor != null && user.getId().equals(trainerOfVisitor.getId())) {
+                                complexService.delete(id);
+                                logger.debug("User {} deleted complex(s) id = {}", user.getLogin(), id);
+
+                            } else {
+                                ResponseState state = new ErrorState();
+                                state.getAttributes().put(AttrName.ERROR_MESSAGE,
+                                        String.format("You are not allowed to delete this record: %s", complex.getTitle()));
+                                return state;
+                            }
+                        } else {
+                            ResponseState state = new ErrorState();
+                            state.getAttributes().put(AttrName.ERROR_MESSAGE,String.format("You are not allowed to delete this record: %s",
+                                    complex == null ? "no such record" : complex.getTitle()));
+                            return state;
+                        }
                     }
                 }
+                request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.delete");
             }
-            request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.delete");
             return new RedirectState("complex/my_complexes.html");
         } catch (IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ForwardState("complex/my_complexes.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+            throw new PersistentException(e.getMessage(), e);
         }
     }
 }

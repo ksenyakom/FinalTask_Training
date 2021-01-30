@@ -18,10 +18,10 @@
 <c:choose>
 
     <c:when test="${not empty errorMessage}">
-        <H2>${errorMessage}</H2>
+        <h4>Error: ${errorMessage}</h4>
     </c:when>
     <c:when test="${not empty pageContext.errorData.requestURI}">
-        <H2>Запрошенная страница ${pageContext.errorData.requestURI} не найдена на сервере</H2>
+        <h4>Error: Запрошенная страница ${pageContext.errorData.requestURI} не найдена на сервере</h4>
     </c:when>
     <c:otherwise>Непредвиденная ошибка приложения</c:otherwise>
 </c:choose>

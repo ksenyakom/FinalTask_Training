@@ -86,8 +86,8 @@ public final class ConnectionPool {
         try {
             destroy();
 
-            String driverName = (String) properties.get("driver"); // подключили драйвер
-            Class.forName(driverName);
+            String driverName = (String) properties.get("driver");
+            Class.forName(driverName);                          // подключили драйвер
             this.properties = properties;
             this.databaseUrl = (String) properties.get("db.url");
             this.maxSize = maxSize;

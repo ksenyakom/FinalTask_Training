@@ -23,29 +23,13 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowEditComplexPageCommand extends AdminAndTrainerCommand{
     private static Logger logger = LogManager.getLogger(ShowEditComplexPageCommand.class);
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Validator<Complex> complexValidator = new ComplexValidator();
-            Integer id = complexValidator.validateId(request);
-            ComplexService complexService = factory.getService(ComplexService.class);
-            Complex complex = complexService.findById(id);
-            request.setAttribute(AttrName.COMPLEX, complex);
-            return new ForwardState("complex/edit.jsp");
-//            Validator<AssignedComplex> validator = new AssignedComplexValidator();
-//            AssignedComplex assignedComplex = validator.validate(request);
-//
-//            AssignedComplexService service = factory.getService(AssignedComplexService.class);
-//            service.save(assignedComplex);
-//
-//            String parameter = "?" + AttrName.USER_ID + "=" + assignedComplex.getVisitor().getId();
-//            return new RedirectState("assigned_complex/list.html" + parameter);
-        } catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-            return new ForwardState("complex/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<Complex> complexValidator = new ComplexValidator();
+        ComplexService complexService = factory.getService(ComplexService.class);
+
+        Integer id = complexValidator.validateId(request);
+        Complex complex = complexService.findById(id);
+        request.setAttribute(AttrName.COMPLEX, complex);
+        return new ForwardState("complex/edit.jsp");
     }
 }

@@ -26,6 +26,7 @@ public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedT
     @Override
     public AssignedTrainer findById(Integer id) throws PersistentException {
         AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
+
         return atDao.read(id);
     }
 
@@ -38,7 +39,10 @@ public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedT
     @Override
     public List<User> findVisitorsByTrainer(User trainer) throws PersistentException {
         AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
-        return atDao.readListVisitorsByTrainer(trainer);
+        List<User> users = atDao.readListVisitorsByTrainer(trainer);
+        UserDao userDao = transaction.createDao(UserDao.class);
+        userDao.readLogin(users);
+        return users;
     }
 
     @Override

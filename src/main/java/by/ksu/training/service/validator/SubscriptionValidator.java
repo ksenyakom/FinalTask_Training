@@ -23,7 +23,7 @@ public class SubscriptionValidator implements Validator<Subscription> {
     private static final String VISITOR_ID = "visitorId";
 
     @Override
-    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+    public Integer validateId(HttpServletRequest request) {
         return null;
     }
 

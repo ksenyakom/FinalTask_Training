@@ -45,9 +45,10 @@ public class UpdateDateExecutedAssignedComplexCommand extends VisitorCommand {
             }
 
             return new RedirectState("visitor/assigned_trainings.html");
-        }  catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-            return new ForwardState("complex/execute.jsp");
+//        }
+//        catch (IncorrectFormDataException e) {
+//            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
+//            return new ForwardState("complex/execute.jsp");
         } catch (PersistentException e) {
             logger.error("Exception in command!!!", e);
             request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());

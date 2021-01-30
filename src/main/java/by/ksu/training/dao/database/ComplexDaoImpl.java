@@ -218,7 +218,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
                 return id;
             } else {
                 logger.error("There is no autoincremented index after trying to add record into table `readers`");
-                throw new PersistentException();
+                throw new PersistentException("There is no autoincremented index after trying to add record into table `readers`");
             }
         } catch (SQLException e) {
             throw new PersistentException(e);

@@ -54,6 +54,8 @@
         <filter-name>ActionFromUriFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
+
+
     <!--    <filter>-->
     <!--        <filter-name>SecurityFilter</filter-name>-->
     <!--        <filter-class>by.ksu.training.controller.filter.SecurityFilter</filter-class>-->
@@ -68,6 +70,8 @@
         <location>/WEB-INF/jsp/error.jsp</location>
     </error-page>
     -->
-
+<!--    <listener>-->
+<!--        <listener-class>by.ksu.training.service.Listener</listener-class>-->
+<!--    </listener>-->
 
 </web-app>

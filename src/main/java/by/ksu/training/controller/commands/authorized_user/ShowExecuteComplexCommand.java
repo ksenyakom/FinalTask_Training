@@ -33,8 +33,8 @@ public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
 
     //TODO привести в порядок, убрать лишнее в сервис
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+//        try {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute(AttrName.AUTHORIZED_USER);
             Complex complex = null;
@@ -61,15 +61,15 @@ public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
 
             request.setAttribute(AttrName.COMPLEX, complex);
             return new ForwardState("complex/execute.jsp");
-        } catch (
-                PersistentException e) {
-            logger.error("Exception in command!!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        } catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-            return new ForwardState("/complex/execute.jsp");
-        }
+//        } catch (
+//                PersistentException e) {
+//            logger.error("Exception in command!!!!", e);
+//            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+//            return new ErrorState();
+//        } catch (IncorrectFormDataException e) {
+//            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
+//            return new ForwardState("/complex/execute.jsp");
+//        }
 
     }
 }

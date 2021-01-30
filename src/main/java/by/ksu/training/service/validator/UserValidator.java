@@ -3,6 +3,7 @@ package by.ksu.training.service.validator;
 import by.ksu.training.controller.AttrName;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
+import by.ksu.training.exception.PersistentException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,19 +15,32 @@ public class UserValidator implements Validator<User> {
     public static final String REGEX_LOGIN = "[A-Za-z0-9_\\-]{5,}";
     public static final String REGEX_EMAIL = "^[a-zA-Z0-9_.+\\-]+@[a-zA-Z0-9\\-]+\\.[a-zA-Z0-9\\-.]+";
 
+
     @Override
-    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+    public Integer validateId(HttpServletRequest request) throws PersistentException {
         String stringId = request.getParameter(AttrName.USER_ID);
+        if (stringId == null || stringId.isEmpty()) {
+            throw new PersistentException(String.format("Record id was not found: %s", AttrName.USER_ID));
+        }
         try {
-            if (stringId != null) {
-                return Integer.parseInt(stringId);
-            } else {
-                throw new IncorrectFormDataException("id", stringId);
-            }
+            return Integer.parseInt(stringId);
         } catch (NumberFormatException e) {
-            throw new IncorrectFormDataException("id", stringId);
+            throw new PersistentException(String.format("Record id cannot be read: %s, was found %s", AttrName.USER_ID, stringId));
         }
     }
+//    @Override
+//    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+//        String stringId = request.getParameter(AttrName.USER_ID);
+//        try {
+//            if (stringId != null) {
+//                return Integer.parseInt(stringId);
+//            } else {
+//                throw new IncorrectFormDataException("id", stringId);
+//            }
+//        } catch (NumberFormatException e) {
+//            throw new IncorrectFormDataException("id", stringId);
+//        }
+//    }
 
     @Override
     public User validate(HttpServletRequest request) throws IncorrectFormDataException {

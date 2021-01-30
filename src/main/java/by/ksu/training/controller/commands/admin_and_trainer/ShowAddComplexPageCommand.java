@@ -24,22 +24,14 @@ public class ShowAddComplexPageCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowAddComplexPageCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-        try {
-            if (user.getRole() == Role.TRAINER) {
-                AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-                List<User> visitors = assignedTrainerService.findVisitorsByTrainer(user);
-                UserService userService = factory.getService(UserService.class);
-                userService.findLogin(visitors);
-                request.setAttribute("lst", visitors);
-            }
+        AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
 
-            return new ForwardState("complex/add.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+        if (user.getRole() == Role.TRAINER) {
+            List<User> visitors = assignedTrainerService.findVisitorsByTrainer(user);
+            request.setAttribute("lst", visitors);
         }
+        return new ForwardState("complex/add.jsp");
     }
 }

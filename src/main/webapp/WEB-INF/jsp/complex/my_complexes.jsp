@@ -2,10 +2,6 @@
   Author: Ksiniya Oznobishina 
   Date: 25.01.2021
 --%>
-<%--
-  Author: Ksiniya Oznobishina
-  Date: 05.01.2021
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--Локализация--%>
@@ -15,8 +11,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title><fmt:message key="title.complex.list"/></title>
     <%@include file="/WEB-INF/jsp/common/head.jsp" %>
+    <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
+    <title><fmt:message key="title.complex.list"/></title>
+
 </head>
 <body>
 <c:set var="isAdmin"
@@ -37,15 +35,11 @@
         </c:choose>
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
-            <c:if test="${not empty warningMessage}">
-                <p class="text-danger"><fmt:message key="${warningMessage}"/></p></c:if>
-            <c:if test="${not empty successMessage}">
-                <p class="text-success"><fmt:message key="${successMessage}"/></p></c:if>
+            <%@ include file="../common/messages.jsp" %>
 
-            <a href='<c:url value="add.html"/>' class="btn btn-success" role="button"><fmt:message
-                    key="button.add"/></a>
-            <form onsubmit="return validateDelete(this)">
-
+            <a href='<c:url value="add.html"/>' class="btn btn-success" role="button">
+                <fmt:message key="button.add"/></a>
+            <form onsubmit="return validateDelete(this)" enctype="multipart/form-data">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <caption>
@@ -98,6 +92,7 @@
                         <fmt:message key="table.remove"/></button>
                 </div>
             </form>
+
         </div>
         <div class="col-sm-2 sidenav">
             <c:import url="/WEB-INF/jsp/common/ads.jsp"/>

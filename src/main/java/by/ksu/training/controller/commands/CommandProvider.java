@@ -70,7 +70,7 @@ public final class CommandProvider {
         repository.put(ShowExerciseAddPageCommand.class, new ShowExerciseAddPageCommand());
         repository.put(AddExerciseCommand.class, new AddExerciseCommand());
         repository.put(ShowExerciseEditCommand.class, new ShowExerciseEditCommand());
-        repository.put(SaveExerciseCommand.class, new SaveExerciseCommand());
+        repository.put(UpdateExerciseCommand.class, new UpdateExerciseCommand());
 
         repository.put(ShowMyComplexesCommand.class, new ShowMyComplexesCommand());
         repository.put(DeleteComplexCommand.class, new DeleteComplexCommand());

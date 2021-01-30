@@ -27,8 +27,8 @@ public class ShowAddExerciseInComplex  extends AdminAndTrainerCommand{
     private static Logger logger = LogManager.getLogger(ShowAddExerciseInComplex.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+//        try {
             Validator<Complex> complexValidator = new ComplexValidator();
             Integer complexId = complexValidator.validateId(request);
 
@@ -38,13 +38,13 @@ public class ShowAddExerciseInComplex  extends AdminAndTrainerCommand{
             request.setAttribute(AttrName.COMPLEX_ID, complexId);
 
             return new ForwardState("complex/add_exercise_in_complex.jsp");
-        } catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-            return new ForwardState("complex/edit.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage()); //TODO проверить чтобы везде был error
-            return new ErrorState();
-        }
+//        } catch (IncorrectFormDataException e) {
+//            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
+//            return new ForwardState("complex/edit.jsp");
+//        } catch (PersistentException e) {
+//            logger.error("Exception in command!!!", e);
+//            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage()); //TODO проверить чтобы везде был error
+//            return new ErrorState();
+//        }
     }
 }

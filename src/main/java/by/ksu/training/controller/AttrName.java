@@ -49,4 +49,5 @@ public class AttrName {
     public static final String EXERCISE_TYPE = "exerciseType";
     public static final String TITLE = "title";
     public static final String ADJUSTING = "adjusting";
+    public static final String WARNING_MAP = "warningMap";
 }

@@ -18,7 +18,7 @@ public class NewSubscriptionValidator implements Validator{
     private static final String PERIOD = "period";
 
     @Override
-    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
+    public Integer validateId(HttpServletRequest request) {
         return null;
     }
 
@@ -32,7 +32,7 @@ public class NewSubscriptionValidator implements Validator{
         try {
             if (beginDate != null) {
                 LocalDate newBegin = LocalDate.parse(beginDate);
-                if (previousEndDate != null) {
+                if (!previousEndDate.isEmpty()) {
                     LocalDate previousEnd = LocalDate.parse(previousEndDate);
                     // начало новой подписки позже чем старая закончится
                     if (!newBegin.isAfter(previousEnd)) {

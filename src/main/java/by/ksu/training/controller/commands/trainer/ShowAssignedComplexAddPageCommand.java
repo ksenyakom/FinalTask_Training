@@ -27,8 +27,8 @@ public class ShowAssignedComplexAddPageCommand  extends TrainerCommand{
     private static Logger logger = LogManager.getLogger(ShowAssignedComplexAddPageCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+//        try {
             Validator<User> validator = new UserValidator();
             Integer visitorId = validator.validateId(request);
 
@@ -44,13 +44,13 @@ public class ShowAssignedComplexAddPageCommand  extends TrainerCommand{
             request.setAttribute("lst",complexes);
 
             return new ForwardState("assigned_complex/add.jsp");
-        }  catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-            return new ForwardState("assigned_complex/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
+//        }  catch (IncorrectFormDataException e) {
+//            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
+////            return new ForwardState("assigned_complex/list.jsp");
+//        } catch (PersistentException e) {
+//            logger.error("Exception in command!!!", e);
+//            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
+//            return new ErrorState();
+//        }
     }
 }

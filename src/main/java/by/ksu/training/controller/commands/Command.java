@@ -2,6 +2,7 @@ package by.ksu.training.controller.commands;
 
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
+import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,5 +40,5 @@ public abstract class Command {
     }
 
 
-    protected abstract ResponseState exec(HttpServletRequest request, HttpServletResponse response);
+    protected abstract ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException;
 }

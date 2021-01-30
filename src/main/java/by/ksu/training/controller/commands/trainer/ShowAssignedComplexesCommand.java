@@ -30,8 +30,8 @@ public class ShowAssignedComplexesCommand extends TrainerCommand {
     private static final int DAYS = 60;
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+//        try {
             Validator<User> validator = new UserValidator();
             Integer visitorId = validator.validateId(request);
             User visitor = new User(visitorId);
@@ -45,11 +45,11 @@ public class ShowAssignedComplexesCommand extends TrainerCommand {
             request.setAttribute(AttrName.VISITOR, visitor);
             request.setAttribute("lst", assignedComplexes);
             return new ForwardState("assigned_complex/list.jsp");
-        } catch (PersistentException | IncorrectFormDataException e) {
-            logger.error("Exception in command!!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
+//        } catch (PersistentException | IncorrectFormDataException e) {
+//            logger.error("Exception in command!!!!", e);
+//            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+//            return new ErrorState();
+//        }
     }
 
 }

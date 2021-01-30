@@ -3,6 +3,7 @@ package by.ksu.training.controller.commands.admin;
 import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
+import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Exercise;
 import by.ksu.training.entity.Person;
@@ -19,38 +20,32 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Kseniya Oznobishina
  * @Date 25.01.2021
  */
 public class ShowExerciseEditCommand extends AdminCommand {
-    private static Logger logger = LogManager.getLogger(AddExerciseCommand.class);
+    private static Logger logger = LogManager.getLogger(ShowExerciseEditCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Validator<Exercise> validator = new ExerciseValidator();
-            Integer id = validator.validateId(request);
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<Exercise> validator = new ExerciseValidator();
+        ExerciseService exerciseService = factory.getService(ExerciseService.class);
+        Integer id = validator.validateId(request);
+        Exercise exercise = exerciseService.findById(id);
+        List<String> types = exerciseService.findExerciseTypes();
 
-            ExerciseService exerciseService = factory.getService(ExerciseService.class);
-            Exercise exercise = exerciseService.findById(id);
-            List<String> types = exerciseService.findExerciseTypes();
-
-            request.setAttribute("lst",types);
-            if (exercise != null) {
-                request.setAttribute(AttrName.EXERCISE, exercise);
-
-                return new ForwardState("exercise/edit.jsp");
-            } else {
-                request.setAttribute(AttrName.WARNING_MESSAGE, "Incorrect parameters request");
-                return new ForwardState("exercise/list.jsp");
-            }
-
-        } catch (PersistentException | IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
-            return new ErrorState();
+        if (exercise != null) {
+            request.setAttribute(AttrName.EXERCISE, exercise);
+            request.setAttribute("lst", types);
+            return new ForwardState("exercise/edit.jsp");
+        } else {
+            logger.warn("Exercise with id={} not found", id);
+            ResponseState state = new RedirectState("exercise/list.html");
+            state.getAttributes().put(AttrName.WARNING_MAP, Map.of("Error", "message.warning.exercise_not_found"));
+            return state;
         }
     }
 }
