@@ -21,7 +21,7 @@
 
 ### Схема базы данных.
 
-![DB_Sheme](https://user-images.githubusercontent.com/61784810/106379595-b2819800-63b5-11eb-8047-ae8e39a9728d.png)
+![DB_Sheme](https://user-images.githubusercontent.com/61784810/106384315-d99a9280-63d2-11eb-8b0e-24a115ce0315.png)
 
 
 ### Установка приложения.
