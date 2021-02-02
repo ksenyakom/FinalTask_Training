@@ -38,7 +38,6 @@
                     <c:url value="add_exercise_in_complex.html" var="myUrl">
                         <c:param name="complexId" value="${complexId}"/>
                     </c:url>
-                    <p>id complex = ${complexId}</p>
                     <button type="submit" class="btn btn-success" formmethod="post" formaction="${myUrl}">
                         <fmt:message key="table.add_exercise"/></button>
 

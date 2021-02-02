@@ -31,7 +31,7 @@
             <form action='<c:url value="edit.html"/>' method="post" enctype="multipart/form-data" onsubmit="return validateComplex(this)">
                 <input type="hidden" name="complexId" value="${ complex.id }">
                 <c:if test="${not empty complex.visitorFor}">
-                    <input type="hidden" name="visitorId" value="${complex.visitorFor}"></c:if>
+                    <input type="hidden" name="visitorId" value="${complex.visitorFor.id}"></c:if>
                 <label for="title"><fmt:message key="label.complex_title"/></label>
                 <input type="text" class="form-control" id="title" name="title" value="${complex.title}"/>
                 <br>

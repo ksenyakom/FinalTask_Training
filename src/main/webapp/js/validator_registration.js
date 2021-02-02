@@ -9,11 +9,15 @@ function validateRegistration(form) {
     var emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
 
     if (loginPattern.test(login) === false) {
-        message += "Логин может включать прописные и строчные буквы, цифры, символы _,-.";
+        message += "Логин может включать прописные и строчные буквы, цифры, символы _,-. Не менее 5 символов.";
     }
 
-    if (password.length < 5) {
-        message += "<br>" + "Пароль должен состоять из 5 символов минимум.";
+    if (login.length > 255) {
+        message += "Логин слишком длинный, должен быть не более 255 символов.";
+    }
+
+    if (password.length < 5 || password.length > 128) {
+        message += "<br>" + "Пароль должен состоять из 5 символов минимум, но не более 128";
     } else if (password !== passwordRepeat) {
         message +="<br>" + "Пароли не совпадают."
     }

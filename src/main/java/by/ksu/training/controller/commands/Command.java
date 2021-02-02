@@ -18,7 +18,12 @@ public abstract class Command {
     private String name;
     protected ServiceFactory factory;
 
-
+    /**
+     *
+     * @return - hashset with allowed roles for command,
+     *         - null if command allowed for both authorized and unauthorized user,
+     *         - empty hashset for commands allowed only for unauthorized users.
+     */
     public Set<Role> getAllowedRoles() {
         return allowedRoles;
     }

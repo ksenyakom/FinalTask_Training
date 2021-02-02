@@ -1,15 +1,10 @@
 package by.ksu.training.dao.database;
 
-import by.ksu.training.dao.PersonDao;
-import by.ksu.training.dao.Transaction;
-import by.ksu.training.dao.UserDao;
-import by.ksu.training.dao.database.TransactionImpl;
+import by.ksu.training.dao.*;
 import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.FilePath;
-import by.ksu.training.service.GetDBProperties;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -34,12 +29,11 @@ public class PersonDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetDBProperties getDBProperties = new GetDBProperties();
-        Properties properties = getDBProperties.fromFile(FilePath.dataBasePropertiesPath);
+        GetProperties getDBProperties = new GetDBProperties();
+        Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
-        Class.forName(driverName);
-
         String databaseUrl = (String) properties.get("db.url");
+        Class.forName(driverName);
         connection = DriverManager.getConnection(databaseUrl, properties);
         connection.setAutoCommit(false);
 
@@ -100,15 +94,6 @@ public class PersonDaoImplTest {
         assertEquals(actual, person);
     }
 
-    @Test(priority = 1, expectedExceptions = PersistentException.class)
-    public void testCreateException() throws PersistentException {
-        Person person = new Person();
-        person.setId(listId.get(2));
-        person.setName("Саша");
-
-        personDao.create(person);
-        personDao.create(person);
-    }
 
     @Test(priority = 2, dataProvider = "person")
     public void testReadAll(Person person) throws PersistentException {
@@ -140,14 +125,6 @@ public class PersonDaoImplTest {
         assertEquals(actual, person);
     }
 
-    @Test(priority = 3, expectedExceptions = PersistentException.class)
-    public void testUpdateException() throws PersistentException {
-        Person person = new Person();
-        person.setId(listId.get(1) + listId.get(2));
-        person.setName("Саша");
-
-        personDao.update(person);
-    }
 
     @Test(priority = 3, dataProvider = "person")
     public void testDeleteException(Person person) throws PersistentException {

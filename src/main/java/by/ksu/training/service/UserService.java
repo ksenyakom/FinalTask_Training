@@ -9,7 +9,6 @@ import by.ksu.training.service.EntityService;
 import java.util.List;
 
 public interface UserService extends EntityService<User> {
-    List<Person> findPersonIdByRole(Role role) throws PersistentException;
 
     List<User> findUserByRole(Role role) throws PersistentException;
 

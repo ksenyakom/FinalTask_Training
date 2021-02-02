@@ -27,8 +27,6 @@ import java.util.Map;
 public class SaveNewComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(SaveNewComplexCommand.class);
 
-
-
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> validator = new ComplexValidator();

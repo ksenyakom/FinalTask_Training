@@ -30,29 +30,23 @@ public class UpdateDateExecutedAssignedComplexCommand extends VisitorCommand {
     private static Logger logger = LogManager.getLogger(UpdateDateExecutedAssignedComplexCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Validator<AssignedComplex> validator = new AssignedComplexValidator();
-            int id = validator.validateId(request);
-            AssignedComplexService service = factory.getService(AssignedComplexService.class);
-            AssignedComplex assignedComplex = service.findById(id);
-            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-            if (user.getId().equals(assignedComplex.getVisitor().getId())) {
-                assignedComplex.setDateExecuted(LocalDate.now());
-                service.save(assignedComplex);
-            } else {
-                throw new PersistentException("User id do not correspond");
-            }
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<AssignedComplex> validator = new AssignedComplexValidator();
+        AssignedComplexService service = factory.getService(AssignedComplexService.class);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
 
-            return new RedirectState("visitor/assigned_trainings.html");
-//        }
-//        catch (IncorrectFormDataException e) {
-//            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-//            return new ForwardState("complex/execute.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ErrorState();
+        int id = validator.validateId(request);
+        AssignedComplex assignedComplex = service.findById(id);
+
+        if (user.getId().equals(assignedComplex.getVisitor().getId())) {
+            assignedComplex.setDateExecuted(LocalDate.now());
+            service.save(assignedComplex);
+            logger.debug("User {} executed complex id = {} assignment id = {}",
+                    user.getLogin(), assignedComplex.getComplex().getId(), assignedComplex.getId());
+        } else {
+            throw new PersistentException("User id do not correspond complex assignment");
         }
+
+        return new RedirectState("visitor/assigned_trainings.html");
     }
 }

@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Menu</title>
+    <titleMessages</title>
     <%@ include file="head.jsp" %>
 </head>
 <body>

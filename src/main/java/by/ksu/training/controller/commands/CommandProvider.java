@@ -50,7 +50,7 @@ public final class CommandProvider {
         repository.put(ShowVisitorsByTrainerCommand.class, new ShowVisitorsByTrainerCommand());
 
 
-        repository.put(SavePersonChangeCommand.class, new SavePersonChangeCommand());
+        repository.put(UpdatePersonCommand.class, new UpdatePersonCommand());
         repository.put(ShowPersonEditCommand.class, new ShowPersonEditCommand());
 
         repository.put(ShowAssignedTrainerListCommand.class, new ShowAssignedTrainerListCommand());
@@ -78,9 +78,10 @@ public final class CommandProvider {
         repository.put(ShowAddExerciseInComplex.class, new ShowAddExerciseInComplex());
         repository.put(AddExerciseInComplexCommand.class, new AddExerciseInComplexCommand());
         repository.put(DeleteExerciseInComplexCommand.class, new DeleteExerciseInComplexCommand());
-        repository.put(UpdateEditedComplexCommand.class, new UpdateEditedComplexCommand());;
-        repository.put(ShowAddComplexPageCommand.class, new ShowAddComplexPageCommand());;
-        repository.put(SaveNewComplexCommand.class, new SaveNewComplexCommand());;
+        repository.put(UpdateComplexCommand.class, new UpdateComplexCommand());
+        repository.put(ShowAddComplexPageCommand.class, new ShowAddComplexPageCommand());
+        repository.put(SaveNewComplexCommand.class, new SaveNewComplexCommand());
+        repository.put(ShowMyAccountPageCommand.class, new ShowMyAccountPageCommand());
 
 
 

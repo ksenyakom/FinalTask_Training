@@ -22,20 +22,13 @@ public class ShowPersonEditCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(ShowPersonEditCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
             PersonService personService = factory.getService(PersonService.class);
-            User user = (User) request.getSession().getAttribute("authorizedUser");
+            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
             Person person = personService.findById(user.getId());
             if (person != null) {
                 request.setAttribute("person", person);
             }
             return new ForwardState("person/edit.jsp");
-
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
-            return new ErrorState();
-        }
     }
 }

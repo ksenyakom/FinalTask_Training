@@ -1,19 +1,17 @@
 package by.ksu.training.dao.database;
 
+import by.ksu.training.dao.GetProperties;
 import by.ksu.training.dao.Transaction;
 import by.ksu.training.dao.UserDao;
-import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.FilePath;
-import by.ksu.training.service.GetDBProperties;
+import by.ksu.training.dao.GetDBProperties;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import javax.validation.constraints.AssertTrue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,12 +28,11 @@ public class UserDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetDBProperties getDBProperties = new GetDBProperties();
-        Properties properties = getDBProperties.fromFile(FilePath.dataBasePropertiesPath);
+        GetProperties getDBProperties = new GetDBProperties();
+        Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
-        Class.forName(driverName);
-
         String databaseUrl = (String) properties.get("db.url");
+        Class.forName(driverName);
         connection = DriverManager.getConnection(databaseUrl, properties);
         connection.setAutoCommit(false);
 
@@ -61,17 +58,6 @@ public class UserDaoImplTest {
         return new Object[]{
                 user
         };
-    }
-
-    @Test(priority = 4, dataProvider = "user")
-    public void testReadPersonByRole(User user) throws PersistentException {
-        int id = userDao.create(user);
-        user.setId(id);
-        List<Person> list = userDao.readPersonByRole(Role.TRAINER);
-        userDao.delete(id);
-        transaction.commit();
-        Person expectedPerson = new Person(user.getId());
-        assertTrue(list.contains(expectedPerson));
     }
 
     @Test(priority = 1, dataProvider = "user")
@@ -114,17 +100,6 @@ public class UserDaoImplTest {
         assertEquals(actual, user);
     }
 
-    @Test(priority = 2)
-    public void testUpdateException() throws PersistentException {
-        User user = new User();
-        user.setId(id*100);
-        user.setPassword("98765");
-        user.setRole(Role.VISITOR);
-        user.setLogin("Guest2");
-
-        userDao.update(user);
-    }
-
     @Test(priority = 3, dataProvider = "user")
     public void testDelete(User user) throws PersistentException {
         int id = userDao.create(user);
@@ -138,27 +113,36 @@ public class UserDaoImplTest {
     @Test(priority = 3, dataProvider = "user")
     public void testCheckLogin(User user) throws PersistentException {
         int id = userDao.create(user);
-        boolean bool = userDao.checkIfLoginExist(user.getLogin());
+        boolean expected = userDao.checkIfLoginExist(user.getLogin());
         userDao.delete(id);
         transaction.commit();
 
-        assertTrue(bool);
+        assertTrue(expected);
     }
 
     @Test
-    public void testReadUserByRole() {
+    public void testReadUserByRole() throws PersistentException {
+        List<User> users = userDao.readUserByRole(Role.VISITOR);
+        int expectedUserNumber = 2;
+
+        assertEquals(users.size(), expectedUserNumber);
     }
 
     @Test
-    public void testReadByLogin() {
+    public void testReadByLogin() throws PersistentException {
+        User user = userDao.readByLogin("visitor1");
+        Integer idExpected = 2;
+
+        assertEquals(user.getId(),idExpected);
     }
 
     @Test
-    public void testCheckIfLoginExist() {
-    }
+    public void testCheckIfLoginExist() throws PersistentException {
+        boolean expectedTrue = userDao.checkIfLoginExist("visitor1");
+        boolean expectedFalse = userDao.checkIfLoginExist("login_which_not_exist");
 
-    @Test
-    public void testRead() {
+        assertTrue(expectedTrue);
+        assertFalse(expectedFalse);
     }
 
     @Test
@@ -166,7 +150,7 @@ public class UserDaoImplTest {
         List <User> users = List.of(new User(2), new User(3));
         userDao.readLogin(users);
 
-        assertTrue(users.get(0).getLogin().equals("visitor1"));
-        assertTrue(users.get(1).getLogin().equals("visitor2"));
+        assertEquals(users.get(0).getLogin(), "visitor1");
+        assertEquals(users.get(1).getLogin(), "visitor2");
     }
 }

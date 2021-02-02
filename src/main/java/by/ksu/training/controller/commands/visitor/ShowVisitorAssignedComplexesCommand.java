@@ -34,6 +34,9 @@ public class ShowVisitorAssignedComplexesCommand extends VisitorCommand {
 
             AssignedComplexService acService = factory.getService(AssignedComplexService.class);
             List<AssignedComplex> assignedComplexes = acService.findUnexecutedByUser(user);
+            if (assignedComplexes.isEmpty()) {
+                request.setAttribute(AttrName.WARNING_MESSAGE,"message.warning..no_assigned_trainings");
+            }
             List<AssignedComplex> executedComplexes = acService.findExecutedByUserForPeriod(user, DAYS);
             assignedComplexes.addAll(executedComplexes);
 

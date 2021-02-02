@@ -24,7 +24,7 @@
         <c:import url="/WEB-INF/jsp/trainer/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
-
+            <c:import url="/WEB-INF/jsp/common/messages.jsp"/>
             <form onsubmit="return validateDelete(this)">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">

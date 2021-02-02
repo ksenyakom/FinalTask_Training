@@ -15,25 +15,29 @@
     <%@include file="/WEB-INF/jsp/common/head.jsp" %>
 </head>
 <body>
-<c:set var="isAdminOrTrainer"
-       value="${sessionScope.authorizedUser.role.name().equals('ADMINISTRATOR') or sessionScope.authorizedUser.role.name().equals('TRAINER')}"/>
+<c:set var="isAdmin" value="${sessionScope.authorizedUser.role.name().equals('ADMINISTRATOR') }"/>
+<c:set var="isTrainer" value="${sessionScope.authorizedUser.role.name().equals('TRAINER')}"/>
+<c:set var="isVisitor" value="${sessionScope.authorizedUser.role.name().equals('VISITOR') }"/>
+
 <c:import url="/WEB-INF/jsp/common/main_menu.jsp"/>
 
 <div class="container-fluid text-center">
     <div class="row content">
         <%--side menu of the page--%>
-        <c:import url="/WEB-INF/jsp/visitor/side_menu.jsp"/>
+        <c:if test="${isVisitor}"><c:import url="/WEB-INF/jsp/visitor/side_menu.jsp"/></c:if>
+        <c:if test="${isTrainer}"><c:import url="/WEB-INF/jsp/trainer/side_menu.jsp"/></c:if>
+        <c:if test="${isAdmin}"><c:import url="/WEB-INF/jsp/admin/side_menu.jsp"/></c:if>
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
             <h4><fmt:message key="title.complex.execute"/></h4>
             <p><fmt:message key="table.training_title"/> : ${complex.title}</p>
-            <c:if test="${not isAdminOrTrainer}">
+            <c:if test="${isVisitor}">
                 <p><fmt:message key="table.date_expected"/> : ${assignedComplex.dateExpected}</p>
-                <c:url value="/assigned_complex/update_date_executed.html" var="myURL">
-                    <c:param name="assignedComplexId" value="${assignedComplex.id}"/>
-                </c:url>
+
                 <div class="container">
-                    <form method="post" action=${myURL}>
+                    <form method="post" action='<c:url value="/assigned_complex/update_date_executed.html"/>'
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="assignedComplexId" value="${assignedComplex.id}">
                         <button class="btn btn-success" disabled><fmt:message key="button.start"/></button>
                         <button class="btn btn-success" disabled><fmt:message key="button.pause"/></button>
                         <button class="btn btn-success" type="submit"><fmt:message key="button.finish"/></button>
@@ -41,9 +45,6 @@
                 </div>
             </c:if>
 
-            <c:if test="${not empty warningMessage}">
-                <p class="text-danger"><fmt:message key="${warningMessage}"/></p>
-            </c:if>
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <caption>

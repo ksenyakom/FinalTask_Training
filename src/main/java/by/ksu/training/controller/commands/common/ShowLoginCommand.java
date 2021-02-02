@@ -16,7 +16,8 @@ import java.util.Set;
 public class ShowLoginCommand extends Command {
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        // TODO проверить куки,если там есть юзер, то положить его в request
+        // TODO проверить куки,если там есть юзер, то положить его в session
+        //TODO спросить про куки
         return new ForwardState("login.jsp");
     }
 }

@@ -80,6 +80,7 @@
                     <%--                        <input type="file"  name="audio" id="audio"/>--%>
                     <%--                    </div>--%>
                 </div>
+                <p id="errorMessage" class="text-danger"></p>
                 <button type="submit" value="Upload file" class="btn btn-success"><fmt:message
                         key="button.save"/></button>
             </form>

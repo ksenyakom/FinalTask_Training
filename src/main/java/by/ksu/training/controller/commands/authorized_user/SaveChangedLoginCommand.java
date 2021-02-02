@@ -32,7 +32,7 @@ public class SaveChangedLoginCommand extends AuthorizedUserCommand {
         User authorizedUser = null;
         try {
             User user = validator.validate(request);
-            authorizedUser = (User) request.getSession().getAttribute("authorizedUser");
+            authorizedUser = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
 
             if (!user.getLogin().equals(authorizedUser.getLogin())) {
                 UserService service = factory.getService(UserService.class);
@@ -50,7 +50,7 @@ public class SaveChangedLoginCommand extends AuthorizedUserCommand {
                         //save in session
                         authorizedUser.setLogin(user.getLogin());
                         request.getSession().setAttribute("authorizedUser", authorizedUser);
-                        return new RedirectState("index.jsp");
+                        return new RedirectState("my_account.html");
                     } else {
                         request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.wrong_password");
                         return new ForwardState("user/edit_login.jsp");

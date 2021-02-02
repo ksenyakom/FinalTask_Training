@@ -4,11 +4,11 @@ import by.ksu.training.controller.commands.Command;
 import by.ksu.training.controller.commands.CommandManager;
 import by.ksu.training.controller.commands.CommandManagerFactory;
 import by.ksu.training.controller.state.*;
+import by.ksu.training.dao.GetProperties;
 import by.ksu.training.dao.database.TransactionFactoryImpl;
 import by.ksu.training.dao.pool.ConnectionPool;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.FilePath;
-import by.ksu.training.service.GetDBProperties;
+import by.ksu.training.dao.GetDBProperties;
 import by.ksu.training.service.ServiceFactory;
 import by.ksu.training.service.ServiceFactoryImpl;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.function.BiConsumer;
 
 public class DispatcherServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger(DispatcherServlet.class);
@@ -29,8 +28,8 @@ public class DispatcherServlet extends HttpServlet {
 
     public void init() {
         try {
-            GetDBProperties getDBProperties = new GetDBProperties();
-            Properties properties = getDBProperties.fromFile(FilePath.dataBasePropertiesPath);
+            GetProperties getDBProperties = new GetDBProperties();
+            Properties properties = getDBProperties.fromFile("properties/database.properties");
             ConnectionPool.getInstance().init(properties,
                     DB_POOL_START_SIZE, DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
         } catch (PersistentException e) {
@@ -52,6 +51,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            resp.setContentType("text/html"); //TODO куда перенести?
             HttpSession session = req.getSession(false);
             if(session != null) {
                 @SuppressWarnings("unchecked")

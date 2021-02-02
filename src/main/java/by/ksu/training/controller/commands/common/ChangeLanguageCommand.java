@@ -41,4 +41,9 @@ public class ChangeLanguageCommand extends Command {
         logger.debug("Redirect to page: {}", page);
         return new RedirectState(page);
     }
+
+    @Override
+    public Set<Role> getAllowedRoles() {
+        return null;
+    }
 }

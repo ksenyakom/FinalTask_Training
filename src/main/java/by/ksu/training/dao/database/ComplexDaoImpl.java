@@ -201,7 +201,7 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
             if (entity.getTrainerDeveloped() == null) {
                 statement.setNull(2, Types.INTEGER);
             } else {
-                statement.setInt(2, entity.getVisitorFor().getId());
+                statement.setInt(2, entity.getTrainerDeveloped().getId());
             }
             if (entity.getVisitorFor() == null) {
                 statement.setNull(3, Types.INTEGER);

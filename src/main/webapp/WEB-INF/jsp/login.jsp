@@ -13,8 +13,7 @@
     <title><fmt:message key="title.login"/></title>
     <%@ include file="common/head.jsp" %>
     <script type="text/javascript" src="<c:url value="/js/validator_login.js"/>"></script>
-<%--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>--%>
-<%--    <script type="text/javascript" src="<c:url value="/js/jquery-3.5.1.min.js"/>"></script>--%>
+
 </head>
 
 <body>
@@ -25,14 +24,14 @@
         <h2><fmt:message key="label.system_enter"/></h2>
         <br>
         <div class="form-group">
-            <label for="login"><fmt:message key="label.login"/></label>
+            <label for="login"><fmt:message key="label.login"/>*</label>
             <input type="text" class="form-control" id="login"
                    name="login" value="${param.login}" required>
             <p class="help-block"><fmt:message key="help_block.login"/></p>
         </div>
         <br>
         <div class="form-group">
-            <label for="password"><fmt:message key="label.password"/></label>
+            <label for="password"><fmt:message key="label.password"/>*</label>
             <input type="password" class="form-control" id="password"
                    name="password" >
             <p class="help-block"><fmt:message key="help_block.password"/></p>
@@ -43,10 +42,8 @@
             </label>
         </div>
         <br>
-        <p id="errorMessage" class="text-danger"></p>
-        <c:if test="${not empty warningMessage}">
-            <p class="text-danger"><fmt:message key="${warningMessage}"/></p>
-        </c:if>
+        <p id="errorMessage" class="text-danger"></p> <!--validator error message-->
+        <%@ include file="common/messages.jsp" %>
 
         <br>
         <button type="submit" class="btn btn-success"><fmt:message key="button.sing_in"/></button>

@@ -17,7 +17,7 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
 
 
     private static final String CREATE =
-            "INSERT INTO `person` (`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`phone`,`achievements`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            "REPLACE INTO `person` (`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`phone`,`achievements`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String READ_BY_ID = "SELECT * FROM `person` WHERE `id`= ?";
     private static final String READ_ALL = "SELECT * FROM `person`";
     private static final String UPDATE =
@@ -127,12 +127,7 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
             statement.setString(6, entity.getPhone());
             statement.setString(7, entity.getAchievements());
             statement.setInt(8, entity.getId());
-            int result = statement.executeUpdate();
-            if (result == 0) {
-                throw new PersistentException("No any rows updated");
-            }
-            logger.debug("updated person {}", entity);
-
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new PersistentException(e);
         }

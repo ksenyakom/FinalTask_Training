@@ -30,33 +30,20 @@ public class ShowVisitorsByTrainerCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowVisitorsByTrainerCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-            if (user != null) {
-                SubscriptionService subscriptionService = factory.getService(SubscriptionService.class);
-                List<Subscription> subscriptions = subscriptionService.findAllActive();
-                AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-                List<User> visitors = assignedTrainerService.findVisitorsByTrainer(user);
-                List<Integer> activeVisitorsId = visitors.stream()
-                        .collect(Collectors.mapping(visitor -> visitor.getId(), Collectors.toList()));
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+        SubscriptionService subscriptionService = factory.getService(SubscriptionService.class);
+        List<Subscription> subscriptions = subscriptionService.findAllActive();
+        AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
+        List<User> visitors = assignedTrainerService.findVisitorsByTrainer(user);
+        List<Integer> activeVisitorsId = visitors.stream()
+                .collect(Collectors.mapping(visitor -> visitor.getId(), Collectors.toList()));
 
-                List<Subscription> activeVisitorSubscriptionList = subscriptions.stream()
-                        .filter(subscription -> activeVisitorsId.contains(subscription.getVisitor().getId()))
-                        .collect(Collectors.toList());
+        List<Subscription> activeVisitorSubscriptionList = subscriptions.stream()
+                .filter(subscription -> activeVisitorsId.contains(subscription.getVisitor().getId()))
+                .collect(Collectors.toList());
 
-                request.setAttribute("lst", activeVisitorSubscriptionList);
-                return new ForwardState("visitor/list.jsp");
-            } else {
-                request.setAttribute(AttrName.ERROR_MESSAGE, "No authorized user");
-                return new ErrorState();
-            }
-
-
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
+        request.setAttribute("lst", activeVisitorSubscriptionList);
+        return new ForwardState("visitor/list.jsp");
     }
 }

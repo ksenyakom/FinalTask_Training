@@ -70,7 +70,10 @@
                                                    value="${complex.id}"/></td>
                                     </c:when>
                                     <c:when test="${not isAdmin and not empty complex.visitorFor}">
-                                        <td><a href='<c:url value="edit.html?complexId=${complex.id}"/>'>
+                                        <c:url value="edit.html" var="myURL">
+                                            <c:param name="complexId" value="${complex.id}"/>
+                                        </c:url>
+                                        <td><a href='${myURL}'>
                                             <fmt:message key="table.edit"/></a></td>
                                         <td><input type="checkbox" class="require-one" name="remove"
                                                    value="${complex.id}"/></td>

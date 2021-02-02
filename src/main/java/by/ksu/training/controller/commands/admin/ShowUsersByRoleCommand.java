@@ -35,8 +35,6 @@ public class ShowUsersByRoleCommand extends AdminCommand {
                 List<User> userList = userService.findUserByRole(role);
 
                 request.setAttribute("lst", userList);
-            } else {
-                request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.no_role");
             }
 
             return new ForwardState("user/list.jsp");

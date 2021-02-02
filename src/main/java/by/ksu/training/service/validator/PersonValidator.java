@@ -1,20 +1,19 @@
 package by.ksu.training.service.validator;
 
-import by.ksu.training.entity.Entity;
-import by.ksu.training.entity.Person;
-import by.ksu.training.entity.Role;
-import by.ksu.training.entity.User;
+import by.ksu.training.controller.AttrName;
+import by.ksu.training.entity.*;
 import by.ksu.training.exception.IncorrectFormDataException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 
 /**
  * @Author Kseniya Oznobishina
  * @Date 18.01.2021
  */
-public class PersonValidator implements Validator<Person> {
+public class PersonValidator extends BaseValidator<Person> implements Validator<Person> {
     private static final String NAME = "name";
     private static final String SURNAME = "surname";
     private static final String PATRONYMIC = "patronymic";
@@ -30,41 +29,120 @@ public class PersonValidator implements Validator<Person> {
     }
 
     @Override
+    public Map<String, String> getWarningMap() {
+        return warningMap;
+    }
+
+    @Override
+    public Person getInvalid() {
+        return invalid;
+    }
+
+    @Override
     public Person validate(HttpServletRequest request) throws IncorrectFormDataException {
         Person person = new Person();
 
+        final int maxTextLength = 500;
+        final int maxAttrLength = 255;
+
         String name = request.getParameter(NAME);
+        if (name != null && !name.isEmpty()) {
+            name = validateText(NAME, name, maxAttrLength);
+            person.setName(name);
+        } else {
+            addWarning("attr." + NAME, "message.warning.emptyParameter");
+        }
+
         String surname = request.getParameter(SURNAME);
+        if (surname != null && !surname.isEmpty()) {
+            surname = validateText(SURNAME, surname, maxAttrLength);
+            person.setSurname(surname);
+        }
+
         String patronymic = request.getParameter(PATRONYMIC);
+        if (patronymic != null && !patronymic.isEmpty()) {
+            patronymic = validateText(PATRONYMIC, patronymic, maxAttrLength);
+            person.setPatronymic(patronymic);
+        }
+
         String address = request.getParameter(ADDRESS);
+        if (address != null && !address.isEmpty()) {
+            address = validateText(ADDRESS, address, maxAttrLength);
+            person.setAddress(address);
+        }
+
         String dateOfBirth = request.getParameter(DATE_OF_BIRTH);
+        if (dateOfBirth != null && !dateOfBirth.isEmpty()) {
+            LocalDate localDate = validateDate(DATE_OF_BIRTH, dateOfBirth);
+            if (localDate != null) {
+                person.setDateOfBirth(localDate);
+            }
+        }
+
         String phone = request.getParameter(PHONE);
+        if (phone != null) {
+            phone = validatePhone(phone);
+            person.setPhone(phone);
+        }
+
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+        person.setId(user.getId());
+
+        if (warningMap != null) {
+            invalid = person;
+            throw new IncorrectFormDataException(warningMap.keySet().toString(), warningMap.values().toString());
+        }
+        return person;
+
+
+        /*
         String share = request.getParameter(SHARE);
         String achievements = request.getParameter(ACHIEVEMENTS);
-
-        person.setName(name);
-        person.setSurname(surname);
-        person.setPatronymic(patronymic);
-        person.setAddress(address);
-
-        try {
-            if (dateOfBirth != null) {
-                person.setDateOfBirth(LocalDate.parse(dateOfBirth));
-            }
-        } catch (DateTimeParseException e) {
-            throw new IncorrectFormDataException(DATE_OF_BIRTH, dateOfBirth);
+        if (achievements != null && !achievements.isEmpty()) {
+            achievements = validateText(ACHIEVEMENTS, achievements, maxTextLength);
+            person.setAchievements(achievements);
         }
-        person.setPhone(phone);
-
-        User user = (User) request.getSession().getAttribute("authorizedUser");
-
         if (user.getRole() == Role.VISITOR) {
             person.setAchievements(share);
         } else if (user.getRole() == Role.TRAINER) {
             person.setAchievements(achievements);
-        }
+        } */
 
-        person.setId(user.getId());
-        return person;
+
+    }
+
+    private String validatePhone(String phone) {
+        phone.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+
+        String telPattern = "\\+[0-9]{12}";
+        if (phone != null && !phone.isEmpty()) {
+            if (phone.matches(telPattern)) {
+                return phone;
+            } else {
+                addWarning("attr.phone", "message.warning.phone_is_not_valid");
+            }
+        }
+        return phone;
+    }
+
+    private String validateText(String paramName, String text, int maxLength) {
+        text.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+        if (text != null)
+            if (text.length() > maxLength) {
+                addWarning("attr." + paramName, "message.warning.longParameter");
+                return text.substring(0, maxLength);
+            }
+        return text;
+    }
+
+    private LocalDate validateDate(String paramName, String date) {
+        try {
+            if (date != null) {
+                return LocalDate.parse(date);
+            }
+        } catch (DateTimeParseException e) {
+            addWarning("attr." + paramName, "message.warning.date_is_not_valid");
+        }
+        return null;
     }
 }

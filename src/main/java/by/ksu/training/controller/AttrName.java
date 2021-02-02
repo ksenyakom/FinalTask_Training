@@ -11,6 +11,7 @@ public class AttrName {
     public static final String ASSIGNED_COMPLEX = "assignedComplex";
     public static final String COMPLEX = "complex";
     public static final String EXERCISE = "exercise";
+    public static final String PERSON = "person";
 
     public static final String ACTION = "action";
     public static final String ROLE = "role";

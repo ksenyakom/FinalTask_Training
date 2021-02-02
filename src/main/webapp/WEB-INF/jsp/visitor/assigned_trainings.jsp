@@ -25,6 +25,7 @@
         <c:import url="/WEB-INF/jsp/visitor/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
+            <c:import url="/WEB-INF/jsp/common/messages.jsp"/>
             <h2><fmt:message key="complex.table.training_title"/></h2>
 
             <div class="table-responsive">

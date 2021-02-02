@@ -15,7 +15,6 @@ import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
 import by.ksu.training.service.ExerciseService;
-import by.ksu.training.service.FilePath;
 import by.ksu.training.service.validator.*;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;

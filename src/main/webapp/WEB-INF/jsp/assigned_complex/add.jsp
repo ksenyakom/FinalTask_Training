@@ -43,10 +43,10 @@
                                 <label for="dateExpected">Дата тренировки</label>
                                 <input type="date" class="form-control" id="dateExpected"
                                        name="dateExpected" required>
-                                <div disabled="true">
-                                    <p><input id="frequency1" type="radio"><label for="frequency1">Один раз в неделю</label></p>
-                                    <p><input id="frequency2" type="radio"><label for="frequency2">Два раза в неделю</label></p>
-                                </div>
+<%--                                <div disabled="true">--%>
+<%--                                    <p><input id="frequency1" type="radio"><label for="frequency1">Один раз в неделю</label></p>--%>
+<%--                                    <p><input id="frequency2" type="radio"><label for="frequency2">Два раза в неделю</label></p>--%>
+<%--                                </div>--%>
 
                             </div>
                         </caption>

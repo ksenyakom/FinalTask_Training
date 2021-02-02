@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Subscription extends Entity{
+public class Subscription extends Entity {
     private User visitor;
     private LocalDate beginDate;
     private LocalDate endDate;
@@ -55,7 +55,8 @@ public class Subscription extends Entity{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Subscription that = (Subscription) o;
-        return Objects.equals(visitor, that.visitor) &&
+
+        return Objects.equals(visitor == null? null: visitor.getId(), that.visitor == null? null: that.visitor.getId()) &&
                 Objects.equals(beginDate, that.beginDate) &&
                 Objects.equals(endDate, that.endDate) &&
                 price.compareTo(that.price) == 0;
@@ -72,7 +73,7 @@ public class Subscription extends Entity{
                 ", visitor=" + visitor.getId() +
                 ", beginDate=" + beginDate +
                 ", endDate=" + endDate +
-                ", price="+ price +
-                "} " ;
+                ", price=" + price +
+                "} ";
     }
 }

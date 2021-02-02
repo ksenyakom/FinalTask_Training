@@ -25,7 +25,7 @@ public class LoginCommand extends Command {
     private static Logger logger = LogManager.getLogger(LoginCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {
             Validator<User> validator = new UserLoginPasswordValidator();
             User testUser = validator.validate(request);
@@ -34,10 +34,10 @@ public class LoginCommand extends Command {
             if (user != null) {
                 HttpSession session = request.getSession();
                 user.setPassword(null);
-                session.setAttribute("authorizedUser", user);
+                session.setAttribute(AttrName.AUTHORIZED_USER, user);
                 logger.info("user {} is logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
 
-                return new RedirectState("/index.jsp");
+                return new RedirectState("my_account.html");
             } else {
                 request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.wrong_login_or_password");
                 logger.info("user {} unsuccessfully tried to log in from {} ({}:{})", testUser.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
@@ -48,10 +48,6 @@ public class LoginCommand extends Command {
             logger.error("Exception in command!!!", e);
             request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
             return new ForwardState("login.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
         }
     }
 }

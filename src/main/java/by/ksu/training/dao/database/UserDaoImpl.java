@@ -28,21 +28,6 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 
     @Override
-    public List<Person> readPersonByRole(Role role) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(READ_ID_BY_ROLE)) {
-            statement.setInt(1, role.getIdentity());
-            ResultSet resultSet = statement.executeQuery();
-            List<Person> list = new ArrayList<>();
-            while (resultSet.next()) {
-                list.add(new Person(resultSet.getInt("id")));
-            }
-            return list;
-        } catch (SQLException e) {
-            throw new PersistentException(e);
-        }
-    }
-
-    @Override
     public List<User> readUserByRole(Role role) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ROLE)) {
             statement.setInt(1, role.getIdentity());

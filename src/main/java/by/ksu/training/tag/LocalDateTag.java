@@ -39,7 +39,7 @@ public class LocalDateTag extends TagSupport {
 //            Locale locale = pageContext.getRequest().getLocale();
 
             Locale locale = null;
-            if (language != null) {
+            if (language != null && !language.isEmpty()) {
                 String[] mass = language.split("_");
                 locale = new Locale(mass[0], mass[1]);
             }

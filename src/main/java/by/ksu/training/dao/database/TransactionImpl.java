@@ -31,7 +31,7 @@ public class TransactionImpl implements Transaction {
 
     public TransactionImpl(Connection connection) {
         this.connection = connection;
-        daoFactory = new DaoFactoryImpl();
+        daoFactory = DaoFactoryImpl.getInstance();
     }
 
     @SuppressWarnings("unchecked")

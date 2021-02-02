@@ -1,5 +1,6 @@
 package by.ksu.training.controller.commands;
 
+import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Complex;
@@ -20,6 +21,6 @@ public class StartCommand extends Command{
 
     @Override
     public ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        return new RedirectState("index.jsp");
+        return new ForwardState("index.jsp");
     }
 }

@@ -32,17 +32,9 @@ public class ComplexValidator extends BaseValidator<Complex> implements Validato
         final int minTitleLength = 3;
         Complex complex = new Complex();
 
+
         String title = request.getParameter(AttrName.TITLE);
-        if (title == null || title.isEmpty()) {
-            addWarning("attr." + AttrName.TITLE, "message.warning.emptyParameter");
-        } else {
-            if (title.length() < minTitleLength) {
-                addWarning("attr." + AttrName.TITLE, "message.warning.shortParameter");
-            } else if (title.length() > maxTitleLength) {
-                addWarning("attr." + AttrName.TITLE, "message.warning.longParameter");
-                title = title.substring(0, maxTitleLength);
-            }
-        }
+        title = validateText(AttrName.TITLE, title, minTitleLength, maxTitleLength);
         complex.setTitle(title);
 
 
@@ -70,6 +62,23 @@ public class ComplexValidator extends BaseValidator<Complex> implements Validato
         return complex;
     }
 
+
+    private String validateText(String paramName, String text, int minLength, int maxLength) {
+        text.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+
+        if (text == null || text.isEmpty()) {
+            addWarning("attr." + paramName, "message.warning.emptyParameter");
+        } else {
+            if (text.length() < minLength) {
+                addWarning("attr." + paramName, "message.warning.shortParameter");
+            } else if (text.length() > maxLength) {
+                addWarning("attr." + paramName, "message.warning.longParameter");
+                return text.substring(0, maxLength);
+            }
+        }
+        return text;
+    }
+
     @Override
     public Integer validateId(HttpServletRequest request) throws PersistentException {
         String stringId = request.getParameter(AttrName.COMPLEX_ID);
@@ -83,17 +92,5 @@ public class ComplexValidator extends BaseValidator<Complex> implements Validato
         }
     }
 
-//    @Override
-//    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
-//        String stringId = request.getParameter(AttrName.COMPLEX_ID);
-//        try {
-//            if (stringId != null) {
-//                return Integer.parseInt(stringId);
-//            } else {
-//                throw new IncorrectFormDataException(AttrName.COMPLEX_ID, stringId);
-//            }
-//        } catch (NumberFormatException e) {
-//            throw new IncorrectFormDataException(AttrName.COMPLEX_ID, stringId);
-//        }
-//    }
+
 }

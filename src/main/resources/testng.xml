@@ -11,6 +11,9 @@
             <class name="by.ksu.training.dao.database.AssignedComplexServiceDaoImplTest"/>
             <class name="by.ksu.training.dao.database.PersonDaoImplTest"/>
             <class name="by.ksu.training.dao.database.AssignedTrainerDaoImplTest"/>
+            <class name="by.ksu.training.service.impl.UserServiceImplTest"/>
+            <class name="by.ksu.training.service.impl.SubscriptionServiceImpl"/>
+            <class name="by.ksu.training.service.impl.PersonServiceImplTest"/>
         </classes>
     </test>
 </suite>

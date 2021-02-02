@@ -57,4 +57,8 @@ public class ShowJournalCommand extends Command {
 
     }
 
+    @Override
+    public Set<Role> getAllowedRoles() {
+        return null;
+    }
 }

@@ -23,7 +23,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
     private static final String READ_BY_ID = "SELECT * FROM `assigned_complex` WHERE `id` = ? ";
     private static final String READ_UNEXECUTED_BY_ID = "SELECT `id`,`complex_id`,`date_expected` FROM `assigned_complex` WHERE `visitor_id` = ? AND `date_executed` IS NULL";
     private static final String READ_EXECUTED_FOR_PERIOD =
-            "SELECT * FROM `assigned_complex` WHERE DATEDIFF(CURDATE(), `date_executed`) < ?";
+            "SELECT * FROM `assigned_complex` WHERE DATEDIFF(CURDATE(), `date_executed`) < ? ORDER BY `date_executed` DESC";
     private static final String READ_EXECUTED_BY_VISITOR_FOR_PERIOD =
             "SELECT `id`,`complex_id`,`date_expected`,`date_executed` FROM `assigned_complex` WHERE `visitor_id` = ? AND  DATEDIFF(CURDATE(), `date_executed`) < ?";
     private static final String UPDATE = "UPDATE `assigned_complex` SET `visitor_id`=?,`complex_id`=?,`date_expected`=?,`date_executed`=? WHERE `id` = ?";

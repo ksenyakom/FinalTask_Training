@@ -88,10 +88,12 @@ public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedT
 
     private void getUsersLogin(List<AssignedTrainer> assignedTrainerList) throws PersistentException {
         List<User> trainers = assignedTrainerList.stream()
+                .filter(assignedTrainer -> assignedTrainer.getTrainer() != null)
                 .map(AssignedTrainer::getTrainer)
                 .distinct()
                 .collect(Collectors.toList());
         List<User> users = assignedTrainerList.stream()
+                .filter(assignedTrainer -> assignedTrainer.getVisitor() != null)
                 .map(AssignedTrainer::getVisitor)
                 .distinct()
                 .collect(Collectors.toList());

@@ -19,4 +19,18 @@ public class BaseValidator<Type> {
         warningMap.put(paramName,message);
     }
 
+//    protected String validateText(String paramName, String text, int minLength, int maxLength) {
+//        if (text == null || text.isEmpty()) {
+//            addWarning("attr." + paramName, "message.warning.emptyParameter");
+//        } else {
+//            if (text.length() < minLength) {
+//                addWarning("attr." + paramName, "message.warning.shortParameter");
+//            } else if (text.length() > maxLength) {
+//                addWarning("attr." + paramName, "message.warning.longParameter");
+//                return text.substring(0, maxLength);
+//            }
+//        }
+//        return text;
+//    }
+
 }

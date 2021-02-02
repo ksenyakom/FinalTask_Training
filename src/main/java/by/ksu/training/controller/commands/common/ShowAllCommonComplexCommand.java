@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Prepare meta data of common complexes to show on page.
+ *
  * @Author Kseniya Oznobishina
  * @Date 13.01.2021
  */
@@ -25,19 +27,17 @@ public class ShowAllCommonComplexCommand extends Command {
     private static Logger logger = LogManager.getLogger(ShowAllCommonComplexCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            ComplexService complexService = factory.getService(ComplexService.class);
-            List<Complex> complexes = complexService.findAllCommonComplexMetaData();
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        ComplexService complexService = factory.getService(ComplexService.class);
+        List<Complex> complexes = complexService.findAllCommonComplexMetaData();
 
-            request.setAttribute("lst", complexes);
+        request.setAttribute("lst", complexes);
 
-            return new ForwardState("complex/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
-            return new ErrorState();
-        }
+        return new ForwardState("complex/list.jsp");
+    }
 
+    @Override
+    public Set<Role> getAllowedRoles() {
+        return null;
     }
 }

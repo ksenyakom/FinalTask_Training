@@ -1,16 +1,10 @@
 package by.ksu.training.dao.database;
 
-import by.ksu.training.dao.SubscriptionDao;
-import by.ksu.training.dao.Transaction;
-import by.ksu.training.dao.UserDao;
-import by.ksu.training.dao.database.TransactionImpl;
+import by.ksu.training.dao.*;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
-import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.FilePath;
-import by.ksu.training.service.GetDBProperties;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -36,12 +30,11 @@ public class SubscriptionDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetDBProperties getDBProperties = new GetDBProperties();
-        Properties properties = getDBProperties.fromFile(FilePath.dataBasePropertiesPath);
+        GetProperties getDBProperties = new GetDBProperties();
+        Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
-        Class.forName(driverName);
-
         String databaseUrl = (String) properties.get("db.url");
+        Class.forName(driverName);
         connection = DriverManager.getConnection(databaseUrl, properties);
         connection.setAutoCommit(false);
 

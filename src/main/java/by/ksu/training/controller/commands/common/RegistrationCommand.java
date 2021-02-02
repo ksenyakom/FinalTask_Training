@@ -45,7 +45,7 @@ public class RegistrationCommand extends Command {
                 HttpSession session = request.getSession();
                 session.setAttribute("authorizedUser", user);
                 logger.info("user {} is created logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-                return new RedirectState("/index.jsp");
+                return new RedirectState("my_account.html");
 
             } else {
                 request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.login_already_exist");
@@ -53,7 +53,8 @@ public class RegistrationCommand extends Command {
                 return new ForwardState("registration.jsp");
             }
         } catch (PersistentException | IncorrectFormDataException e) {
-            logger.error("user {} unsuccessfully tried to register from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+            logger.error("user {} unsuccessfully tried to register from {} ({}:{})",
+                    user != null ? user.getLogin(): "unknown", request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
             request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
             return new ErrorState();
         }

@@ -1,12 +1,11 @@
 package by.ksu.training.dao.database;
 
 import by.ksu.training.dao.ExerciseDao;
+import by.ksu.training.dao.GetProperties;
 import by.ksu.training.dao.Transaction;
-import by.ksu.training.dao.database.TransactionImpl;
 import by.ksu.training.entity.Exercise;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.FilePath;
-import by.ksu.training.service.GetDBProperties;
+import by.ksu.training.dao.GetDBProperties;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -15,7 +14,6 @@ import org.testng.annotations.Test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 import static org.testng.Assert.assertEquals;
@@ -28,12 +26,11 @@ public class ExerciseDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetDBProperties getDBProperties = new GetDBProperties();
-        Properties properties = getDBProperties.fromFile(FilePath.dataBasePropertiesPath);
+        GetProperties getDBProperties = new GetDBProperties();
+        Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
-        Class.forName(driverName);
-
         String databaseUrl = (String) properties.get("db.url");
+        Class.forName(driverName);
         connection = DriverManager.getConnection(databaseUrl, properties);
         connection.setAutoCommit(false);
 

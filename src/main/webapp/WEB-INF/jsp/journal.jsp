@@ -47,9 +47,6 @@
                 </table>
             </div>
 
-            <hr>
-            <h3>Test</h3>
-
         </div>
         <div class="col-sm-2 sidenav">
             <c:import url="common/ads.jsp"/>

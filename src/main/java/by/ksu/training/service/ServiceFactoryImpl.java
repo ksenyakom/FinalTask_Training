@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ServiceFactoryImpl implements ServiceFactory {
+    //TODO разобраться что тут
     private static Logger logger = LogManager.getLogger(ServiceFactoryImpl.class);
     private TransactionFactory factory;
 
@@ -37,7 +38,6 @@ public class ServiceFactoryImpl implements ServiceFactory {
             service.setTransaction(transaction);
             return (T) service;
         } else {
-    //        logger.error("No such service: {}", clazz);
             throw new PersistentException("No such service:" + clazz);
         }
     }

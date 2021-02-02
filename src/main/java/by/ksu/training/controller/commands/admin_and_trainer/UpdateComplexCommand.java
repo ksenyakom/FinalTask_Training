@@ -1,7 +1,6 @@
 package by.ksu.training.controller.commands.admin_and_trainer;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
@@ -24,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
  */
-public class UpdateEditedComplexCommand extends AdminAndTrainerCommand {
-    private static Logger logger = LogManager.getLogger(UpdateEditedComplexCommand.class);
+public class UpdateComplexCommand extends AdminAndTrainerCommand {
+    private static Logger logger = LogManager.getLogger(UpdateComplexCommand.class);
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -54,12 +53,9 @@ public class UpdateEditedComplexCommand extends AdminAndTrainerCommand {
                     oldComplex.setTrainerDeveloped(user);
                 }
             }
-
             if (!allowed) {
-                ResponseState state = new ErrorState();
-                state.getAttributes().put(AttrName.ERROR_MESSAGE, String.format("You are not allowed to edit this record: %s",
+                throw new PersistentException(String.format("You are not allowed to edit this record: %s",
                         oldComplex == null ? "no such record" : oldComplex.getTitle()));
-                return state;
             }
 
             oldComplex.setTitle(newComplex.getTitle());

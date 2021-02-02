@@ -25,11 +25,7 @@ public class PersonServiceImpl extends ServiceImpl implements PersonService {
     @Override
     public void save(Person person) throws PersistentException {
         PersonDao personDao = transaction.createDao(PersonDao.class);
-        if (person.getId() == null) {
-            personDao.create(person);
-        } else {
-            personDao.update(person);
-        }
+        personDao.create(person);
     }
 
     @Override

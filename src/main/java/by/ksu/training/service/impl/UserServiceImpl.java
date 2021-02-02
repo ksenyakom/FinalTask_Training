@@ -12,11 +12,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.List;
 
 public class UserServiceImpl extends ServiceImpl implements UserService {
-    @Override
-    public List<Person> findPersonIdByRole(Role role) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
-        return userDao.readPersonByRole(role);
-    }
+
 
     @Override
     public List<User> findUserByRole(Role role) throws PersistentException {

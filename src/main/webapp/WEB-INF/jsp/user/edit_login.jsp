@@ -23,7 +23,7 @@
 <form action="<c:url value="save_changes_login.html"/>" method="POST"  onsubmit="return validateLogin(this)">
     <div class="container">
 
-        <h2><fmt:message key="label.system_enter"/></h2>
+        <h2><fmt:message key="title.edit_login"/></h2>
         <br>
         <div class="form-group">
             <label for="login"><fmt:message key="label.login"/></label>

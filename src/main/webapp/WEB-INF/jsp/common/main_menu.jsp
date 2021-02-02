@@ -26,7 +26,7 @@
             <ul class="nav navbar-nav">
                 <li class="nav-link"><a href="#"><fmt:message key="label.main_menu.about_us"/></a></li>
                 <li class="nav-link"><a href='<c:url value="/index.jsp"/>'><fmt:message key="label.main_menu.main"/></a></li>
-                <li class="nav-link"><a href="#"><fmt:message key="label.main_menu.room"/></a></li>
+                <li class="nav-link"><a href='<c:url value="/my_account.html"/>'><fmt:message key="label.main_menu.room"/></a></li>
                 <li class="nav-link"><a href="#"><fmt:message key="label.main_menu.contacts"/></a></li>
             </ul>
 

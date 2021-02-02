@@ -7,9 +7,11 @@ function validateLogin(form) {
     if (loginPattern.test(login) === false) {
         message += "Логин введен неверно.";
     }
-
-    if (password.length < 5) {
-        message += "<br>" + "Пароль должен состоять из 5 символов минимум.";
+    if (login.length > 255) {
+        message += "Логин слишком длинный, должен быть не более 255 символов.";
+    }
+    if (password.length < 5 || password.length > 128) {
+        message += "<br>" + "Пароль должен состоять из 5 символов минимум, но не более 128";
     }
 
     if (message !== "") {
