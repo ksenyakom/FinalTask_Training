@@ -15,12 +15,10 @@ import by.ksu.training.service.validator.UserValidator;
 import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Attr;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Set;
 
 /**
  * @Author Kseniya Oznobishina

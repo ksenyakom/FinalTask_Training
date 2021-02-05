@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Author Kseniya Oznobishina
  * @Date 17.01.2021
  */
-public class UserLoginPasswordValidator implements Validator<User> {
+public class UserLoginPasswordValidator extends BaseValidator<User> implements Validator<User> {
     public static final String REGEX_LOGIN = "[A-Za-z0-9_\\-]{5,}";
 
     @Override

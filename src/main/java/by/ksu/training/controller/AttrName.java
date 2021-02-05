@@ -17,6 +17,7 @@ public class AttrName {
     public static final String ROLE = "role";
     public static final String ALL = "all";
     public static final String REMOVE = "remove";
+    public static final String ADD_ID = "addId";
     public static final String ACTIVE = "active";
 
 

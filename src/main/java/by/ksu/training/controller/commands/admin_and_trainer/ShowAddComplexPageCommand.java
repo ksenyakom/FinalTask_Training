@@ -1,14 +1,12 @@
 package by.ksu.training.controller.commands.admin_and_trainer;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedTrainerService;
-import by.ksu.training.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

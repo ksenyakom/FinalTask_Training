@@ -1,6 +1,7 @@
-package by.ksu.training.dao.database;
+package by.ksu.training.dao.database.impl;
 
-import by.ksu.training.dao.AssignedTrainerDao;
+import by.ksu.training.dao.database.AssignedTrainerDao;
+import by.ksu.training.dao.BaseDaoImpl;
 import by.ksu.training.entity.*;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ParseDate;
@@ -59,16 +60,18 @@ public class AssignedTrainerDaoImpl extends BaseDaoImpl implements AssignedTrain
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            assignedTrainer = new AssignedTrainer(id);
-            assignedTrainer.setVisitor(new User(resultSet.getInt("visitor_id")));
-            assignedTrainer.setTrainer(new User(resultSet.getInt("trainer_id")));
-            assignedTrainer.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
-            assignedTrainer.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
+            if (resultSet.next()) {
+                assignedTrainer = new AssignedTrainer(id);
+                assignedTrainer.setVisitor(new User(resultSet.getInt("visitor_id")));
+                assignedTrainer.setTrainer(new User(resultSet.getInt("trainer_id")));
+                assignedTrainer.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
+                assignedTrainer.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
+            }
+            return assignedTrainer;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
-        return assignedTrainer;
+
     }
 
     @Override

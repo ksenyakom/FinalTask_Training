@@ -6,9 +6,14 @@ import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedComplex;
+import by.ksu.training.entity.AssignedTrainer;
+import by.ksu.training.entity.Complex;
+import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
+import by.ksu.training.service.AssignedTrainerService;
+import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.validator.AssignedComplexValidator;
 import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
@@ -25,25 +30,39 @@ public class AddAssignedComplexCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(AddAssignedComplexCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<AssignedComplex> validator = new AssignedComplexValidator();
+        AssignedComplexService service = factory.getService(AssignedComplexService.class);
+        int visitorId = 0;
         try {
-            Validator<AssignedComplex> validator = new AssignedComplexValidator();
-            AssignedComplex assignedComplex = validator.validate(request);
+            visitorId = validator.validateIntAttr(AttrName.VISITOR_ID, request);
+            User visitor = new User(visitorId);
+            int complexId = validator.validateIntAttr(AttrName.COMPLEX_ID, request);
+            AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
+            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+            boolean check = assignedTrainerService.checkTrainerByVisitor(user, visitor);
 
-            AssignedComplexService service= factory.getService(AssignedComplexService.class);
-            service.save(assignedComplex);
+            if (check){
+                AssignedComplex assignedComplex = validator.validate(request);
+                assignedComplex.setVisitor(visitor);
+                assignedComplex.setComplex(new Complex(complexId));
 
-            String parameter = "?userId="+assignedComplex.getVisitor().getId();
+                service.save(assignedComplex);
+                logger.debug("User {} added assigned complex id={} to visitor id={}", user.getLogin(), complexId, visitorId);
+                String parameter = "?userId=" + assignedComplex.getVisitor().getId();
 
-            return new RedirectState("assigned_complex/list.html"+parameter);
+                return new RedirectState("assigned_complex/list.html" + parameter);
+            } else {
+                throw new PersistentException("You are not allowed to add complex to this visitor");
+            }
+
         } catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-            return new ForwardState("assigned_complex/add.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
 
+            logger.warn("User entered invalid data", e);
+            String parameter = "?" + AttrName.USER_ID +"="+ visitorId;
+            ResponseState state = new RedirectState("assigned_complex/add.html" + parameter);
+            state.getAttributes().put(AttrName.WARNING_MAP, validator.getWarningMap());
+            return state;
+        }
     }
 }

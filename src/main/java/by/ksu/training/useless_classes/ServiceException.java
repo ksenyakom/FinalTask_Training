@@ -1,4 +1,4 @@
-package by.ksu.training.service;
+package by.ksu.training.useless_classes;
 
 public class ServiceException extends Exception{
     public ServiceException() {

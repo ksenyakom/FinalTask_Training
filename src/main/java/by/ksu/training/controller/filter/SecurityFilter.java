@@ -20,19 +20,16 @@ public class SecurityFilter implements Filter {
     private static Logger logger = LogManager.getLogger(SecurityFilter.class);
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) {}
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
-            // получаем request response command
             HttpServletRequest httpRequest = (HttpServletRequest)request;
             HttpServletResponse httpResponse = (HttpServletResponse)response;
             Command command = (Command)httpRequest.getAttribute("command");
-            // получаем allowRoles
             Set<Role> allowRoles = command.getAllowedRoles();
 
-            //получаем session, берем user оттуда
             HttpSession session = httpRequest.getSession(false);
             User user = null;
             if(session != null) {
@@ -44,7 +41,6 @@ public class SecurityFilter implements Filter {
                 }
             }
 
-            //проверяем может ли этот User выполнить выбранную команду
             String userName = "unauthorized user";
             boolean canExecute = allowRoles == null;
             if(user != null) {
@@ -56,16 +52,13 @@ public class SecurityFilter implements Filter {
                 }
                 canExecute = canExecute || allowRoles.contains(user.getRole());
             } else {
-                //user не авторизован и имеет доступ к странице для авторизованных юзеров (login and registration)
                 if (allowRoles!= null && allowRoles.isEmpty()) {
                     canExecute = true;
                 }
             }
-            // если может то следующий фильтр
             if(canExecute) {
                 chain.doFilter(request, response);
             } else {
-                // если нет, то redirect на login.html и сообщение на SecurityFilterMessage
                 logger.info("Trying of {} access to forbidden resource {}", userName, command.getName());
                 if(session != null && command.getClass() != StartCommand.class) {
                     session.setAttribute("SecurityFilterMessage", "\"Access forbidden. ");
@@ -76,7 +69,6 @@ public class SecurityFilter implements Filter {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");}
             }
         } else {
-            //ошибка
             logger.error("It is impossible to use HTTP filter");
             request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
         }

@@ -1,8 +1,6 @@
-package by.ksu.training.dao.database;
+package by.ksu.training.dao;
 
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.dao.Transaction;
-import by.ksu.training.dao.TransactionFactory;
 import by.ksu.training.dao.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

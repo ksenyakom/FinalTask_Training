@@ -11,52 +11,60 @@ import by.ksu.training.exception.PersistentException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 
 /**
  * @Author Kseniya Oznobishina
  * @Date 22.01.2021
  */
-public class AssignedComplexValidator implements Validator<AssignedComplex> {
+public class AssignedComplexValidator extends BaseValidator<AssignedComplex> implements Validator<AssignedComplex> {
+    @Override
+    public Map<String, String> getWarningMap() {
+        return warningMap;
+    }
+
+    @Override
+    public AssignedComplex getInvalid() {
+        return invalid;
+    }
+
     @Override
     public AssignedComplex validate(HttpServletRequest request) throws IncorrectFormDataException {
-        String visitorId = request.getParameter(AttrName.VISITOR_ID);
-        String complexId = request.getParameter(AttrName.COMPLEX_ID);
-        String dateExpected = request.getParameter(AttrName.DATE_EXPECTED);
-
         AssignedComplex assignedComplex = new AssignedComplex();
 
+        String dateExpected = request.getParameter(AttrName.DATE_EXPECTED);
+        LocalDate localDate = validateDate(AttrName.DATE_EXPECTED, dateExpected);
+        assignedComplex.setDateExpected(localDate);
 
-        try {
-                int id = Integer.parseInt(visitorId);
-                assignedComplex.setVisitor(new User(id));
-        } catch (NumberFormatException e) {
-            throw new IncorrectFormDataException(AttrName.VISITOR_ID, visitorId);
+        if (warningMap != null) {
+            invalid = assignedComplex;
+            throw new IncorrectFormDataException(warningMap.keySet().toString(), warningMap.values().toString());
         }
 
-        try {
-            int id = Integer.parseInt(complexId);
-            assignedComplex.setComplex(new Complex(id));
-        } catch (NumberFormatException e) {
-            throw new IncorrectFormDataException(AttrName.COMPLEX_ID, complexId);
-        }
-
-        try {
-            if (dateExpected != null) {
-                LocalDate localDate = LocalDate.parse(dateExpected);
-                assignedComplex.setDateExpected(localDate);
-            } else {
-                throw new IncorrectFormDataException(AttrName.DATE_EXPECTED, dateExpected);
-            }
-        }catch (DateTimeParseException e) {
-            throw new IncorrectFormDataException(AttrName.DATE_EXPECTED, dateExpected);
-        }
         return assignedComplex;
+
+    }
+
+    private LocalDate validateDate (String attrName, String dateExpected) {
+        if (dateExpected != null) {
+            try {
+                return LocalDate.parse(dateExpected);
+            } catch (DateTimeParseException e) {
+               addWarning("attr." + attrName, "message.warning.date_is_not_valid");
+            }
+        } else {
+            addWarning("attr." + attrName, "message.warning.date_is_empty");
+        }
+        return null;
 
     }
 
     @Override
     public Integer validateId(HttpServletRequest request) throws PersistentException {
         String stringId = request.getParameter(AttrName.ASSIGNED_COMPLEX_ID);
+        if (stringId != null) {
+            stringId.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+        }
         if (stringId == null || stringId.isEmpty()) {
             throw new PersistentException(String.format("Record id was not found: %s", AttrName.ASSIGNED_COMPLEX_ID));
         }

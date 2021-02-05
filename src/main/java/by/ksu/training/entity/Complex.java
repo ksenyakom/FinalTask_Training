@@ -114,7 +114,7 @@ public class Complex extends Entity {
         if (listOfUnits != null && listOfUnits.size() != 0) {
             listOfUnits.forEach(unit -> sb.append(unit.exercise.getId()).append(","));
             sb.deleteCharAt(sb.length() - 1);
-        }
+        } //TODO привести в порядок
         String s = "Complex{" + super.toString();
         s += ", title=" + title;
         s += ", trainerDeveloped=" + (trainerDeveloped == null ? null : trainerDeveloped.getId());

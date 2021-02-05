@@ -1,6 +1,7 @@
-package by.ksu.training.dao.database;
+package by.ksu.training.dao.database.impl;
 
-import by.ksu.training.dao.SubscriptionDao;
+import by.ksu.training.dao.database.SubscriptionDao;
+import by.ksu.training.dao.BaseDaoImpl;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;

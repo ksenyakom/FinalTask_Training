@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class GetDBProperties implements GetProperties{
-    private static Logger logger = LogManager.getLogger(GetDBProperties.class);
+public class GetDbProperties implements GetProperties{
+    private static Logger logger = LogManager.getLogger(GetDbProperties.class);
 
     @Override
     public Properties fromFile(String fileProperties) throws PersistentException {

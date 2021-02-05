@@ -1,6 +1,4 @@
-package by.ksu.training.service;
-
-import by.ksu.training.exception.PersistentException;
+package by.ksu.training.useless_classes;
 
 import javax.servlet.http.Cookie;
 import java.util.Locale;

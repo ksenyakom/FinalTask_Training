@@ -30,7 +30,7 @@ public class AssignedComplexServiceDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetProperties getDBProperties = new GetDBProperties();
+        GetProperties getDBProperties = new GetDbProperties();
         Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
         String databaseUrl = (String) properties.get("db.url");
@@ -90,14 +90,14 @@ public class AssignedComplexServiceDaoImplTest {
         assignedComplex.setDateExpected(LocalDate.of(2020, 12, 10));
         assignedComplex.setDateExecuted(LocalDate.of(2020, 12, 10));
 
-        AssignedComplex assignedComplex2 = new AssignedComplex();
-        assignedComplex2.setVisitor(user);
-        assignedComplex2.setComplex(complex);
-        assignedComplex2.setDateExpected(LocalDate.of(2020, 12, 30));
+        AssignedComplex assignedComplexWithoutExecutedDate = new AssignedComplex();
+        assignedComplexWithoutExecutedDate.setVisitor(user);
+        assignedComplexWithoutExecutedDate.setComplex(complex);
+        assignedComplexWithoutExecutedDate.setDateExpected(LocalDate.of(2020, 12, 30));
         // dateExecuted = null;
         return new Object[]{
                 assignedComplex,
-                assignedComplex2
+                assignedComplexWithoutExecutedDate
         };
     }
 

@@ -1,22 +1,13 @@
 package by.ksu.training.controller.commands.admin_and_trainer;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.commands.authorized_user.DeleteUserCommand;
-import by.ksu.training.controller.state.ErrorState;
-import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
-import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.entity.Complex;
-import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
-import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.AssignedTrainerService;
 import by.ksu.training.service.ComplexService;
-import by.ksu.training.service.UserService;
 import by.ksu.training.service.validator.ComplexValidator;
-import by.ksu.training.service.validator.UserValidator;
 import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,55 +31,27 @@ public class DeleteComplexCommand extends AdminAndTrainerCommand {
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> validator = new ComplexValidator();
         ComplexService complexService = factory.getService(ComplexService.class);
-        try {
-            // check if authorized user can remove this complex
-            List<Integer> listId = validator.validateRemoveId(request);
-            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-            if (!listId.isEmpty()) {
-                if (user.getRole() == Role.ADMINISTRATOR) {
-                    // for admin
-                    for (Integer id : listId) {
-                        Complex complex = complexService.findById(id);
-                        if (complex != null && complex.getVisitorFor() == null) {
-                            complexService.delete(id);
-                            logger.debug("User {} deleted complex(s) id = {}", user.getLogin(), id);
-                        } else {
-                            ResponseState state = new ErrorState();
-                            state.getAttributes().put(AttrName.ERROR_MESSAGE,String.format("You are not allowed to delete this record: %s",
-                                            complex == null ? "no such record" : complex.getTitle()));
-                            return state;
-                        }
-                    }
-                } else {
-                    // for trainer
-                    AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-                    for (Integer id : listId) {
-                        Complex complex = complexService.findById(id);
-                        if (complex != null && complex.getVisitorFor() != null) {
-                            User trainerOfVisitor = assignedTrainerService.findTrainerByVisitor(complex.getVisitorFor());
-                            if (trainerOfVisitor != null && user.getId().equals(trainerOfVisitor.getId())) {
-                                complexService.delete(id);
-                                logger.debug("User {} deleted complex(s) id = {}", user.getLogin(), id);
 
-                            } else {
-                                ResponseState state = new ErrorState();
-                                state.getAttributes().put(AttrName.ERROR_MESSAGE,
-                                        String.format("You are not allowed to delete this record: %s", complex.getTitle()));
-                                return state;
-                            }
-                        } else {
-                            ResponseState state = new ErrorState();
-                            state.getAttributes().put(AttrName.ERROR_MESSAGE,String.format("You are not allowed to delete this record: %s",
-                                    complex == null ? "no such record" : complex.getTitle()));
-                            return state;
-                        }
-                    }
+        List<Integer> listId = validator.validateListId(AttrName.REMOVE, request);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+        ResponseState state = new RedirectState("complex/my_complexes.html");
+
+        if (!listId.isEmpty()) {
+            for (Integer id : listId) {
+                Complex complex = complexService.findById(id);
+                boolean allowed = complexService.checkEditAllowed(user, complex);
+                if (!allowed) {
+                    throw new PersistentException(String.format("You are not allowed to edit this record: %s",
+                            complex == null ? "no such record" : complex.getTitle()));
                 }
-                request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.delete");
+
+                complexService.delete(id);
+                logger.debug("User {} deleted complex(s) id = {}", user.getLogin(), id);
             }
-            return new RedirectState("complex/my_complexes.html");
-        } catch (IncorrectFormDataException e) {
-            throw new PersistentException(e.getMessage(), e);
+            state.getAttributes().put(AttrName.SUCCESS_MESSAGE, "message.success.delete");
+        } else {
+            state.getAttributes().put(AttrName.WARNING_MAP, validator.getWarningMap());
         }
+        return state;
     }
 }

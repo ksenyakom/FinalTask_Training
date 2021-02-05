@@ -1,8 +1,8 @@
 package by.ksu.training.service.impl;
 
-import by.ksu.training.dao.AssignedTrainerDao;
-import by.ksu.training.dao.SubscriptionDao;
-import by.ksu.training.dao.UserDao;
+import by.ksu.training.dao.database.AssignedTrainerDao;
+import by.ksu.training.dao.database.SubscriptionDao;
+import by.ksu.training.dao.database.UserDao;
 import by.ksu.training.entity.AssignedTrainer;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
@@ -16,30 +16,43 @@ import java.util.stream.Collectors;
 
 public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedTrainerService {
     @Override
+    public boolean checkTrainerByVisitor(User checkedTrainer, User visitor) throws PersistentException {
+        AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
+
+        User currentTrainer = dao.readCurrentTrainerByVisitor(visitor);
+
+        if (currentTrainer != null && checkedTrainer!= null && checkedTrainer.getId().equals(currentTrainer.getId())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public List<AssignedTrainer> findAll() throws PersistentException {
-        AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
-        List<AssignedTrainer> assignedTrainerList = atDao.read();
+        AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
+        List<AssignedTrainer> assignedTrainerList = dao.read();
         getUsersLogin(assignedTrainerList);
         return assignedTrainerList;
     }
 
     @Override
     public AssignedTrainer findById(Integer id) throws PersistentException {
-        AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
+        AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
 
-        return atDao.read(id);
+        return dao.read(id);
     }
 
     @Override
     public User findTrainerByVisitor(User visitor) throws PersistentException {
-        AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
-        return atDao.readCurrentTrainerByVisitor(visitor);
+        AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
+        return dao.readCurrentTrainerByVisitor(visitor);
     }
 
     @Override
     public List<User> findVisitorsByTrainer(User trainer) throws PersistentException {
-        AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
-        List<User> users = atDao.readListVisitorsByTrainer(trainer);
+        AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
+        List<User> users = dao.readListVisitorsByTrainer(trainer);
         UserDao userDao = transaction.createDao(UserDao.class);
         userDao.readLogin(users);
         return users;
@@ -61,29 +74,30 @@ public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedT
 
     @Override
     public List<AssignedTrainer> findAllWithoutTrainer() throws PersistentException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void save(AssignedTrainer assignedTrainer) throws PersistentException {
-        AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
+        AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
         if (assignedTrainer.getId() != null) {
-            atDao.update(assignedTrainer);
+            dao.update(assignedTrainer);
         } else {
             // check if there is assigned trainer for this visitor
-            AssignedTrainer existAssignment = atDao.readCurrentByVisitor(assignedTrainer.getVisitor());
+            AssignedTrainer existAssignment = dao.readCurrentByVisitor(assignedTrainer.getVisitor());
             if (existAssignment != null) {
                 existAssignment.setEndDate(LocalDate.now());
-                atDao.update(existAssignment);
+                dao.update(existAssignment);
             }
-            atDao.create(assignedTrainer);
+            Integer id = dao.create(assignedTrainer);
+            assignedTrainer.setId(id);
         }
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        AssignedTrainerDao atDao = transaction.createDao(AssignedTrainerDao.class);
-        atDao.delete(id);
+        AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
+        dao.delete(id);
     }
 
     private void getUsersLogin(List<AssignedTrainer> assignedTrainerList) throws PersistentException {

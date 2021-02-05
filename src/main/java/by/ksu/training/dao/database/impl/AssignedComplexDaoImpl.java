@@ -1,6 +1,7 @@
-package by.ksu.training.dao.database;
+package by.ksu.training.dao.database.impl;
 
-import by.ksu.training.dao.AssignedComplexDao;
+import by.ksu.training.dao.database.AssignedComplexDao;
+import by.ksu.training.dao.BaseDaoImpl;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;

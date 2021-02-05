@@ -30,7 +30,7 @@ public class AssignedTrainerDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetProperties getDBProperties = new GetDBProperties();
+        GetProperties getDBProperties = new GetDbProperties();
         Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
         String databaseUrl = (String) properties.get("db.url");
@@ -126,14 +126,6 @@ public class AssignedTrainerDaoImplTest {
         transaction.commit();
 
         assertEquals(actual, assignedTrainer);
-    }
-
-    @Test(priority = 3, dataProvider = "assignedTrainer", expectedExceptions = PersistentException.class)
-    public void testDeleteException(AssignedTrainer assignedTrainer) throws PersistentException {
-        int id = atDao.create(assignedTrainer);
-        assignedTrainer.setId(id);
-        atDao.delete(id);
-        atDao.read(id);
     }
 
     @Test(priority = 4, dataProvider = "assignedTrainer")

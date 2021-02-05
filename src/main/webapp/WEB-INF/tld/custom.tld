@@ -8,7 +8,7 @@
     <uri>customtags</uri>
     <tag>
         <name>welcome</name>
-        <tag-class>by.ksu.training.tag.HelloTag</tag-class>
+        <tag-class>by.ksu.training.useless_classes.HelloTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>user</name>

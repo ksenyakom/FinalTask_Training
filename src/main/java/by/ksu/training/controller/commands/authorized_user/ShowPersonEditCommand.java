@@ -1,7 +1,6 @@
 package by.ksu.training.controller.commands.authorized_user;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Person;

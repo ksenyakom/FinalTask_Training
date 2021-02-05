@@ -15,7 +15,7 @@ import java.util.Scanner;
  * @Author Kseniya Oznobishina
  * @Date 16.01.2021
  */
-public class SubscriptionValidator implements Validator<Subscription> {
+public class SubscriptionValidator extends BaseValidator<Subscription> implements Validator<Subscription> {
     private static final String BEGIN_DATE = "beginDate";
     private static final String END_DATE = "endDate";
     private static final String PRICE = "price";

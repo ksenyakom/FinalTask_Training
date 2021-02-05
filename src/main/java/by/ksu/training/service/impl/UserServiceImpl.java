@@ -1,7 +1,6 @@
 package by.ksu.training.service.impl;
 
-import by.ksu.training.dao.UserDao;
-import by.ksu.training.entity.Person;
+import by.ksu.training.dao.database.UserDao;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;

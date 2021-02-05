@@ -25,12 +25,9 @@
         <c:import url="../admin/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8">
-
-            <c:url value = "update.html" var = "myURL">
-                <c:param name = "assignedComplexId" value = "${assignedComplex.id}"/>
-                <c:param name = "visitorId" value = "${assignedComplex.visitor.id}"/>
-            </c:url>
-            <form action="${myURL}" method="POST" onsubmit="return validateAssignedComplexEdit(this)">
+            <form action='<c:url value = "update.html"/>' method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="assignedComplexId" value="${assignedComplex.id}"/>
+                <input type="hidden" name="visitorId" value="${assignedComplex.visitor.id}"/>
                 <h2><fmt:message key="title.assigned_complex_edit"/></h2>
                 <br>
                 <div class="container col-xs-6">
@@ -54,7 +51,9 @@
                         <c:forEach items="${lst}" var="complex" varStatus="status">
                             <tr>
                                 <td>${ status.count }</td>
-                                <td><input type="radio" name="complexId" value="${complex.id}" required></td>
+                                <td><input type="radio" name="complexId" value="${complex.id}" required
+                                           <c:if test="${assignedComplex.complex.id.equals(complex.id)}">checked</c:if>/>
+                                </td>
                                 <td>${ complex.title }</td>
                             </tr>
                         </c:forEach>

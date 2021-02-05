@@ -12,6 +12,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
     <title><fmt:message key="title.exercise_list"/></title>
     <%@include file="/WEB-INF/jsp/common/head.jsp" %>
 </head>
@@ -26,21 +27,13 @@
         <%--Content of the page --%>
         <div class="col-sm-10 text-justify">
             <h2><fmt:message key="title.exercise_list"/></h2>
-            <c:if test="${not empty warningMessage}">
-                <p class="text-danger"><fmt:message key="${warningMessage}"/></p>
-            </c:if>
-            <c:if test="${not empty successMessage}">
-                <p class="text-success"><fmt:message key="${successMessage}"/></p>
-            </c:if>
+            <%@include file="/WEB-INF/jsp/common/messages.jsp" %>
 
-            <form onsubmit="return validateAdd(this)">
+            <form onsubmit="return validateAdd(this)" method="post"
+                  action=' <c:url value="add_exercise_in_complex.html" />' enctype="multipart/form-data">
                 <div class="table-responsive">
-                    <c:url value="add_exercise_in_complex.html" var="myUrl">
-                        <c:param name="complexId" value="${complexId}"/>
-                    </c:url>
-                    <button type="submit" class="btn btn-success" formmethod="post" formaction="${myUrl}">
-                        <fmt:message key="table.add_exercise"/></button>
-
+                    <input type="hidden" name="complexId" value="${complexId}"/>
+                    <button type="submit" class="btn btn-success"><fmt:message key="table.add_exercise"/></button>
                     <table class="table table-hover table-bordered">
                         <caption>
                         </caption>
@@ -54,7 +47,8 @@
                         <c:forEach items="${lst}" var="exercise" varStatus="status">
                             <tr>
                                 <td>${ status.count }</td>
-                                <td><input type="checkbox" class="require-one" name="addId" value="${exercise.id}"/></td>
+                                <td><input type="checkbox" class="require-one" name="addId" value="${exercise.id}"/>
+                                </td>
                                 <td>${ exercise.title }</td>
                                 <td>${ exercise.adjusting }</td>
 

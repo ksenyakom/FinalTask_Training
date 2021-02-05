@@ -71,7 +71,7 @@
     </error-page>
 
 <!--    <listener>-->
-<!--        <listener-class>by.ksu.training.service.Listener</listener-class>-->
+<!--        <listener-class>by.ksu.training.useless_classes.Listener</listener-class>-->
 <!--    </listener>-->
 
 </web-app>

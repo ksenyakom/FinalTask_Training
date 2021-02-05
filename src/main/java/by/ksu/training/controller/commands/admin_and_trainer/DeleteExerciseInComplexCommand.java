@@ -1,19 +1,13 @@
 package by.ksu.training.controller.commands.admin_and_trainer;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ErrorState;
-import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.Exercise;
-import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
-import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.AssignedTrainerService;
 import by.ksu.training.service.ComplexService;
-import by.ksu.training.service.validator.ComplexValidator;
 import by.ksu.training.service.validator.ExerciseValidator;
 import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * Deletes exercises (with numbers from parameter "removeId")
+ * from complex (with id from parameter "complexId").
+ *
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
  */
@@ -32,51 +29,35 @@ public class DeleteExerciseInComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(DeleteExerciseInComplexCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Validator<Exercise> validator = new ExerciseValidator();
-            List<Integer> removeIndex = validator.validateRemoveId(request);
-            Validator<Complex> complexVilidator = new ComplexValidator();
-            Integer complexId = complexVilidator.validateId(request);
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<Exercise> validator = new ExerciseValidator();
+        ComplexService complexService = factory.getService(ComplexService.class);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
 
-            // check if authorized user can work with complex
-            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-            ComplexService complexService = factory.getService(ComplexService.class);
+        Integer complexId = validator.validateIntAttr(AttrName.COMPLEX_ID, request);
+        String parameter = "?" + AttrName.COMPLEX_ID + "=" + complexId;
+        ResponseState state = new RedirectState("complex/edit.html" + parameter);
+
+        List<Integer> removeIndex = validator.validateListId(AttrName.REMOVE, request);
+        if (!removeIndex.isEmpty()) {
             Complex complex = complexService.findById(complexId);
-            // for admin
-            boolean allowed = false;
-            if (user.getRole() == Role.ADMINISTRATOR && complex != null && complex.getVisitorFor() == null) {
-                allowed = true;
-            }
-            // for trainer
-            if (user.getRole() == Role.TRAINER && complex != null && complex.getVisitorFor() != null) {
-                AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-                User trainerOfVisitor = assignedTrainerService.findTrainerByVisitor(complex.getVisitorFor());
-                if (trainerOfVisitor != null && user.getId().equals(trainerOfVisitor.getId())) {
-                    allowed = true;
-                }
-            }
+            boolean allowed = complexService.checkEditAllowed(user, complex);
             if (!allowed) {
-                request.setAttribute(AttrName.ERROR_MESSAGE, String.format("You are not allowed to delete this record: %s",
+                throw new PersistentException(String.format("You are not allowed to edit this record: %s",
                         complex == null ? "no such record" : complex.getTitle()));
-                return new ErrorState();
             }
+
             removeIndex.sort(Comparator.reverseOrder());
             for (Integer index : removeIndex) {
-                complex.deleteComplexUnit(index-1);
+                complex.deleteComplexUnit(index - 1);
             }
             complexService.save(complex);
+            logger.debug("User {} removed units {} from complex id = {}", user.getLogin(), removeIndex, complex.getId());
 
-            String parameter = "?" + AttrName.COMPLEX_ID + "=" + complexId;
-            return new RedirectState("complex/edit.html"+ parameter);
-        } catch (IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ForwardState("complex/edit.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+            state.getAttributes().put(AttrName.SUCCESS_MESSAGE, "message.success.delete");
+        } else {
+            state.getAttributes().put(AttrName.WARNING_MAP, validator.getWarningMap());
         }
+        return state;
     }
 }

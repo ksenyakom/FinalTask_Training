@@ -5,7 +5,6 @@ import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedComplex;
-import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author Kseniya Oznobishina
@@ -27,25 +25,20 @@ public class ShowVisitorAssignedComplexesCommand extends VisitorCommand {
     private static final int DAYS = 60;
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute(AttrName.AUTHORIZED_USER);
 
             AssignedComplexService acService = factory.getService(AssignedComplexService.class);
             List<AssignedComplex> assignedComplexes = acService.findUnexecutedByUser(user);
             if (assignedComplexes.isEmpty()) {
-                request.setAttribute(AttrName.WARNING_MESSAGE,"message.warning..no_assigned_trainings");
+                request.setAttribute(AttrName.WARNING_MESSAGE,"message.warning.no_assigned_trainings");
             }
             List<AssignedComplex> executedComplexes = acService.findExecutedByUserForPeriod(user, DAYS);
             assignedComplexes.addAll(executedComplexes);
 
             request.setAttribute("lst", assignedComplexes);
             return new ForwardState("visitor/assigned_trainings.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
+
     }
 }

@@ -1,11 +1,8 @@
 package by.ksu.training.dao;
 
-import by.ksu.training.dao.database.*;
+import by.ksu.training.dao.database.impl.*;
 import by.ksu.training.exception.PersistentException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**

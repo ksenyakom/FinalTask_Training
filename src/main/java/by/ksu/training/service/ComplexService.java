@@ -3,7 +3,6 @@ package by.ksu.training.service;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.EntityService;
 
 import java.util.List;
 
@@ -22,4 +21,6 @@ public interface ComplexService extends EntityService<Complex> {
     List<Complex> findIndividualComplexMetaDataByUsers(List<User> visitorsOfTrainer) throws PersistentException;
 
     boolean checkTitleExist(String title) throws PersistentException;
+
+    boolean checkEditAllowed(User user, Complex complex) throws PersistentException;
 }

@@ -3,11 +3,9 @@ package by.ksu.training.controller.commands.admin_and_trainer;
 import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.state.*;
 import by.ksu.training.entity.Complex;
-import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.AssignedTrainerService;
 import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.validator.ComplexValidator;
 import by.ksu.training.service.validator.Validator;
@@ -16,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * Saves entered complex, provides check if title exist.

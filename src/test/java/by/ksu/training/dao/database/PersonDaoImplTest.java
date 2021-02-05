@@ -29,7 +29,7 @@ public class PersonDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetProperties getDBProperties = new GetDBProperties();
+        GetProperties getDBProperties = new GetDbProperties();
         Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
         String databaseUrl = (String) properties.get("db.url");

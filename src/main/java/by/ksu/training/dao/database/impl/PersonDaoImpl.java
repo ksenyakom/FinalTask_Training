@@ -1,8 +1,9 @@
-package by.ksu.training.dao.database;
+package by.ksu.training.dao.database.impl;
 
+import by.ksu.training.dao.BaseDaoImpl;
 import by.ksu.training.entity.Person;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.dao.PersonDao;
+import by.ksu.training.dao.database.PersonDao;
 import by.ksu.training.service.ParseDate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

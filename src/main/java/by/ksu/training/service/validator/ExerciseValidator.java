@@ -57,8 +57,9 @@ public class ExerciseValidator extends BaseValidator<Exercise> implements Valida
     }
 
     private String validateText(String paramName, String text, int minLength, int maxLength) {
-        text.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
-
+        if (text != null) {
+            text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim();
+        }
         if (text == null || text.isEmpty()) {
             addWarning("attr." + paramName, "message.warning.emptyParameter");
         } else {

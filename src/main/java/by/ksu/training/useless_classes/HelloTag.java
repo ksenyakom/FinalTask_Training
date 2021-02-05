@@ -1,4 +1,4 @@
-package by.ksu.training.tag;
+package by.ksu.training.useless_classes;
 
 import by.ksu.training.entity.User;
 

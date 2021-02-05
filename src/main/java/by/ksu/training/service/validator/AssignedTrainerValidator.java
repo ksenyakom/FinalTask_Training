@@ -17,7 +17,7 @@ import java.util.List;
  * @Author Kseniya Oznobishina
  * @Date 19.01.2021
  */
-public class AssignedTrainerValidator implements Validator<AssignedTrainer> {
+public class AssignedTrainerValidator extends BaseValidator<AssignedTrainer> implements Validator<AssignedTrainer> {
 
     @Override
     public Integer validateId(HttpServletRequest request)  {

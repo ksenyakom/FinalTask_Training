@@ -16,3 +16,14 @@ function validateDelete(form) {
     }
 
 }
+
+function validateAdd(form) {
+    var addId =form.addId.value;
+
+    if($('.require-one:checked').length == 0){
+        // no checkbox was checked
+        alert("Вы не выбрали ни одной записи для добавления");
+        return false;
+    }
+
+}

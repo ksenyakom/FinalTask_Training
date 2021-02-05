@@ -41,7 +41,10 @@ VALUES
 INSERT INTO `complex`
 (`id`,`title`,`trainer_id`,`visitor_id`,`rating`)
 VALUES
-(1, "Общеукрепляющая тренировка", 4, null, 5);
+(1, "Общеукрепляющая тренировка", 4, null, 5),
+(2, "Фитнес", null, null, 4.5),
+(3, "Индивидуальная", 5, 2, 5);
+
 
 INSERT INTO `exercise_in_complex`
 (`complex_id`,`serial_number`,`exercise_id`,`repeat`,`group`)

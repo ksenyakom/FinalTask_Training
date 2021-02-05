@@ -1,4 +1,4 @@
-package by.ksu.training.service;
+package by.ksu.training.useless_classes;
 
 import by.ksu.training.exception.PersistentException;
 

@@ -4,16 +4,8 @@ import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
-import by.ksu.training.entity.Complex;
-import by.ksu.training.entity.Exercise;
-import by.ksu.training.entity.User;
-import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.ExerciseService;
-import by.ksu.training.service.UserService;
-import by.ksu.training.service.validator.UserValidator;
-import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

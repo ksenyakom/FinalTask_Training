@@ -1,4 +1,4 @@
-package by.ksu.training.dao.database;
+package by.ksu.training.dao;
 
 import java.sql.Connection;
 

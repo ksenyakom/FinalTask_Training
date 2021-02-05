@@ -1,14 +1,15 @@
 package by.ksu.training.service.impl;
 
-import by.ksu.training.dao.ComplexDao;
-import by.ksu.training.dao.ExerciseDao;
-import by.ksu.training.dao.UserDao;
+import by.ksu.training.dao.database.AssignedTrainerDao;
+import by.ksu.training.dao.database.ComplexDao;
+import by.ksu.training.dao.database.ExerciseDao;
+import by.ksu.training.dao.database.UserDao;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.Exercise;
+import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ComplexService;
-import by.ksu.training.service.ExerciseService;
 import by.ksu.training.service.ServiceImpl;
 
 import java.util.List;
@@ -19,7 +20,9 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
     public Complex findById(Integer id) throws PersistentException {
         ComplexDao complexDao = transaction.createDao(ComplexDao.class);
         Complex complex = complexDao.read(id);
-        findExercises(complex);
+        if (complex != null ) {
+            findExercises(complex);
+        }
         return complex;
     }
 
@@ -30,6 +33,26 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
                 .distinct()
                 .collect(Collectors.toList());
         exerciseDao.readByExercise(exercises);
+    }
+
+    @Override
+    public boolean checkEditAllowed(User user, Complex complex) throws PersistentException {
+        boolean allowed = false;
+        if (complex != null) {
+            // for admin
+            if (user.getRole() == Role.ADMINISTRATOR && complex.getVisitorFor() == null) {
+                allowed = true;
+            } else if (user.getRole() == Role.TRAINER && complex.getVisitorFor() != null) {
+                // for trainer
+                AssignedTrainerDao assignedTrainerDao = transaction.createDao(AssignedTrainerDao.class);
+                User trainerOfVisitor = assignedTrainerDao.readCurrentTrainerByVisitor(complex.getVisitorFor());
+
+                if (trainerOfVisitor != null && user.getId().equals(trainerOfVisitor.getId())) {
+                    allowed = true;
+                }
+            }
+        }
+        return allowed;
     }
 
     @Override
@@ -46,8 +69,10 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
         readTrainerLogin(complexes);
         return complexes;
     }
+
     /**
      * A method finds all complexes meta data in base.
+     *
      * @return - list of complexes
      * @throws PersistentException - when exception occur in dao layout.
      */
@@ -62,6 +87,7 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
 
     /**
      * A method finds all individual visitor complexes meta data.
+     *
      * @param visitors - list of users, for who we find complexes
      * @return - list of  complexes
      * @throws PersistentException - when exception occur in dao layout.
@@ -77,6 +103,7 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
 
     /**
      * A method finds all complexes available for visitor: all common complexes and special developed for him.
+     *
      * @param visitor - user, for who we find complexes
      * @return - list of available complexes
      * @throws PersistentException - when exception occur in dao layout.
@@ -105,8 +132,7 @@ public class ComplexServiceImpl extends ServiceImpl implements ComplexService {
 
         if (complex.getId() != null) {
             complexDao.update(complex);
-        }
-        else {
+        } else {
             complex.setId(complexDao.create(complex));
         }
     }

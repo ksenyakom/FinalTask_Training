@@ -1,12 +1,9 @@
 package by.ksu.training.controller.commands.authorized_user;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ErrorState;
-import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.User;
-import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.UserService;
 import by.ksu.training.service.validator.UserValidator;
@@ -28,10 +25,9 @@ public class DeleteUserCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(DeleteUserCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
             Validator<User> validator = new UserValidator();
-            List<Integer> listId = validator.validateRemoveId(request);
+            List<Integer> listId = validator.validateListId(AttrName.REMOVE, request);
             UserService userService = factory.getService(UserService.class);
             for (Integer id : listId) {
                 userService.delete(id);
@@ -42,14 +38,6 @@ public class DeleteUserCommand extends AuthorizedUserCommand {
             String parameter = sRole == null ? "" : "?" + AttrName.ROLE + "=" + sRole;
 
             return new RedirectState("user/list.html" + parameter);
-        } catch (IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ForwardState("user/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
+
     }
 }

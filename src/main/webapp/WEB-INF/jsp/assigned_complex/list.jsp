@@ -12,12 +12,11 @@
 <html lang="ru">
 <head>
     <title><fmt:message key="title.complex.list"/></title>
+    <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
     <%@include file="/WEB-INF/jsp/common/head.jsp" %>
 </head>
 <body>
-
 <c:import url="/WEB-INF/jsp/common/main_menu.jsp"/>
-
 <div class="container-fluid text-center">
     <div class="row content">
         <%--side menu of the page--%>
@@ -25,7 +24,7 @@
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
             <c:import url="/WEB-INF/jsp/common/messages.jsp"/>
-            <form onsubmit="return validateDelete(this)">
+            <form onsubmit="return validateDelete(this)" enctype="multipart/form-data">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <caption>
@@ -58,12 +57,12 @@
                                     <a href='<c:url value="edit.html?assignedComplexId=${assignedComplex.id}"/>'>
                                         <fmt:message key="table.edit"/></a> </c:if></td>
                                 <td><input type="checkbox" class="require-one" name="remove"
-                                           value="${assignedComplex.id}"/></td>
+                                           value="${assignedComplex.id}"  /></td>
                             </tr>
                         </c:forEach>
                     </table>
-                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="delete.html"
-                            name="userId" value="${visitor.id}">
+                    <input type="hidden" name="userId" value="${visitor.id}"/>
+                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="delete.html">
                         <fmt:message key="table.remove"/></button>
                     <br>
                 </div>

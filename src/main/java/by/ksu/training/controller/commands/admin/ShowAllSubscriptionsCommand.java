@@ -4,7 +4,6 @@ import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
-import by.ksu.training.entity.Role;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.SubscriptionService;
@@ -14,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Finds subscriptions according user choice: all or only active.

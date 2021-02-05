@@ -14,6 +14,10 @@
             <class name="by.ksu.training.service.impl.UserServiceImplTest"/>
             <class name="by.ksu.training.service.impl.SubscriptionServiceImpl"/>
             <class name="by.ksu.training.service.impl.PersonServiceImplTest"/>
+            <class name="by.ksu.training.service.impl.ExerciseServiceImplTest"/>
+            <class name="by.ksu.training.service.impl.ComplexServiceImplTest"/>
+            <class name="by.ksu.training.service.impl.AssignedTrainerServiceImplTest"/>
+            <class name="by.ksu.training.service.impl.AssignedComplexServiceImplTest"/>
         </classes>
     </test>
 </suite>

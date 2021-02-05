@@ -1,11 +1,10 @@
 package by.ksu.training.controller.commands.admin_and_trainer;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Complex;
-import by.ksu.training.exception.IncorrectFormDataException;
+import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.validator.ComplexValidator;
@@ -26,9 +25,16 @@ public class ShowEditComplexPageCommand extends AdminAndTrainerCommand{
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> complexValidator = new ComplexValidator();
         ComplexService complexService = factory.getService(ComplexService.class);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+
 
         Integer id = complexValidator.validateId(request);
         Complex complex = complexService.findById(id);
+        boolean allowed = complexService.checkEditAllowed(user, complex);
+        if (!allowed) {
+            throw new PersistentException(String.format("You are not allowed to edit this record: %s",
+                    complex == null ? "no such record" : complex.getTitle()));
+        }
         request.setAttribute(AttrName.COMPLEX, complex);
         return new ForwardState("complex/edit.jsp");
     }

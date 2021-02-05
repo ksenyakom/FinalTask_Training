@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
  * @Author Kseniya Oznobishina
  * @Date 18.01.2021
  */
-public class NewSubscriptionValidator implements Validator{
+public class NewSubscriptionValidator extends BaseValidator<Subscription> implements Validator{
     private static final String BEGIN_DATE = "beginDate";
     private static final String PREVIOUS_END_DAY = "previousEndDate";
     private static final String PERIOD = "period";

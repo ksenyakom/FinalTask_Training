@@ -5,11 +5,9 @@ import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Complex;
-import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.service.AssignedTrainerService;
 import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.validator.ComplexValidator;
 import by.ksu.training.service.validator.Validator;
@@ -38,21 +36,7 @@ public class UpdateComplexCommand extends AdminAndTrainerCommand {
             Complex newComplex = validator.validate(request); // only visitor_id, title, trainer
             Complex oldComplex = complexService.findById(id);
 
-            boolean allowed = false;
-            // for admin
-            if (user.getRole() == Role.ADMINISTRATOR && oldComplex != null && oldComplex.getVisitorFor() == null) {
-                allowed = true;
-            }
-            // for trainer
-            if (user.getRole() == Role.TRAINER && oldComplex != null && oldComplex.getVisitorFor() != null) {
-                AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-                User trainerOfVisitor = assignedTrainerService.findTrainerByVisitor(oldComplex.getVisitorFor());
-
-                if (trainerOfVisitor != null && user.getId().equals(trainerOfVisitor.getId())) {
-                    allowed = true;
-                    oldComplex.setTrainerDeveloped(user);
-                }
-            }
+            boolean allowed = complexService.checkEditAllowed(user, oldComplex);
             if (!allowed) {
                 throw new PersistentException(String.format("You are not allowed to edit this record: %s",
                         oldComplex == null ? "no such record" : oldComplex.getTitle()));

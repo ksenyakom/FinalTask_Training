@@ -1,11 +1,11 @@
-package by.ksu.training.dao.database;
+package by.ksu.training.dao;
 
-import by.ksu.training.dao.*;
+import by.ksu.training.dao.database.*;
+import by.ksu.training.dao.database.impl.*;
 import by.ksu.training.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;

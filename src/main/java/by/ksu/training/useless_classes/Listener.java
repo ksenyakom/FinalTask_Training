@@ -1,9 +1,8 @@
-package by.ksu.training.service;
+package by.ksu.training.useless_classes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.util.concurrent.atomic.AtomicInteger;

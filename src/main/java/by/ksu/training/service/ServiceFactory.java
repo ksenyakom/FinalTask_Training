@@ -1,6 +1,7 @@
 package by.ksu.training.service;
 
 import by.ksu.training.exception.PersistentException;
+
 /**
  * A factory for entity service classes.
  *

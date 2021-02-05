@@ -1,7 +1,7 @@
 package by.ksu.training.service.impl;
 
-import by.ksu.training.dao.AssignedComplexDao;
-import by.ksu.training.dao.ComplexDao;
+import by.ksu.training.dao.database.AssignedComplexDao;
+import by.ksu.training.dao.database.ComplexDao;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
@@ -15,54 +15,56 @@ import java.util.stream.Collectors;
 public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedComplexService {
     @Override
     public AssignedComplex findById(Integer id) throws PersistentException {
-        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        AssignedComplex assignedComplex = acDao.read(id);
-        readComplexTitle(List.of(assignedComplex));
+        AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
+        AssignedComplex assignedComplex = dao.read(id);
+        if (assignedComplex!= null) {
+            readComplexTitle(List.of(assignedComplex));
+        }
         return assignedComplex;
     }
+
     @Override
     public AssignedComplex find(AssignedComplex assignedComplex) throws PersistentException {
-        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.read(assignedComplex);
+        AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
+        return dao.read(assignedComplex);
     }
 
     @Override
     public void save(AssignedComplex assignedComplex) throws PersistentException {
-        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-
+        AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
         if (assignedComplex.getId() != null) {
-            acDao.update(assignedComplex);
+            dao.update(assignedComplex);
         } else {
-            assignedComplex.setId(acDao.create(assignedComplex));
+            assignedComplex.setId(dao.create(assignedComplex));
         }
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        acDao.delete(id);
+        AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
+        dao.delete(id);
     }
 
     @Override
     public List<AssignedComplex> findUnexecutedByUser(User user) throws PersistentException {
-        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        List<AssignedComplex> assignedComplexes = acDao.readUnexecutedByUser(user);
+        AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
+        List<AssignedComplex> assignedComplexes = dao.readUnexecutedByUser(user);
         readComplexTitle(assignedComplexes);
-        return  assignedComplexes;
+        return assignedComplexes;
     }
 
     @Override
     public List<AssignedComplex> findExecutedByUserForPeriod(User user, int periodDays) throws PersistentException {
-        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        List<AssignedComplex> assignedComplexes = acDao.readExecutedByUserForPeriod(user,periodDays);
+        AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
+        List<AssignedComplex> assignedComplexes = dao.readExecutedByUserForPeriod(user, periodDays);
         readComplexTitle(assignedComplexes);
-        return  assignedComplexes;
+        return assignedComplexes;
     }
 
     @Override
     public List<AssignedComplex> findExecutedForPeriod(int period) throws PersistentException {
-        AssignedComplexDao acDao = transaction.createDao(AssignedComplexDao.class);
-        return acDao.readExecutedForPeriod(period);
+        AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
+        return dao.readExecutedForPeriod(period);
     }
 
     private void readComplexTitle(List<AssignedComplex> assignedComplexes) throws PersistentException {

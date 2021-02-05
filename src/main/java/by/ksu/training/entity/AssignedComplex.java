@@ -9,7 +9,8 @@ public class AssignedComplex extends Entity {
     private LocalDate dateExpected;
     private LocalDate dateExecuted;
 
-    public AssignedComplex() {}
+    public AssignedComplex() {
+    }
 
     public AssignedComplex(Integer id) {
         this.setId(id);
@@ -53,8 +54,8 @@ public class AssignedComplex extends Entity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         AssignedComplex that = (AssignedComplex) o;
-        return Objects.equals(visitor, that.visitor) &&
-                Objects.equals(complex, that.complex) &&
+        return Objects.equals(visitor != null ? visitor.getId() : null, that.visitor != null ? that.visitor.getId() : null) &&
+                Objects.equals(complex != null ? complex.getId() : null, that.complex != null ? that.complex.getId() : null) &&
                 Objects.equals(dateExpected, that.dateExpected) &&
                 Objects.equals(dateExecuted, that.dateExecuted);
     }
@@ -66,7 +67,7 @@ public class AssignedComplex extends Entity {
 
     @Override
     public String toString() {
-        return "AssignedComplex{" + super.toString()+
+        return "AssignedComplex{" + super.toString() +
                 ", user=" + visitor.getId() +
                 ", complex=" + complex.getId() +
                 ", dateExpected=" + dateExpected +

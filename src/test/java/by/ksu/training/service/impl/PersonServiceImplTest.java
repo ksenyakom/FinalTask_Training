@@ -1,26 +1,24 @@
 package by.ksu.training.service.impl;
 
-import by.ksu.training.dao.GetDBProperties;
+import by.ksu.training.dao.GetDbProperties;
 import by.ksu.training.dao.GetProperties;
 import by.ksu.training.dao.Transaction;
-import by.ksu.training.dao.database.TransactionImpl;
+import by.ksu.training.dao.TransactionImpl;
 import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.*;
+import by.ksu.training.service.PersonService;
+import by.ksu.training.service.UserService;
 import org.testng.annotations.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import static org.testng.Assert.*;
 
@@ -34,7 +32,7 @@ public class PersonServiceImplTest {
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException, IOException {
 
-        GetProperties getDBProperties = new GetDBProperties();
+        GetProperties getDBProperties = new GetDbProperties();
         Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
         String databaseUrl = (String) properties.get("db.url");

@@ -19,6 +19,7 @@ public abstract class Command {
     protected ServiceFactory factory;
 
     /**
+     *A method returns set of allowed roles.
      *
      * @return - hashset with allowed roles for command,
      *         - null if command allowed for both authorized and unauthorized user,

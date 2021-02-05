@@ -1,5 +1,6 @@
-package by.ksu.training.dao;
+package by.ksu.training.dao.database;
 
+import by.ksu.training.dao.Dao;
 import by.ksu.training.entity.Person;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;

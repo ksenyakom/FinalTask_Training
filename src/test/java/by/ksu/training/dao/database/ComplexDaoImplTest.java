@@ -30,7 +30,7 @@ public class ComplexDaoImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetProperties getDBProperties = new GetDBProperties();
+        GetProperties getDBProperties = new GetDbProperties();
         Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
         String databaseUrl = (String) properties.get("db.url");
@@ -119,19 +119,25 @@ public class ComplexDaoImplTest {
         User trainer = new User(trainerId);
         complex.setTrainerDeveloped(trainer);
         User visitor = new User(visitorId);
-        complex.setVisitorFor(visitor); //TODO another complex without this field
+        complex.setVisitorFor(visitor);
         complex.setRating(4.5f);
         complex.setListOfComplexUnit(List.of(unit, unit, unit));
 
-        Complex complex2 = new Complex();
-        complex2.setTitle("Растяжка999");
-        complex2.setTrainerDeveloped(trainer);
-        complex2.setRating(3f);
-        complex2.setListOfComplexUnit(List.of(unit, unit, unit));
+        Complex complexWithoutVisitorFor = new Complex();
+        complexWithoutVisitorFor.setTitle("Растяжка999");
+        complexWithoutVisitorFor.setTrainerDeveloped(trainer);
+        complexWithoutVisitorFor.setRating(3f);
+        complexWithoutVisitorFor.setListOfComplexUnit(List.of(unit, unit, unit));
 
+
+        Complex complexWithoutVisitorAndTrainer = new Complex();
+        complexWithoutVisitorAndTrainer.setTitle("Растяжка555");
+        complexWithoutVisitorAndTrainer.setRating(3.9f);
+        complexWithoutVisitorAndTrainer.setListOfComplexUnit(List.of(unit, unit, unit));
         return new Object[] {
                 complex,
-                complex2
+                complexWithoutVisitorFor,
+                complexWithoutVisitorAndTrainer
         };
     }
 

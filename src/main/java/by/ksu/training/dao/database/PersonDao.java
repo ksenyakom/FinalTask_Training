@@ -1,8 +1,7 @@
-package by.ksu.training.dao;
+package by.ksu.training.dao.database;
 
+import by.ksu.training.dao.Dao;
 import by.ksu.training.entity.Person;
-import by.ksu.training.entity.Trainer;
-import by.ksu.training.entity.Visitor;
 import by.ksu.training.exception.PersistentException;
 
 import java.util.List;

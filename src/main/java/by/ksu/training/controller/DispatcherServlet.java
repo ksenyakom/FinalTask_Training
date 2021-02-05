@@ -5,10 +5,10 @@ import by.ksu.training.controller.commands.CommandManager;
 import by.ksu.training.controller.commands.CommandManagerFactory;
 import by.ksu.training.controller.state.*;
 import by.ksu.training.dao.GetProperties;
-import by.ksu.training.dao.database.TransactionFactoryImpl;
+import by.ksu.training.dao.TransactionFactoryImpl;
 import by.ksu.training.dao.pool.ConnectionPool;
 import by.ksu.training.exception.PersistentException;
-import by.ksu.training.dao.GetDBProperties;
+import by.ksu.training.dao.GetDbProperties;
 import by.ksu.training.service.ServiceFactory;
 import by.ksu.training.service.ServiceFactoryImpl;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class DispatcherServlet extends HttpServlet {
 
     public void init() {
         try {
-            GetProperties getDBProperties = new GetDBProperties();
+            GetProperties getDBProperties = new GetDbProperties();
             Properties properties = getDBProperties.fromFile("properties/database.properties");
             ConnectionPool.getInstance().init(properties,
                     DB_POOL_START_SIZE, DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
@@ -51,7 +51,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            resp.setContentType("text/html"); //TODO куда перенести?
+            resp.setContentType("text/html;charset=UTF-8"); //TODO куда перенести?
             HttpSession session = req.getSession(false);
             if(session != null) {
                 @SuppressWarnings("unchecked")
@@ -65,11 +65,8 @@ public class DispatcherServlet extends HttpServlet {
             }
 
             Command command = (Command) req.getAttribute("command");
-            //TODO move to another place
-            ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
-
             if (command != null) {
-                CommandManager commandManager = CommandManagerFactory.getManager(serviceFactory);
+                CommandManager commandManager = CommandManagerFactory.getManager();
                 ResponseState state = commandManager.execute(command, req, resp);
                 commandManager.close();
 

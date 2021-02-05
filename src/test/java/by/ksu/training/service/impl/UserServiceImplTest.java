@@ -1,13 +1,14 @@
 package by.ksu.training.service.impl;
 
-import by.ksu.training.dao.GetDBProperties;
+import by.ksu.training.dao.GetDbProperties;
 import by.ksu.training.dao.GetProperties;
 import by.ksu.training.dao.Transaction;
-import by.ksu.training.dao.database.TransactionImpl;
+import by.ksu.training.dao.TransactionImpl;
 import by.ksu.training.entity.Role;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.*;
+import by.ksu.training.service.UserService;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -29,7 +30,7 @@ public class UserServiceImplTest {
 
     @BeforeClass
     public void init() throws PersistentException, ClassNotFoundException, SQLException {
-        GetProperties getDBProperties = new GetDBProperties();
+        GetProperties getDBProperties = new GetDbProperties();
         Properties properties = getDBProperties.fromFile("properties/database.properties");
         String driverName = (String) properties.get("driver");
         String databaseUrl = (String) properties.get("db.url");

@@ -1,16 +1,18 @@
 package by.ksu.training.service.validator;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import by.ksu.training.exception.IncorrectFormDataException;
+import by.ksu.training.exception.PersistentException;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * @Author Kseniya Oznobishina
  * @Date 29.01.2021
  */
-public class BaseValidator<Type> {
+public class BaseValidator<T> {
     protected Map<String, String> warningMap;
-    protected Type invalid;
+    protected T invalid;
 
     protected void addWarning(String paramName, String message) {
         if (warningMap == null) {
@@ -19,18 +21,37 @@ public class BaseValidator<Type> {
         warningMap.put(paramName,message);
     }
 
-//    protected String validateText(String paramName, String text, int minLength, int maxLength) {
-//        if (text == null || text.isEmpty()) {
-//            addWarning("attr." + paramName, "message.warning.emptyParameter");
-//        } else {
-//            if (text.length() < minLength) {
-//                addWarning("attr." + paramName, "message.warning.shortParameter");
-//            } else if (text.length() > maxLength) {
-//                addWarning("attr." + paramName, "message.warning.longParameter");
-//                return text.substring(0, maxLength);
-//            }
-//        }
-//        return text;
-//    }
+    public List<Integer> validateListId(String attrName, HttpServletRequest request) throws PersistentException {
+        String[] arrayId = request.getParameterValues(attrName);
+        List<Integer> listId = new ArrayList<>();
+        if (arrayId != null) {
+            try {
+                for (String stringId : arrayId) {
+                    int id = Integer.parseInt(stringId);
+                    listId.add(id);
+                }
+                return listId;
+            } catch (NumberFormatException e) {
+                String error =  Arrays.toString(arrayId).replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+                throw new PersistentException("User entered incorrect data" + attrName + error);
+            }
+        } else {
+            addWarning(attrName, "message.warning.no_any_record_chosen");
+        }
+        return List.of();
+    }
+
+    public Integer validateIntAttr(String attrName, HttpServletRequest request) throws PersistentException {
+        String attribute = request.getParameter(attrName);
+        if (attribute != null) {
+            attribute = attribute.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim();
+        }
+        try {
+            return Integer.parseInt(attribute);
+        } catch (NumberFormatException e) {
+            throw new PersistentException(String.format("message.warning.parameter_not_correct: %s found %s",
+                    attrName, attribute));
+        }
+    }
 
 }

@@ -1,16 +1,17 @@
 package by.ksu.training.controller.commands.trainer;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.commands.visitor.UpdateDateExecutedAssignedComplexCommand;
 import by.ksu.training.controller.state.ErrorState;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedComplex;
+import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
+import by.ksu.training.service.AssignedTrainerService;
 import by.ksu.training.service.validator.AssignedComplexValidator;
 import by.ksu.training.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
@@ -18,9 +19,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
 
 /**
+ * Updates assignedComplex with data which came in response.
+ *
  * @Author Kseniya Oznobishina
  * @Date 23.01.2021
  */
@@ -28,23 +30,40 @@ public class UpdateAssignedComplexCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(UpdateAssignedComplexCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<AssignedComplex> validator = new AssignedComplexValidator();
+        int visitorId = 0;
+        int assignedComplexId = 0;
         try {
-            Validator<AssignedComplex> validator = new AssignedComplexValidator();
-            AssignedComplex assignedComplex = validator.validate(request);
+            assignedComplexId = validator.validateId(request);
 
-            AssignedComplexService service = factory.getService(AssignedComplexService.class);
-            service.save(assignedComplex);
+            visitorId = validator.validateIntAttr(AttrName.VISITOR_ID, request);
+            User visitor = new User(visitorId);
 
-            String parameter = "?" + AttrName.USER_ID + "=" + assignedComplex.getVisitor().getId();
-            return new RedirectState("assigned_complex/list.html" + parameter);
+            int complexId = validator.validateIntAttr(AttrName.COMPLEX_ID, request);
+            AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
+            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+            boolean check = assignedTrainerService.checkTrainerByVisitor(user, visitor);
+            if (check) {
+                AssignedComplex assignedComplex = validator.validate(request);
+                assignedComplex.setId(assignedComplexId);
+                assignedComplex.setVisitor(visitor);
+                assignedComplex.setComplex(new Complex(complexId));
+                AssignedComplexService service = factory.getService(AssignedComplexService.class);
+                service.save(assignedComplex);
+                logger.debug("User {} updated assignedComplex id={} for visitor id={} ", user.getLogin(), complexId, visitorId);
+
+                String parameter = "?" + AttrName.USER_ID + "=" + assignedComplex.getVisitor().getId();
+                return new RedirectState("assigned_complex/list.html" + parameter);
+            } else {
+                throw new PersistentException("You are not allowed to add complex to this visitor");
+            }
         } catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You have entered incorrect data: " + e.getMessage());
-            return new ForwardState("assigned_complex/edit.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ErrorState();
+            logger.warn("User entered invalid data", e);
+            String parameter = "?" + AttrName.ASSIGNED_COMPLEX_ID + "=" + assignedComplexId;
+            ResponseState state = new RedirectState("assigned_complex/edit.html" + parameter);
+            state.getAttributes().put(AttrName.WARNING_MAP, validator.getWarningMap());
+            return state;
         }
     }
 }

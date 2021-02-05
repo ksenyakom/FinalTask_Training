@@ -1,12 +1,9 @@
 package by.ksu.training.controller.commands.admin;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ErrorState;
-import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.Subscription;
-import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.SubscriptionService;
 import by.ksu.training.service.validator.SubscriptionValidator;
@@ -29,10 +26,9 @@ public class DeleteSubscriptionCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(DeleteSubscriptionCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
             Validator<Subscription> validator = new SubscriptionValidator();
-            List<Integer> listId = validator.validateRemoveId(request);
+            List<Integer> listId = validator.validateListId(AttrName.REMOVE, request);
             SubscriptionService service = factory.getService(SubscriptionService.class);
             for (Integer id : listId) {
                 service.delete(id);
@@ -43,14 +39,5 @@ public class DeleteSubscriptionCommand extends AdminCommand {
             String parameter = action == null ? "" : "?" + AttrName.ACTION + "=" + action;
             return new RedirectState("subscription/list.html" + parameter);
 
-        } catch (IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ForwardState("subscription/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
     }
 }

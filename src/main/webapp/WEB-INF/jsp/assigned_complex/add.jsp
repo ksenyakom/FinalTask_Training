@@ -25,15 +25,10 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>
-            <c:if test="${not empty warningMessage}"><p class="text-warning"><fmt:message
-                    key="${ warningMessage }"/></p></c:if>
-            <c:if test="${not empty successMessage}"><p class="text-success"><fmt:message
-                    key="${ successMessage }"/></p></c:if>
+            <%@ include file="../common/messages.jsp" %>
 
-            <c:url value="add.html" var="myURL">
-                <c:param name="visitorId" value="${visitor.id}"/>
-            </c:url>
-            <form action="${myURL}" method="post">
+            <form action='<c:url value="add.html"/>' method="post" enctype="multipart/form-data">
+                <input type="hidden" name="visitorId" value="${visitor.id}">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <caption>
@@ -43,10 +38,10 @@
                                 <label for="dateExpected">Дата тренировки</label>
                                 <input type="date" class="form-control" id="dateExpected"
                                        name="dateExpected" required>
-<%--                                <div disabled="true">--%>
-<%--                                    <p><input id="frequency1" type="radio"><label for="frequency1">Один раз в неделю</label></p>--%>
-<%--                                    <p><input id="frequency2" type="radio"><label for="frequency2">Два раза в неделю</label></p>--%>
-<%--                                </div>--%>
+                                <%--                                <div disabled="true">--%>
+                                <%--                                    <p><input id="frequency1" type="radio"><label for="frequency1">Один раз в неделю</label></p>--%>
+                                <%--                                    <p><input id="frequency2" type="radio"><label for="frequency2">Два раза в неделю</label></p>--%>
+                                <%--                                </div>--%>
 
                             </div>
                         </caption>
@@ -66,7 +61,6 @@
                     <button type="submit" class="btn btn-success"><fmt:message key="button.save"/></button>
                 </div>
             </form>
-
 
         </div>
         <div class="col-sm-2 sidenav">
