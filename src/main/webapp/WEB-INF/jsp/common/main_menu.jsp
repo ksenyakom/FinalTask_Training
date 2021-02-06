@@ -12,8 +12,8 @@
 <body>
 <%--выбор языка--%>
 <div class="text-right">
-    <a href='<c:url value="/change_language.html?language=ru_RU&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>рус</a>
-    <a href='<c:url value="/change_language.html?language=en_US&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>eng</a>
+    <a class="language" href='<c:url value="/change_language.html?language=ru_RU&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>рус</a>
+    <a class="language" href='<c:url value="/change_language.html?language=en_US&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>eng</a>
 </div>
 
 <nav class="navbar navbar-default">

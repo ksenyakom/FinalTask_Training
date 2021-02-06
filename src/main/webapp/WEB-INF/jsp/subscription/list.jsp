@@ -35,8 +35,10 @@
                             key="label.show"/></label>
                     <div class="col-sm-6 col-md-4">
                         <select id="action" class="form-control" name="action">
-                            <option value="active"><fmt:message key="dropdown.active"/></option>
-                            <option value="all"><fmt:message key="dropdown.all"/></option>
+                            <option value="active" <c:if test='${action == "active"}'> selected</c:if> ><fmt:message
+                                    key="dropdown.active"/></option>
+                            <option value="all" <c:if test='${action == "all"}'> selected</c:if> ><fmt:message
+                                    key="dropdown.all"/></option>
                         </select>
                     </div>
                 </div>
@@ -44,7 +46,8 @@
             </form>
 
             <br>
-            <form onsubmit="return validateDelete(this)">
+            <form onsubmit="return validateDelete(this)" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="${action}">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <caption>
@@ -68,15 +71,18 @@
                                 <td><ctg:parse localDate="${ subscription.endDate }"
                                                language="${cookie.language.value}"/></td>
                                 <td><fmt:formatNumber value="${ subscription.price }"/></td>
-                                <td><a href='<c:url value="/subscription/edit.html?editId=${subscription.id}"/>'><fmt:message
-                                        key="table.edit"/></a>
-                                </td>
-                                <td><input type="checkbox"  class="require-one" name="remove" value="${subscription.id}"/></td>
+                                <td><c:url value="/subscription/edit.html" var="myUrl">
+                                    <c:param name="editId" value="${subscription.id}"/>
+                                    <c:param name="action" value="${action}"/>
+                                </c:url>
+                                    <a href='${myUrl}'><fmt:message key="table.edit"/></a></td>
+
+                                <td><input type="checkbox" class="require-one" name="remove"
+                                           value="${subscription.id}"/></td>
                             </tr>
                         </c:forEach>
                     </table>
-                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="delete.html"
-                            name="action" value="${param.get("action")}">
+                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="delete.html">
                         <fmt:message key="table.remove"/></button>
                 </div>
             </form>

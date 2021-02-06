@@ -56,7 +56,11 @@
                             <th scope="col"><fmt:message key="table.execute"/></th>
                         </tr>
                         <c:forEach items="${lst}" var="complex" varStatus="status">
-                            <tr>
+                            <tr <c:choose>
+                                <c:when test="${not empty complex.visitorFor}">class="warning"</c:when>
+                                <c:when test="${ empty complex.visitorFor}">class="success"</c:when>
+                                <c:otherwise>class="text-muted"</c:otherwise>
+                            </c:choose>>
                                 <td>${ status.count }</td>
                                 <td>${ complex.title }</td>
                                 <td>${ complex.trainerDeveloped.login }</td>

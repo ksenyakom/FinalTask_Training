@@ -30,6 +30,8 @@ public class AddExerciseCommand extends AdminCommand {
      * Adds exercise in base.
      *
      * @throws PersistentException - if any exception occur while performing command.
+     * @throws FileTooBigException - if user is trying to load too big file.
+     * @see by.ksu.training.entity.Exercise
      */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

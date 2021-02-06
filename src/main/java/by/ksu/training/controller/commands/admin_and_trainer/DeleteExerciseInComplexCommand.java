@@ -19,8 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Deletes exercises (with numbers from parameter "removeId")
- * from complex (with id from parameter "complexId").
+ * Deletes exercises from complex.
  *
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
@@ -28,6 +27,12 @@ import java.util.List;
 public class DeleteExerciseInComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(DeleteExerciseInComplexCommand.class);
 
+    /**
+     * Deletes exercises (with numbers from parameter "removeId")
+     * from complex (with id from parameter "complexId").
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Exercise> validator = new ExerciseValidator();

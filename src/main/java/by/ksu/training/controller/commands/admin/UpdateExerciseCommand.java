@@ -21,12 +21,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Updates exercise.
+ *
  * @Author Kseniya Oznobishina
  * @Date 25.01.2021
  */
 public class UpdateExerciseCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(UpdateExerciseCommand.class);
 
+    /**
+     * Updates exercise with id (parameter exercise_id) with values came with request.
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Exercise> validator = new ExerciseValidator();
@@ -37,10 +44,10 @@ public class UpdateExerciseCommand extends AdminCommand {
         try {
             exercise = validator.validate(request);
             exercise.setId(validator.validateIntAttr(AttrName.EXERCISE_ID,request));
-            List<String> pathes = fileValidator.validateUpdate(request);
-            if (!pathes.isEmpty()) {
-                exercise.setPicturePath(pathes.get(0));
-                exercise.setAudioPath(pathes.get(1));
+            List<String> paths = fileValidator.validateUpdate(request);
+            if (!paths.isEmpty()) {
+                exercise.setPicturePath(paths.get(0));
+                exercise.setAudioPath(paths.get(1));
                 ExerciseService exerciseService = factory.getService(ExerciseService.class);
                 exerciseService.save(exercise);
 
@@ -55,12 +62,12 @@ public class UpdateExerciseCommand extends AdminCommand {
 
         } catch (IncorrectFormDataException e) {
             Map<String, String> warningMap = validator.getWarningMap();
-            logger.debug("User entered invalid data while updating exercise: {}", warningMap, e);
+            logger.debug("User entered invalid data while updating exercise: {}", e);
 
             state =  new RedirectState("exercise/edit.html");
             exercise = validator.getInvalid();
             state.getAttributes().put(AttrName.WARNING_MAP, warningMap);
-        } catch (FileTooBigException e) {
+        } catch (FileTooBigException e) { //TODO поразбираться еще
             logger.debug("User tried to load too big file while updating exercise", e);
             state =  new RedirectState("exercise/edit.html");
             state.getAttributes().put(AttrName.WARNING_MAP, Map.of("attr.picture", "message.warning.file_too_big"));

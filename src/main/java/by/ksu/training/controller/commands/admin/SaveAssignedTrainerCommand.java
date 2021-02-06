@@ -6,6 +6,7 @@ import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 import by.ksu.training.entity.AssignedTrainer;
+import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedTrainerService;
@@ -22,31 +23,39 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @Author Kseniya Oznobishina
  * @Date 19.01.2021
- * @see AssignedTrainer
  */
 public class SaveAssignedTrainerCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(SaveAssignedTrainerCommand.class);
 
+    /**
+     * Saves assignment of trainer for visitor.
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     * @see by.ksu.training.entity.AssignedTrainer
+     */
+
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<AssignedTrainer> validator = new AssignedTrainerValidator();
+        AssignedTrainerService atService = factory.getService(AssignedTrainerService.class);
+
+        String action = request.getParameter(AttrName.ACTION);
+        String parameter = "?" + AttrName.ACTION + "=" + action;
+        ResponseState state = new RedirectState("assigned_trainer/list.html" + parameter);
+
         try {
-            Validator<AssignedTrainer> validator = new AssignedTrainerValidator();
             AssignedTrainer assignedTrainer = validator.validate(request);
-
-            AssignedTrainerService atService = factory.getService(AssignedTrainerService.class);
+            Integer visitorId = validator.validateIntAttr(AttrName.VISITOR_ID, request);
+            Integer trainerId = validator.validateIntAttr(AttrName.TRAINER_ID, request);
+            assignedTrainer.setTrainer(new User(trainerId));
+            assignedTrainer.setVisitor(new User(visitorId));
             atService.save(assignedTrainer);
-
-            request.getSession().setAttribute(AttrName.SUCCESS_MESSAGE, "message.success.trainer_assigned");
-
-            return new RedirectState("assigned_trainer/list.html");
+            logger.debug("Admin assigned trainer id={} to user id={}", trainerId, visitorId);
+            state.getAttributes().put(AttrName.SUCCESS_MESSAGE, "message.success.trainer_assigned");
+            return state;
         } catch (IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ForwardState("assigned_trainer/set.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+            //never thrown
         }
+        return state;
     }
 }

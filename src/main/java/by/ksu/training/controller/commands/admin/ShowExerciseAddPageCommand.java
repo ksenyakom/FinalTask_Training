@@ -14,24 +14,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
+ * Prepares data to show on page for exercise adding.
+ *
  * @Author Kseniya Oznobishina
  * @Date 24.01.2021
  */
 public class ShowExerciseAddPageCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowExerciseAddPageCommand.class);
+
+    /**
+     * Prepares data to show on list for exercise adding:
+     * list of exercise types.
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
+
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            ExerciseService service = factory.getService(ExerciseService.class);
-            List<String> types = service.findExerciseTypes();
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        ExerciseService service = factory.getService(ExerciseService.class);
 
-            request.setAttribute("lst",types);
-
-            return new ForwardState("exercise/add.jsp");
-        }  catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
+        List<String> types = service.findExerciseTypes();
+        request.setAttribute("lst", types);
+        return new ForwardState("exercise/add.jsp");
     }
 }

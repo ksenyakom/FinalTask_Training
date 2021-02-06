@@ -31,6 +31,8 @@
                 <c:param name = "visitorId" value = "${subscription.visitor.id}"/>
             </c:url>
             <form action="${myURL}" method="POST" onsubmit="return validateSubscriptionEdit(this)">
+                <input type="hidden" name="action" value="${action}">
+
                 <h2><fmt:message key="title.subscription_edit"/></h2>
                 <br>
                 <div class="container col-xs-6">

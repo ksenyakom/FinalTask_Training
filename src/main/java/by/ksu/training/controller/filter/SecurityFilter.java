@@ -20,22 +20,23 @@ public class SecurityFilter implements Filter {
     private static Logger logger = LogManager.getLogger(SecurityFilter.class);
 
     @Override
-    public void init(FilterConfig filterConfig) {}
+    public void init(FilterConfig filterConfig) {
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if(request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
-            HttpServletRequest httpRequest = (HttpServletRequest)request;
-            HttpServletResponse httpResponse = (HttpServletResponse)response;
-            Command command = (Command)httpRequest.getAttribute("command");
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            Command command = (Command) httpRequest.getAttribute("command");
             Set<Role> allowRoles = command.getAllowedRoles();
 
             HttpSession session = httpRequest.getSession(false);
             User user = null;
-            if(session != null) {
-                user = (User)session.getAttribute(AttrName.AUTHORIZED_USER);
-                String errorMessage = (String)session.getAttribute("SecurityFilterMessage");
-                if(errorMessage != null) {
+            if (session != null) {
+                user = (User) session.getAttribute(AttrName.AUTHORIZED_USER);
+                String errorMessage = (String) session.getAttribute("SecurityFilterMessage");
+                if (errorMessage != null) {
                     httpRequest.setAttribute(AttrName.ERROR_MESSAGE, errorMessage);
                     session.removeAttribute("SecurityFilterMessage");
                 }
@@ -43,30 +44,35 @@ public class SecurityFilter implements Filter {
 
             String userName = "unauthorized user";
             boolean canExecute = allowRoles == null;
-            if(user != null) {
+            if (user != null) {
                 userName = "\"" + user.getLogin() + "\" user";
-                if (allowRoles!= null && allowRoles.isEmpty()) {
+                if (allowRoles != null && allowRoles.isEmpty()) {
                     logger.info("Trying of {} access to forbidden resource {}", userName, command.getName());
                     request.setAttribute(AttrName.ERROR_MESSAGE, "Access forbidden for authorized user. Logout first.");
                     request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
                 }
                 canExecute = canExecute || allowRoles.contains(user.getRole());
             } else {
-                if (allowRoles!= null && allowRoles.isEmpty()) {
+                if (allowRoles != null && allowRoles.isEmpty()) {
                     canExecute = true;
                 }
             }
-            if(canExecute) {
+            if (canExecute) {
                 chain.doFilter(request, response);
             } else {
                 logger.info("Trying of {} access to forbidden resource {}", userName, command.getName());
-                if(session != null && command.getClass() != StartCommand.class) {
-                    session.setAttribute("SecurityFilterMessage", "\"Access forbidden. ");
-                }
+//                if (session != null && command.getClass() != StartCommand.class) {
+//                    session.setAttribute("SecurityFilterMessage", "Access forbidden");
+//                }
                 if (user != null) {
-                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/error.jsp");
+                    request.setAttribute(AttrName.ERROR_MESSAGE, "Access forbidden");
+                    request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
                 } else {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");}
+                    if (session != null) {
+                        session.setAttribute("SecurityFilterMessage", "message.access_forbidden");
+                    }
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");
+                }
             }
         } else {
             logger.error("It is impossible to use HTTP filter");
@@ -75,5 +81,6 @@ public class SecurityFilter implements Filter {
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 }

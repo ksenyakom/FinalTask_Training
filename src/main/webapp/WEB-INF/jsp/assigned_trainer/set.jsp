@@ -24,10 +24,8 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>
-                <c:if test="${not empty warningMessage}"><p class="text-warning"><fmt:message
-                        key="${ warningMessage }"/></p></c:if>
-                <c:if test="${not empty successMessage}"><p class="text-success"><fmt:message
-                        key="${ successMessage }"/></p></c:if>
+                <%@ include file="../common/messages.jsp" %>
+
             <p class="text-success"><fmt:message key="label.visitor"/> ${ visitor.login }</p>
             <p class="text-success"><fmt:message key="label.trainer"/>
                 <c:if test="${not empty trainer}">
@@ -41,6 +39,7 @@
                 <c:param name="visitorId" value="${visitor.id}"/>
             </c:url>
             <form action="${myURL}" method="post">
+                <input type="hidden" name="action" value="${action}">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <tr class="active">

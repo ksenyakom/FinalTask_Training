@@ -25,32 +25,9 @@ public class AssignedTrainerValidator extends BaseValidator<AssignedTrainer> imp
     }
 
     @Override
-    public AssignedTrainer validate(HttpServletRequest request) throws IncorrectFormDataException {
-        String visitorId = request.getParameter(AttrName.VISITOR_ID);
-        String trainerId = request.getParameter(AttrName.TRAINER_ID);
+    public AssignedTrainer validate(HttpServletRequest request) {
+
         AssignedTrainer assignedTrainer = new AssignedTrainer();
-
-        try {
-            if (visitorId != null) {
-                int id = Integer.parseInt(visitorId);
-                assignedTrainer.setVisitor(new User(id));
-            } else {
-                throw new IncorrectFormDataException(AttrName.VISITOR_ID, visitorId);
-            }
-        } catch (NumberFormatException e) {
-            throw new IncorrectFormDataException(AttrName.VISITOR_ID, visitorId);
-        }
-
-        try {
-            if (trainerId != null) {
-                int id = Integer.parseInt(trainerId);
-                assignedTrainer.setTrainer(new User(id));
-            } else {
-                throw new IncorrectFormDataException(AttrName.TRAINER_ID, trainerId);
-            }
-        } catch (NumberFormatException e) {
-            throw new IncorrectFormDataException(AttrName.TRAINER_ID, trainerId);
-        }
 
         assignedTrainer.setBeginDate(LocalDate.now());
         return assignedTrainer;

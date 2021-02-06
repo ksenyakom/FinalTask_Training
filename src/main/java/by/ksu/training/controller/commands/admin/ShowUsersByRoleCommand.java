@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Finds users by role.
+ * Prepares data to show on page list of users.
  *
  * @Author Kseniya Oznobishina
  * @Date 29.12.2020
@@ -24,29 +24,27 @@ import java.util.List;
 public class ShowUsersByRoleCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowUsersByRoleCommand.class);
 
+    /**
+     * Prepares data to show  on page list users:
+     * list of users by Role (Trainer or Visitor).
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        UserService userService = factory.getService(UserService.class);
         try {
             String sRole = request.getParameter(AttrName.ROLE);
             if (sRole != null) {
                 Role role = Role.valueOf(sRole.toUpperCase());
-
-                UserService userService = factory.getService(UserService.class);
                 List<User> userList = userService.findUserByRole(role);
 
                 request.setAttribute("lst", userList);
+                request.setAttribute(AttrName.ROLE, sRole);
             }
-
             return new ForwardState("user/list.jsp");
         } catch (IllegalArgumentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
-            return new ForwardState("user/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+            throw new PersistentException("Exception while parsing role", e);
         }
-
     }
 }

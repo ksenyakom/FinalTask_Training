@@ -19,14 +19,15 @@ import java.util.List;
 /**
  * Prepares data (list of exercises) to show on page "add exercise in complex".
  *
- * @throws PersistentException - if complexId is not valid or any exception
- *                               occure while receiving data from base.
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
  */
 public class ShowAddExerciseInComplex extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowAddExerciseInComplex.class);
 
+    /**
+     * Prepares data (list of exercises) to show on page "add exercise in complex".
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> complexValidator = new ComplexValidator();

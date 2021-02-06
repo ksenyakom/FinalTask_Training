@@ -80,12 +80,6 @@ public class DispatcherServlet extends HttpServlet {
                     String uri = req.getContextPath() + "/" + state.getUrl();
                     resp.sendRedirect(uri);
                 } else if (state.getClass() == ForwardState.class) {
-                    //в командах переккинуть меседжи в state.attributes
-                   String successMessage = (String) req.getSession().getAttribute(AttrName.SUCCESS_MESSAGE);
-                    if (successMessage != null) {
-                        req.setAttribute(AttrName.SUCCESS_MESSAGE, successMessage);
-                        req.getSession().removeAttribute(AttrName.SUCCESS_MESSAGE);
-                    }
                     String uri = "/WEB-INF/jsp/" + state.getUrl();
                     req.getRequestDispatcher(uri).forward(req, resp);
                 } else if (state.getClass() == ReturnBackState.class) {

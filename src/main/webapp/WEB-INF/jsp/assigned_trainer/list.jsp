@@ -36,8 +36,8 @@
                             key="label.show"/></label>
                     <div class="col-sm-6 col-md-4">
                         <select id="action" class="form-control" name="action">
-                            <option value="active"><fmt:message key="dropdown.active"/></option>
-                            <option value="all"><fmt:message key="dropdown.all"/></option>
+                            <option value="active" <c:if test='${action == "active"}'> selected</c:if> ><fmt:message key="dropdown.active"/></option>
+                            <option value="all" <c:if test='${action == "all"}'> selected</c:if> ><fmt:message key="dropdown.all"/>  </option>
 <%--                            <option value="visitors_without_trainer"><fmt:message key="dropdown.visitors_without_trainer"/></option>--%>
                         </select>
                     </div>
@@ -46,7 +46,8 @@
             </form>
 
             <br>
-            <form onsubmit="return validateDelete(this)">
+            <form onsubmit="return validateDelete(this)" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="${action}">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <caption>
@@ -61,7 +62,12 @@
                             <th scope="col"><fmt:message key="table.remove"/></th>
                         </tr>
                         <c:forEach items="${lst}" var="assign" varStatus="status">
-                            <tr>
+                            <tr <c:choose>
+                                <c:when test="${empty assign.trainer}">class="warning"</c:when>
+                                <c:when test="${ not empty assign.trainer && empty assign.endDate}">class="success"</c:when>
+                                <c:otherwise>class="text-muted"</c:otherwise>
+                            </c:choose>>
+
                                 <td>${ status.count }</td>
                                 <td>${ assign.trainer.login }</td>
                                 <td>${ assign.visitor.login }</td>
@@ -69,17 +75,19 @@
                                 <td><ctg:parse localDate="${ assign.endDate }" language="${cookie.language.value}"/></td>
                                 <td>
                                     <c:if test="${empty assign.endDate}">
-                                    <a href='<c:url value="/assigned_trainer/set.html?visitorId=${assign.visitor.id}"/>'>
-                                        <fmt:message key="table.set"/></a>
-                                    </c:if>
-                                </td>
+                                        <c:url value="/assigned_trainer/set.html" var="myUrl">
+                                            <c:param name="visitorId" value="${assign.visitor.id}"/>
+                                            <c:param name="action" value="${action}"/>
+                                        </c:url>
+                                    <a href='${myUrl}'><fmt:message key="table.set"/></a></c:if> </td>
+
+
                                 <td><input type="checkbox" class="require-one" name="remove"
                                            value="${assign.id}"/></td>
                             </tr>
                         </c:forEach>
                     </table>
-                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="delete.html"
-                            name="action" value="${param.get("action")}">
+                    <button type="submit" class="btn btn-warning" formmethod="post" formaction="delete.html">
                         <fmt:message key="table.remove"/></button>
                 </div>
             </form>

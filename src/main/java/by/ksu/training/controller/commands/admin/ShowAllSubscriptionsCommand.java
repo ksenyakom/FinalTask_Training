@@ -15,32 +15,32 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Finds subscriptions according user choice: all or only active.
+ * Prepare data to show on page with all subscriptions.
  *
  * @Author Kseniya Oznobishina
  * @Date 14.01.2021
- * @see Subscription
  */
 public class ShowAllSubscriptionsCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowAllSubscriptionsCommand.class);
 
+    /**
+     * Finds subscriptions according user choice: all or only active.
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     * @see Subscription
+     */
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String action = request.getParameter(AttrName.ACTION);
-            SubscriptionService service = factory.getService(SubscriptionService.class);
-            if (action != null) {
-                List<Subscription> subscriptionList = action.equalsIgnoreCase(AttrName.ALL)
-                        ? service.findAll()
-                        : service.findAllActive();
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        String action = request.getParameter(AttrName.ACTION);
+        SubscriptionService service = factory.getService(SubscriptionService.class);
+        if (action != null) {
+            List<Subscription> subscriptionList = action.equalsIgnoreCase(AttrName.ALL)
+                    ? service.findAll()
+                    : service.findAllActive();
 
-                request.setAttribute("lst", subscriptionList);
-            }
-            return new ForwardState("subscription/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+            request.setAttribute("lst", subscriptionList);
+            request.setAttribute(AttrName.ACTION, action);
         }
+        return new ForwardState("subscription/list.jsp");
     }
 }

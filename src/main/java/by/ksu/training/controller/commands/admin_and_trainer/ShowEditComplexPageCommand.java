@@ -16,17 +16,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Prepares data  to show on page "edit complex".
+ *
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
  */
-public class ShowEditComplexPageCommand extends AdminAndTrainerCommand{
+public class ShowEditComplexPageCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowEditComplexPageCommand.class);
+
+    /**
+     * Prepares data  to show on page "edit complex":
+     * data of complex with id came in parameter complexId in request.
+     * Performs check if edit allowed for this user.
+     */
+
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> complexValidator = new ComplexValidator();
         ComplexService complexService = factory.getService(ComplexService.class);
         User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-
 
         Integer id = complexValidator.validateId(request);
         Complex complex = complexService.findById(id);

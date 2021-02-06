@@ -112,7 +112,9 @@ public class PersonValidator extends BaseValidator<Person> implements Validator<
     }
 
     private String validatePhone(String phone) {
-        phone.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+        if (phone != null) {
+           phone = phone.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim();
+        }
 
         String telPattern = "\\+[0-9]{12}";
         if (phone != null && !phone.isEmpty()) {
@@ -126,7 +128,9 @@ public class PersonValidator extends BaseValidator<Person> implements Validator<
     }
 
     private String validateText(String paramName, String text, int maxLength) {
-        text.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+        if (text != null) {
+            text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim();
+        }
         if (text != null)
             if (text.length() > maxLength) {
                 addWarning("attr." + paramName, "message.warning.longParameter");

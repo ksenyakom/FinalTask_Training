@@ -37,11 +37,11 @@
                         <th scope="col"><fmt:message key="table.rating"/></th>
                     </tr>
                     <c:forEach items="${lst}" var="complex" varStatus="status">
-                        <tr>
+                        <tr <c:if test="${complex.rating > 4}">class="success"</c:if>>
                             <td>${ status.count }</td>
                             <td>${ complex.title }</td>
                             <td>${ complex.trainerDeveloped.login }</td>
-                            <td><fmt:formatNumber value="${ complex.rating }"/></td>
+                            <td ><fmt:formatNumber value="${ complex.rating }"/></td>
                         </tr>
                     </c:forEach>
                 </table>

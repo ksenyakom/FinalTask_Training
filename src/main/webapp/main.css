@@ -31,5 +31,9 @@ footer {
 }
 
 .language {
-    padding: 30px;
+    padding: 10px;
+}
+
+.highRating{
+    background-color: forestgreen;
 }

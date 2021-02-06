@@ -40,7 +40,10 @@
                         <th scope="col"><fmt:message key="complex.table.date_executed"/></th>
                     </tr>
                     <c:forEach items="${lst}" var="assignedComplex" varStatus="status">
-                        <tr>
+                        <tr <c:choose>
+                            <c:when test="${ empty  assignedComplex.dateExecuted}">class="warning"</c:when>
+                            <c:otherwise>class="success"</c:otherwise>
+                        </c:choose>>
                             <td>${ status.count }</td>
                             <td>${ assignedComplex.complex.title }</td>
                             <td><ctg:parse localDate="${ assignedComplex.dateExpected }"

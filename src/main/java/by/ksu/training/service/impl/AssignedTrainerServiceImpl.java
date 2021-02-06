@@ -1,5 +1,6 @@
 package by.ksu.training.service.impl;
 
+import by.ksu.training.controller.AttrName;
 import by.ksu.training.dao.database.AssignedTrainerDao;
 import by.ksu.training.dao.database.SubscriptionDao;
 import by.ksu.training.dao.database.UserDao;
@@ -46,7 +47,13 @@ public class AssignedTrainerServiceImpl extends ServiceImpl implements AssignedT
     @Override
     public User findTrainerByVisitor(User visitor) throws PersistentException {
         AssignedTrainerDao dao = transaction.createDao(AssignedTrainerDao.class);
-        return dao.readCurrentTrainerByVisitor(visitor);
+
+        User trainer = dao.readCurrentTrainerByVisitor(visitor);
+        if (trainer != null) {
+            UserDao userDao = transaction.createDao(UserDao.class);
+            userDao.readLogin(List.of(trainer));
+        }
+        return trainer;
     }
 
     @Override

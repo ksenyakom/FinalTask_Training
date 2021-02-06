@@ -63,7 +63,7 @@ public class AssignedComplexValidator extends BaseValidator<AssignedComplex> imp
     public Integer validateId(HttpServletRequest request) throws PersistentException {
         String stringId = request.getParameter(AttrName.ASSIGNED_COMPLEX_ID);
         if (stringId != null) {
-            stringId.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
+            stringId = stringId.replaceAll("<","&lt;").replaceAll(">", "&gt;").trim();
         }
         if (stringId == null || stringId.isEmpty()) {
             throw new PersistentException(String.format("Record id was not found: %s", AttrName.ASSIGNED_COMPLEX_ID));
@@ -75,17 +75,4 @@ public class AssignedComplexValidator extends BaseValidator<AssignedComplex> imp
         }
     }
 
-//    @Override
-//    public Integer validateId(HttpServletRequest request) throws IncorrectFormDataException {
-//        String stringId = request.getParameter(AttrName.ASSIGNED_COMPLEX_ID);
-//        try {
-//            if (stringId != null) {
-//                return Integer.parseInt(stringId);
-//            } else {
-//                throw new IncorrectFormDataException("id", stringId);
-//            }
-//        } catch (NumberFormatException e) {
-//            throw new IncorrectFormDataException("id", stringId);
-//        }
-//    }
 }

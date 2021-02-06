@@ -43,6 +43,8 @@ public class AttrName {
     public static final String VISITOR_ID = "visitorId";
     public static final String TRAINER_ID = "trainerId";
     public static final String EXERCISE_ID= "exerciseId";
+    public static final String SUBSCRIPTION_ID = "subscriptionId";
+
 
     public static final String EDIT_ID = "editId";
     public static final String DATE_EXPECTED = "dateExpected";
@@ -52,4 +54,9 @@ public class AttrName {
     public static final String TITLE = "title";
     public static final String ADJUSTING = "adjusting";
     public static final String WARNING_MAP = "warningMap";
+    public static final String PRICE = "price";
+    public static final String BEGIN_DATE = "beginDate";
+    public static final String END_DATE = "endDate";
+
+
 }

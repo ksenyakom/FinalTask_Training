@@ -15,35 +15,36 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Shows list of trainer assignments for users,
- * all assignments or only active(means for users
- * with active subscription).
+ * Prepares data to show on list of trainer assignments for users.
  *
  * @Author Kseniya Oznobishina
  * @Date 19.01.2021
- * @see AssignedTrainer
  */
 public class ShowAssignedTrainerListCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowAssignedTrainerListCommand.class);
 
+    /**
+     * Prepares data to show on list of trainer assignments for users,
+     * all assignments or only active(means for users
+     * with active subscription).
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     * @see by.ksu.training.entity.AssignedTrainer
+     */
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            AssignedTrainerService atService = factory.getService(AssignedTrainerService.class);
-            String action = request.getParameter(AttrName.ACTION);
-            if (action != null) {
-                List<AssignedTrainer> list = action.equals(AttrName.ALL)
-                        ? atService.findAll()
-                        : atService.findAllActive();
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        AssignedTrainerService atService = factory.getService(AssignedTrainerService.class);
 
-                request.setAttribute("lst", list);
-            }
-            return new ForwardState("assigned_trainer/list.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
+        String action = request.getParameter(AttrName.ACTION);
+        if (action != null) {
+            List<AssignedTrainer> list = action.equals(AttrName.ALL)
+                    ? atService.findAll()
+                    : atService.findAllActive();
+
+            request.setAttribute("lst", list);
+            request.setAttribute(AttrName.ACTION, action);
         }
+        return new ForwardState("assigned_trainer/list.jsp");
     }
 }

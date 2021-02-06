@@ -18,12 +18,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Prepares data to show on page for exercise edit.
+ *
  * @Author Kseniya Oznobishina
  * @Date 25.01.2021
  */
 public class ShowExerciseEditCommand extends AdminCommand {
     private static Logger logger = LogManager.getLogger(ShowExerciseEditCommand.class);
 
+    /**
+     * Prepares data to show on list for exercise edit:
+     * exercise data.
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Exercise> validator = new ExerciseValidator();

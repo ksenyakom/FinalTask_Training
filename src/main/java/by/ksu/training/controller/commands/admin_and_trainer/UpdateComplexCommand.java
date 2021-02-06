@@ -18,12 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Updates complex.
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
  */
 public class UpdateComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(UpdateComplexCommand.class);
 
+    /**
+     * Updates complex with values which came in request.
+     * Performs check if user allowed to edit.
+     * @throws PersistentException
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> validator = new ComplexValidator();
@@ -45,7 +51,6 @@ public class UpdateComplexCommand extends AdminAndTrainerCommand {
             oldComplex.setTitle(newComplex.getTitle());
             complexService.save(oldComplex);
             logger.debug("User {} updated complex {} with new title and trainer", user.getLogin(), oldComplex.getId());
-
             return new RedirectState("complex/my_complexes.html");
         } catch (IncorrectFormDataException e) {
             logger.debug("User entered invalid data.", e);

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Adds exercise(es) with id which came with parameter "addId" to complex.
+ * Adds exercise(es) in complex.
  *
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
@@ -26,6 +26,11 @@ import java.util.List;
 public class AddExerciseInComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(AddExerciseInComplexCommand.class);
 
+    /**
+     * Adds exercise(es) with id which came with parameter "addId" in complex.
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> complexValidator = new ComplexValidator();
@@ -52,8 +57,8 @@ public class AddExerciseInComplexCommand extends AdminAndTrainerCommand {
             String parameter = "?" + AttrName.COMPLEX_ID + "=" + complexId;
             return new RedirectState("complex/edit.html" + parameter);
         } else {
-            String parameter = String.format("?%s=%s",AttrName.COMPLEX_ID, complexId);
-            ResponseState state = new RedirectState("complex/add_exercise_in_complex.html"+parameter);
+            String parameter = String.format("?%s=%s", AttrName.COMPLEX_ID, complexId);
+            ResponseState state = new RedirectState("complex/add_exercise_in_complex.html" + parameter);
             state.getAttributes().put(AttrName.WARNING_MESSAGE, "message.warning.no_any_record_chosen");
 
             return state;

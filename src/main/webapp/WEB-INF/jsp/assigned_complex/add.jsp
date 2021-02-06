@@ -51,7 +51,10 @@
                             <th scope="col"><fmt:message key="complex.table.training_title"/></th>
                         </tr>
                         <c:forEach items="${lst}" var="complex" varStatus="status">
-                            <tr>
+                            <tr <c:choose>
+                                <c:when test="${ not empty complex.visitorFor}">class="success"</c:when>
+                                <c:otherwise>class="info"</c:otherwise>
+                            </c:choose>>
                                 <td>${ status.count }</td>
                                 <td><input type="radio" name="complexId" value="${complex.id}" required></td>
                                 <td>${ complex.title }</td>

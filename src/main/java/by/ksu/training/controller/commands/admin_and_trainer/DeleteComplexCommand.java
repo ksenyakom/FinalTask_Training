@@ -17,9 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Deletes complex chosen by user, 'id' of complexes to delete come with parameter 'removeId' in request.
- * Checks if authorized user can remove complex (trainer can remove complex of his visitor;
- * admin can remove common complexes, which developed not for certain visitor).
+ * Deletes complex chosen by user.
  *
  * @Author Kseniya Oznobishina
  * @Date 26.01.2021
@@ -27,6 +25,13 @@ import java.util.List;
 public class DeleteComplexCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(DeleteComplexCommand.class);
 
+    /**
+     * Deletes complex chosen by user, 'id' of complexes to delete come with parameter 'removeId' in request.
+     * Checks if authorized user can remove complex (trainer can remove complex of his visitor;
+     * admin can remove common complexes, which developed not for certain visitor).
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Complex> validator = new ComplexValidator();

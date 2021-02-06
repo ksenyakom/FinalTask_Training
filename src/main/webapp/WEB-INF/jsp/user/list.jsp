@@ -20,22 +20,18 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>
-                <c:if test="${not empty warningMessage}">
-                    <p class="text-danger"><fmt:message key="${warningMessage}"/></p></c:if>
-                <c:if test="${not empty successMessage}">
-                    <p class="text-success"><fmt:message key="${successMessage}"/></p></c:if>
-
+            <c:import url="../common/messages.jsp"/>
             <h4 class="text-center"><fmt:message key="title.user.list"/></h4>
             <br>
             <br>
-            <form action="list.html" method="GET">
+            <form action="list.html" method="GET" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="control-label col-sm-offset-2 col-sm-2" for="role"><fmt:message
                             key="label.show"/></label>
                     <div class="col-sm-6 col-md-4">
                         <select id="role" class="form-control" name="role">
-                            <option value="Visitor"><fmt:message key="label.user_list.visitors"/></option>
-                            <option value="Trainer"><fmt:message key="label.user_list.trainers"/></option>
+                            <option value="Visitor"  <c:if test='${role == "Visitor"}'>selected</c:if> ><fmt:message key="label.user_list.visitors"/></option>
+                            <option value="Trainer"  <c:if test='${role == "Trainer"}'>selected</c:if> ><fmt:message key="label.user_list.trainers"/></option>
                         </select>
                     </div>
                 </div>
@@ -43,7 +39,9 @@
             </form>
 
             <br>
-            <form onsubmit="return validateDelete(this)">
+            <form onsubmit="return validateDelete(this)" enctype="multipart/form-data">
+                <input type="hidden" name="role" value="${role}">
+
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <tr class="active">
@@ -59,12 +57,13 @@
                                 <td>${ user.login }</td>
                                 <td>${ user.email}</td>
                                 <td>${ user.role }</td>
-                                <td><input id="remove" class="require-one" type="checkbox" name="remove" value="${user.id}"/></td>
+                                <td><input id="remove" class="require-one" type="checkbox" name="remove"
+                                           value="${user.id}"/></td>
                             </tr>
                         </c:forEach>
                     </table>
                     <button type="submit" class="btn btn-warning" formaction="deleteUser.html" formmethod="post"
-                            name="role" value="${param.get("role")}" ><fmt:message key="table.remove"/></button>
+                            name="role" value="${param.get("role")}"><fmt:message key="table.remove"/></button>
                 </div>
             </form>
 

@@ -15,12 +15,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
+ * Prepares data to show page for adding complex.
+ *
  * @Author Kseniya Oznobishina
  * @Date 27.01.2021
  */
 public class ShowAddComplexPageCommand extends AdminAndTrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowAddComplexPageCommand.class);
 
+    /**
+     * Prepares data to show page for adding complex:
+     * if user role is Trainer - list of visitors;
+     * nothing for admin.
+     *
+     * @throws PersistentException if any exception occur in service layout.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);

@@ -21,8 +21,6 @@ public interface Validator<T extends Entity> {
         throw new UnsupportedOperationException();
     }
 
-    ;
-
     T validate(HttpServletRequest request) throws IncorrectFormDataException;
 
     List<Integer> validateListId(String attrName, HttpServletRequest request) throws PersistentException;
