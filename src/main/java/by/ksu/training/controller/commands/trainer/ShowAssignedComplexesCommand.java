@@ -18,16 +18,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Prepares data to show on page, includes complexes executed for period DAYS,
- * and all assigned complexes unexecuted.
+ * Prepares data to show on page assigned complexes for trainer.
  *
  * @Author Kseniya Oznobishina
  * @Date 22.01.2021
  */
 public class ShowAssignedComplexesCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowAssignedComplexesCommand.class);
+    /**
+     * For this period of days executed complexes records are collected for page.
+     */
     private static final int DAYS = 60;
 
+    /**
+     * Prepares data to show on page, includes complexes executed for period DAYS,
+     * and all assigned complexes unexecuted.
+     *
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<User> validator = new UserValidator();

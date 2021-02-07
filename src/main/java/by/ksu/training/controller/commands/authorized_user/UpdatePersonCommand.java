@@ -17,12 +17,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Update person command.
+ *
  * @Author Kseniya Oznobishina
  * @Date 17.01.2021
  */
 public class UpdatePersonCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(UpdatePersonCommand.class);
 
+    /**
+     * Update person by values which came with parameters from request.
+     *
+     * @Author Kseniya Oznobishina
+     * @Date 17.01.2021
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<Person> validator = new PersonValidator();

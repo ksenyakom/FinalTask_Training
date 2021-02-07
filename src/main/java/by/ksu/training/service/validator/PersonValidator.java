@@ -131,8 +131,7 @@ public class PersonValidator extends BaseValidator<Person> implements Validator<
         if (text != null) {
             text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim();
         }
-        if (text != null)
-            if (text.length() > maxLength) {
+        if (text != null && text.length() > maxLength) {
                 addWarning("attr." + paramName, "message.warning.longParameter");
                 return text.substring(0, maxLength);
             }

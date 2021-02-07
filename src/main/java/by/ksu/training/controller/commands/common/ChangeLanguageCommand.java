@@ -24,6 +24,7 @@ public class ChangeLanguageCommand extends Command {
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+        //TODO это все надо сделать в js
         String language = request.getParameter(AttrName.LANGUAGE);
         String page = request.getParameter(AttrName.PAGE);
 
@@ -32,12 +33,11 @@ public class ChangeLanguageCommand extends Command {
             response.addCookie(cookie);
         }
 
-        // page == "" if user just came and changes language from first time loaded page index
-        if (page != "") {
+        // page.isEmpty if user just came and changes language from first time loaded page index
+        if (!page.isEmpty()) {
             String contextPath = request.getContextPath();
             page = page.substring(contextPath.length()+1);
         }
-
         logger.debug("Redirect to page: {}", page);
         return new RedirectState(page);
     }

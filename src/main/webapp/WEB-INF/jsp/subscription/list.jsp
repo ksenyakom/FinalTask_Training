@@ -27,6 +27,8 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <h4 class="text-center"><fmt:message key="table.subscription_list.name"/></h4>
+            <c:import url="../common/messages.jsp"/>
+
             <br>
             <br>
             <form action="list.html" method="GET">

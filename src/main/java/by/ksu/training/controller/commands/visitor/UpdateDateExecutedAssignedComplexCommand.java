@@ -26,6 +26,10 @@ import java.time.LocalDate;
 public class UpdateDateExecutedAssignedComplexCommand extends VisitorCommand {
     private static Logger logger = LogManager.getLogger(UpdateDateExecutedAssignedComplexCommand.class);
 
+    /**
+     * Updates assigned complex dateExecuted with today date.
+     * Performs check if assigned complex correspond to user.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<AssignedComplex> validator = new AssignedComplexValidator();

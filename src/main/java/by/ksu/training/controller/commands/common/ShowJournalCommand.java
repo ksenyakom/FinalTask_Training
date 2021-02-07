@@ -20,43 +20,29 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * Prepares data to show on page "journal".
+ *
  * @Author Kseniya Oznobishina
  * @Date 02.01.2021
  */
 public class ShowJournalCommand extends Command {
     private static Logger logger = LogManager.getLogger(ShowJournalCommand.class);
+    /**
+     * Default period for journal.
+     */
     private static final int periodDefault = 90;
 
+    /**
+     * Prepares data to show on page "journal".
+     * list of executed complexes by users for last periodDefault.
+     */
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            AssignedComplexService assignedComplexService = factory.getService(AssignedComplexService.class);
-            List<AssignedComplex> list = assignedComplexService.findExecutedForPeriod(periodDefault);
-//           remove to service
-            List<User> users = list.stream()
-                    .map(AssignedComplex::getVisitor)
-                    .distinct()
-                    .collect(Collectors.toList());
-            UserService userService = factory.getService(UserService.class);
-            userService.findLogin(users);
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        AssignedComplexService assignedComplexService = factory.getService(AssignedComplexService.class);
+        List<AssignedComplex> list = assignedComplexService.findExecutedForPeriod(periodDefault);
+        request.setAttribute("lst", list);
 
-            List<Complex> complexes = list.stream()
-                    .map(AssignedComplex::getComplex)
-                    .distinct()
-                    .collect(Collectors.toList());
-
-            ComplexService complexService = factory.getService(ComplexService.class);
-            complexService.findTitle(complexes);
-//
-            request.setAttribute("lst", list);
-
-            return new ForwardState("journal.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE,e.getMessage());
-            return new ErrorState();
-        }
-
+        return new ForwardState("journal.jsp");
     }
 
     @Override

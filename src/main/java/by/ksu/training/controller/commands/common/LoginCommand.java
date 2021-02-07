@@ -18,20 +18,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * A class to authorize user.
+ *
+ * @Author Kseniya Oznobishina
+ * @Date 07.01.2021
+ */
+
 public class LoginCommand extends Command {
     private static Logger logger = LogManager.getLogger(LoginCommand.class);
 
+    /**
+     * Authorizes user and saves him in session.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Validator<User> validator = new UserLoginPasswordValidator();
+        UserService service = factory.getService(UserService.class);
         try {
-            Validator<User> validator = new UserLoginPasswordValidator();
             User testUser = validator.validate(request);
-            UserService service = factory.getService(UserService.class);
             User user = service.findByLoginAndPassword(testUser.getLogin(), testUser.getPassword());
             if (user != null) {
-                HttpSession session = request.getSession();
                 user.setPassword(null);
-                session.setAttribute(AttrName.AUTHORIZED_USER, user);
+                request.getSession().setAttribute(AttrName.AUTHORIZED_USER, user);
                 logger.info("user {} is logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
 
                 return new RedirectState("my_account.html");
@@ -42,8 +51,7 @@ public class LoginCommand extends Command {
                 return new ForwardState("login.jsp");
             }
         } catch (IncorrectFormDataException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.WARNING_MESSAGE, e.getMessage());
+            request.setAttribute(AttrName.WARNING_MAP, validator.getWarningMap());
             return new ForwardState("login.jsp");
         }
     }

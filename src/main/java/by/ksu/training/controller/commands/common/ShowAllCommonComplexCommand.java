@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Prepare meta data of common complexes to show on page.
+ * Prepares data of common complexes to show on page.
  *
  * @Author Kseniya Oznobishina
  * @Date 13.01.2021

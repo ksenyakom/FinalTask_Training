@@ -18,13 +18,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Prepares data to show on page: all complexes which visitor with id "vistitorId" can execute.
+ * Prepares data to show on page "assignedComplex add".
  *
  * @Author Kseniya Oznobishina
  * @Date 22.01.2021
  */
 public class ShowAssignedComplexAddPageCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowAssignedComplexAddPageCommand.class);
+
+    /**
+     * Prepares data to show on page "assignedComplex add":
+     * all complexes which visitor with id "vistitorId" allowed to execute.
+     */
 
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

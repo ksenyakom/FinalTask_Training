@@ -21,9 +21,6 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Prepares data to show complex for execute page.
- * For Visitor: checks for active subscription.
- *
- * PersistentException - if visitor has no active subscription, or assignedComplex with requested id not found
  *
  * @Author Kseniya Oznobishina
  * @Date 20.01.2021
@@ -31,20 +28,27 @@ import javax.servlet.http.HttpSession;
 public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(ShowExecuteComplexCommand.class);
 
+    /**
+     * Prepares data to show complex for execute page.
+     * For Visitor: checks for active subscription,
+     * checks for assigned complex is for user;
+     *
+     * @throws PersistentException - if visitor has no active subscription, or assignedComplex
+     *                             with requested id was not found or not for this user.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(AttrName.AUTHORIZED_USER);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
         Complex complex = null;
         ComplexService complexService = factory.getService(ComplexService.class);
+        SubscriptionService subscriptionService = factory.getService(SubscriptionService.class);
+        AssignedComplexService acService = factory.getService(AssignedComplexService.class);
+        Validator<AssignedComplex> validator = new AssignedComplexValidator();
 
         if (user.getRole() == Role.VISITOR) {
-            SubscriptionService subscriptionService = factory.getService(SubscriptionService.class);
+            //for Visitor
             Subscription activeSubscription = subscriptionService.findActiveByUser(user);
             if (activeSubscription != null) {
-                Validator<AssignedComplex> validator = new AssignedComplexValidator();
-                AssignedComplexService acService = factory.getService(AssignedComplexService.class);
-
                 int assignedComplexId = validator.validateId(request);
                 AssignedComplex assignedComplex = acService.findById(assignedComplexId);
 
@@ -63,8 +67,8 @@ public class ShowExecuteComplexCommand extends AuthorizedUserCommand {
             }
         } else {
             //for role admin and trainer
-            Validator<Complex> validator = new ComplexValidator();
-            int complexId = validator.validateId(request);
+            Validator<Complex> complexValidator = new ComplexValidator();
+            int complexId = complexValidator.validateId(request);
             complex = complexService.findById(complexId);
             if (complex == null) {
                 throw new PersistentException("Wrong parameter request: complex not found");

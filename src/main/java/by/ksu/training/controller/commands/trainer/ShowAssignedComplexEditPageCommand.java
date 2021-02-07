@@ -19,25 +19,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
+ * Prepares data to show on page "assigned сomplex edit".
+ *
  * @Author Kseniya Oznobishina
  * @Date 23.01.2021
  */
 public class ShowAssignedComplexEditPageCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(ShowAssignedComplexEditPageCommand.class);
+
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-            Validator<AssignedComplex> validator = new AssignedComplexValidator();
-            int id = validator.validateId(request);
-            AssignedComplexService service = factory.getService(AssignedComplexService.class);
-            AssignedComplex assignedComplex = service.findById(id);
-            UserService userService = factory.getService(UserService.class);
-            userService.findLogin(List.of(assignedComplex.getVisitor()));
-            ComplexService complexService = factory.getService(ComplexService.class);
-            List<Complex> complexes = complexService.findComplexesMetaDataByUser(assignedComplex.getVisitor());
+        Validator<AssignedComplex> validator = new AssignedComplexValidator();
+        AssignedComplexService service = factory.getService(AssignedComplexService.class);
+        ComplexService complexService = factory.getService(ComplexService.class);
 
-            request.setAttribute("lst",complexes);
-            request.setAttribute(AttrName.ASSIGNED_COMPLEX, assignedComplex);
+        int id = validator.validateId(request);
+        AssignedComplex assignedComplex = service.findById(id);
+        List<Complex> complexes = complexService.findComplexesMetaDataByUser(assignedComplex.getVisitor());
 
-            return new ForwardState("assigned_complex/edit.jsp");
+        request.setAttribute("lst", complexes);
+        request.setAttribute(AttrName.ASSIGNED_COMPLEX, assignedComplex);
+        return new ForwardState("assigned_complex/edit.jsp");
     }
 }

@@ -1,8 +1,7 @@
-package by.ksu.training.controller.commands.common;
+package by.ksu.training.controller.commands.admin;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.commands.Command;
-import by.ksu.training.controller.state.ErrorState;
+import by.ksu.training.controller.commands.common.RegistrationCommand;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
@@ -18,20 +17,20 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * A command for registration.
+ * Saves new trainer.
  *
  * @Author Kseniya Oznobishina
- * @Date 29.12.2020
+ * @Date 07.02.2021
  */
-public class RegistrationCommand extends Command {
-    private static Logger logger = LogManager.getLogger(RegistrationCommand.class);
+public class RegisterTrainerCommand extends AdminCommand {
+    private static Logger logger = LogManager.getLogger(RegisterTrainerCommand.class);
 
     /**
-     * A command for registration.
-     * Provides check of duplicate login.
+     * Saves new trainer. Performs check if login exists.
+     *
+     * @throws PersistentException - if exception occur while receiving data from database.
      */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -42,28 +41,22 @@ public class RegistrationCommand extends Command {
         try {
             user = validator.validate(request);
             if (!service.checkLoginExist(user.getLogin())) {
-                user.setRole(Role.VISITOR);
+                user.setRole(Role.TRAINER);
                 service.save(user);
-
-                HttpSession session = request.getSession();
-                session.setAttribute("authorizedUser", user);
-                logger.info("user {} is created logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-                return new RedirectState("my_account.html");
-
+                logger.info("Admin created new trainer, login={} is created logged in from {} ({}:{})", user.getLogin(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+                return new RedirectState("user/list.html?role=trainer");
             } else {
                 request.setAttribute(AttrName.WARNING_MESSAGE, "message.warning.login_already_exist");
                 request.setAttribute(AttrName.USER, user);
-                logger.info("user {} already exist", user.getLogin());
-                return new ForwardState("registration.jsp");
+                logger.info("Admin tried to create new trainer? but user {} already exist", user.getLogin());
+                return new ForwardState("admin/register_trainer.jsp");
             }
         } catch (IncorrectFormDataException e) {
             request.setAttribute(AttrName.WARNING_MAP, validator.getWarningMap());
             user = validator.getInvalid();
-            request.setAttribute(AttrName.USER,user);
-            logger.error("user {} unsuccessfully tried to register from {} ({}:{})",
-                    user != null ? user.getLogin() : "unknown", request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
-            return new ForwardState("registration.jsp");
+            request.setAttribute(AttrName.USER, user);
+            logger.error("Admin unsuccessfully tried to register new trainer login={} from {} ({}:{})", user != null ? user.getLogin() : "unknown", request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+            return new ForwardState("admin/register_trainer.jsp");
         }
     }
-
 }

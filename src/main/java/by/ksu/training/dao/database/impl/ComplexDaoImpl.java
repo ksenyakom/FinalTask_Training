@@ -26,15 +26,9 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
     private static final String UPDATE_COMPLEX = "UPDATE `complex` SET `title`=?,`trainer_id`=?,`visitor_id`=?,`rating`=? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `complex` WHERE `id` = ?";
 
-    private static final String CREATE_EXERCISE_IN_COMPLEX =
-            "INSERT INTO `exercise_in_complex` (`complex_id`,`serial_number`,`exercise_id`, `repeat`, `group`) VALUES (?,?,?,?,?)";
-    private static final String READ_LIST_OF_EXERCISES_BY_COMPLEX_ID =
-            "SELECT * FROM `exercise_in_complex` where `complex_id` = ? ORDER BY `serial_number`";
-    private static final String UPDATE_EXERCISE_IN_COMPLEX =
-            "REPLACE INTO `exercise_in_complex` SET `complex_id` = ?,`serial_number` = ?,`exercise_id` = ?, `repeat` = ?, `group` = ?";
-    //    "INSERT INTO `exercise_in_complex` (`complex_id`,`serial_number`,`exercise_id`, `repeat`, `group`) VALUES (?,?,?,?,?) "
-    //           + "ON DUPLICATE KEY UPDATE `exercise_id` = VALUES(`exercise_id`), `repeat` = VALUES (`repeat`),  `group` = VALUES( `group`) ";
-    //TODO alias - workbanch ругается
+    private static final String CREATE_EXERCISE_IN_COMPLEX ="INSERT INTO `exercise_in_complex` (`complex_id`,`serial_number`,`exercise_id`, `repeat`, `group`) VALUES (?,?,?,?,?)";
+    private static final String READ_LIST_OF_EXERCISES_BY_COMPLEX_ID = "SELECT * FROM `exercise_in_complex` where `complex_id` = ? ORDER BY `serial_number`";
+    private static final String UPDATE_EXERCISE_IN_COMPLEX ="REPLACE INTO `exercise_in_complex` SET `complex_id` = ?,`serial_number` = ?,`exercise_id` = ?, `repeat` = ?, `group` = ?";
     private static final String UPDATE_LIST_OF_EXERCISES_DELETE_REMAIN = "DELETE FROM `exercise_in_complex` WHERE `complex_id` = ? AND `serial_number` > ?";
     private static final String DELETE_LIST_OF_EXERCISES = "DELETE FROM `exercise_in_complex`  WHERE `complex_id` = ?";
     private static final String CHECK_BY_TITLE = "SELECT 1 FROM `complex` WHERE `title`=? limit 1";
@@ -341,17 +335,19 @@ public class ComplexDaoImpl extends BaseDaoImpl implements ComplexDao {
             ResultSet resultSet = statement.executeQuery();
             List<Complex.ComplexUnit> list = new ArrayList<>();
             Complex.ComplexUnit unit = null;
+            Map<Integer, Exercise> exerciseMap = new HashMap<>();
+            Exercise exercise;
 
             while (resultSet.next()) {
                 unit = new Complex.ComplexUnit();
-                Exercise exercise = new Exercise();
-                exercise.setId(resultSet.getInt("exercise_id"));
+                int id = resultSet.getInt("exercise_id");
+                exercise = exerciseMap.merge(id, new Exercise(id), (oldValue, newValue) -> oldValue);
                 unit.setExercise(exercise);
                 unit.setGroup(resultSet.getInt("group"));
                 unit.setRepeat(resultSet.getInt("repeat"));
                 list.add(unit);
             }
-            return list; //TODO возвращает пустой лист а не null??
+            return list;
         } catch (SQLException e) {
             throw new PersistentException(e);
         }

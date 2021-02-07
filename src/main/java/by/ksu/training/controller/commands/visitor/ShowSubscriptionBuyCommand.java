@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Prepares data to show on page for buying new subscription.
+ *
  * @Author Kseniya Oznobishina
  * @Date 18.01.2021
  */
@@ -22,20 +24,12 @@ public class ShowSubscriptionBuyCommand extends VisitorCommand {
     private static Logger logger = LogManager.getLogger(ShowSubscriptionBuyCommand.class);
 
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            SubscriptionService service = factory.getService(SubscriptionService.class);
-            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-            Subscription subscription = service.findActiveByUser(user);
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        SubscriptionService service = factory.getService(SubscriptionService.class);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
 
-            request.setAttribute(AttrName.SUBSCRIPTION, subscription);
-
-            return new ForwardState("subscription/buy.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception in command!!!", e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
-            return new ErrorState();
-        }
-
+        Subscription subscription = service.findActiveByUser(user);
+        request.setAttribute(AttrName.SUBSCRIPTION, subscription);
+        return new ForwardState("subscription/buy.jsp");
     }
 }

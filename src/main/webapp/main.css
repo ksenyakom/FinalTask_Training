@@ -31,7 +31,8 @@ footer {
 }
 
 .language {
-    padding: 10px;
+    padding-left: 5px;
+    padding-right: 10px;
 }
 
 .highRating{

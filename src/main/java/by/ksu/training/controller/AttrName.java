@@ -1,6 +1,8 @@
 package by.ksu.training.controller;
 
 /**
+ * Names of parameters and attributes used in application.
+ *
  * @Author Kseniya Oznobishina
  * @Date 21.01.2021
  */
@@ -59,4 +61,7 @@ public class AttrName {
     public static final String END_DATE = "endDate";
 
 
+    public static final String EMAIL = "email";
+    public static final String USER = "user";
+    public static final String PREVIOUS_END_DAY = "previousEndDate";
 }

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Updates assignedComplex with data which came in response.
+ * Updates assignedComplex.
  *
  * @Author Kseniya Oznobishina
  * @Date 23.01.2021
@@ -29,28 +29,31 @@ import javax.servlet.http.HttpServletResponse;
 public class UpdateAssignedComplexCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(UpdateAssignedComplexCommand.class);
 
+    /**
+     * Updates assignedComplex with data which came in request.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<AssignedComplex> validator = new AssignedComplexValidator();
+        AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
+        AssignedComplexService assignedComplexService = factory.getService(AssignedComplexService.class);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+
         int visitorId = 0;
         int assignedComplexId = 0;
         try {
             assignedComplexId = validator.validateId(request);
-
             visitorId = validator.validateIntAttr(AttrName.VISITOR_ID, request);
             User visitor = new User(visitorId);
-
             int complexId = validator.validateIntAttr(AttrName.COMPLEX_ID, request);
-            AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+
             boolean check = assignedTrainerService.checkTrainerByVisitor(user, visitor);
             if (check) {
                 AssignedComplex assignedComplex = validator.validate(request);
                 assignedComplex.setId(assignedComplexId);
                 assignedComplex.setVisitor(visitor);
                 assignedComplex.setComplex(new Complex(complexId));
-                AssignedComplexService service = factory.getService(AssignedComplexService.class);
-                service.save(assignedComplex);
+                assignedComplexService.save(assignedComplex);
                 logger.debug("User {} updated assignedComplex id={} for visitor id={} ", user.getLogin(), complexId, visitorId);
 
                 String parameter = "?" + AttrName.USER_ID + "=" + assignedComplex.getVisitor().getId();

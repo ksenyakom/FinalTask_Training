@@ -14,10 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * A command to redirect user to his account page by role.
+ *
  * @Author Kseniya Oznobishina
  * @Date 31.01.2021
  */
-public class ShowMyAccountPageCommand extends AuthorizedUserCommand{
+public class ShowMyAccountPageCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(ShowMyAccountPageCommand.class);
 
     @Override

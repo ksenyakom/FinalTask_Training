@@ -2,12 +2,15 @@ package by.ksu.training.service.impl;
 
 import by.ksu.training.dao.database.AssignedComplexDao;
 import by.ksu.training.dao.database.ComplexDao;
+import by.ksu.training.dao.database.UserDao;
 import by.ksu.training.entity.AssignedComplex;
 import by.ksu.training.entity.Complex;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.AssignedComplexService;
+import by.ksu.training.service.ComplexService;
 import by.ksu.training.service.ServiceImpl;
+import by.ksu.training.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,8 +20,12 @@ public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedC
     public AssignedComplex findById(Integer id) throws PersistentException {
         AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
         AssignedComplex assignedComplex = dao.read(id);
-        if (assignedComplex!= null) {
+        if (assignedComplex != null) {
             readComplexTitle(List.of(assignedComplex));
+            if (assignedComplex.getVisitor() != null) {
+                UserDao userDao = transaction.createDao(UserDao.class);
+                userDao.readLogin(List.of(assignedComplex.getVisitor()));
+            }
         }
         return assignedComplex;
     }
@@ -64,7 +71,16 @@ public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedC
     @Override
     public List<AssignedComplex> findExecutedForPeriod(int period) throws PersistentException {
         AssignedComplexDao dao = transaction.createDao(AssignedComplexDao.class);
-        return dao.readExecutedForPeriod(period);
+        List<AssignedComplex> list = dao.readExecutedForPeriod(period);
+
+        UserDao userDao = transaction.createDao(UserDao.class);
+        List<User> users = list.stream()
+                .map(AssignedComplex::getVisitor)
+                .distinct()
+                .collect(Collectors.toList());
+        userDao.readLogin(users);
+        readComplexTitle(list);
+        return list;
     }
 
     private void readComplexTitle(List<AssignedComplex> assignedComplexes) throws PersistentException {

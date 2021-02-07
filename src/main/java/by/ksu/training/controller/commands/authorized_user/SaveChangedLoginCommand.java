@@ -18,35 +18,40 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Save changed login.
+ *
  * @Author Kseniya Oznobishina
  * @Date 17.01.2021
  */
 public class SaveChangedLoginCommand extends AuthorizedUserCommand {
     private static Logger logger = LogManager.getLogger(SaveChangedLoginCommand.class);
 
+    /**
+     * Save changed login. Performs check of password and duplicate login in base.
+     */
     @Override
-    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) {
+    protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<User> validator = new UserLoginPasswordValidator();
         User authorizedUser = null;
         try {
-            User user = validator.validate(request);
+            User newLoginUser = validator.validate(request);
             authorizedUser = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
 
-            if (!user.getLogin().equals(authorizedUser.getLogin())) {
+            if (!newLoginUser.getLogin().equals(authorizedUser.getLogin())) {
                 UserService service = factory.getService(UserService.class);
 
-                if (!service.checkLoginExist(user.getLogin())) {
-                    User userFromBase = service.findByLoginAndPassword(authorizedUser.getLogin(), user.getPassword());
+                if (!service.checkLoginExist(newLoginUser.getLogin())) {
+                    User userFromBase = service.findByLoginAndPassword(authorizedUser.getLogin(), newLoginUser.getPassword());
                     if (userFromBase != null) {
                         //save in base
-                        user.setEmail(authorizedUser.getEmail());
-                        user.setId(authorizedUser.getId());
-                        user.setRole(authorizedUser.getRole());
-                        service.save(user);
-                        logger.info("user {} has changed login to {}",  authorizedUser.getLogin(), user.getLogin());
+                        newLoginUser.setEmail(authorizedUser.getEmail());
+                        newLoginUser.setId(authorizedUser.getId());
+                        newLoginUser.setRole(authorizedUser.getRole());
+                        service.save(newLoginUser);
+                        logger.info("user {} has changed login to {}",  authorizedUser.getLogin(), newLoginUser.getLogin());
 
                         //save in session
-                        authorizedUser.setLogin(user.getLogin());
+                        authorizedUser.setLogin(newLoginUser.getLogin());
                         request.getSession().setAttribute("authorizedUser", authorizedUser);
                         return new RedirectState("my_account.html");
                     } else {
@@ -62,12 +67,8 @@ public class SaveChangedLoginCommand extends AuthorizedUserCommand {
                 return new ForwardState("user/edit_login.jsp");
             }
         } catch (IncorrectFormDataException e) {
-            request.setAttribute(AttrName.WARNING_MESSAGE, "You entered incorrect data: " + e.getMessage());
+            request.setAttribute(AttrName.WARNING_MAP, validator.getWarningMap());
             return new ForwardState("user/edit_login.jsp");
-        } catch (PersistentException e) {
-            logger.error("Exception while changing Login of user {}", authorizedUser.getLogin(), e);
-            request.setAttribute(AttrName.ERROR_MESSAGE, "Exception in command!! " + e.getMessage());
-            return new ErrorState();
         }
     }
 }

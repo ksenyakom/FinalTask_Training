@@ -17,66 +17,69 @@ public final class CommandFactory {
         switch (commandName) {
             case START: return new StartCommand();
 
-            case CHANGE_LANGUAGE: return  new ChangeLanguageCommand();
-            case LOGIN: return  new LoginCommand();
-            case SHOW_LOGIN: return  new ShowLoginCommand();
-            case LOGOUT: return  new LogoutCommand();
-            case SHOW_USER_EDIT_LOGIN: return  new ShowUserEditLoginCommand();
-            case SAVE_CHANGED_LOGIN: return  new SaveChangedLoginCommand();
-            case REGISTRATION: return  new RegistrationCommand();
-            case SHOW_REGISTRATION: return  new ShowRegistrationCommand();
-            case SHOW_USERS_BY_ROLE: return  new ShowUsersByRoleCommand();
-            case DELETE_USER: return  new DeleteUserCommand();
+            case CHANGE_LANGUAGE: return new ChangeLanguageCommand();
+            case LOGIN: return new LoginCommand();
+            case SHOW_LOGIN: return new ShowLoginCommand();
+            case LOGOUT: return new LogoutCommand();
+            case SHOW_USER_EDIT_LOGIN: return new ShowUserEditLoginCommand();
+            case SAVE_CHANGED_LOGIN: return new SaveChangedLoginCommand();
+            case REGISTRATION: return new RegistrationCommand();
+            case SHOW_REGISTRATION: return new ShowRegistrationCommand();
+            case SHOW_USERS_BY_ROLE: return new ShowUsersByRoleCommand();
+            case DELETE_USER: return new DeleteUserCommand();
 
-            case SHOW_JOURNAL: return  new ShowJournalCommand();
+            case SHOW_JOURNAL: return new ShowJournalCommand();
 
-            case SHOW_ALL_COMMON_COMPLEX: return  new ShowAllCommonComplexCommand();
-            case SHOW_VISITOR_ASSIGNED_COMPLEXES: return  new ShowVisitorAssignedComplexesCommand();
-            case SHOW_EXECUTE_COMPLEX: return  new ShowExecuteComplexCommand();
-            case UPDATE_DATE_EXECUTED_ASSIGNED_COMPLEX: return  new UpdateDateExecutedAssignedComplexCommand();
+            case SHOW_ALL_COMMON_COMPLEX: return new ShowAllCommonComplexCommand();
+            case SHOW_VISITOR_ASSIGNED_COMPLEXES: return new ShowVisitorAssignedComplexesCommand();
+            case SHOW_EXECUTE_COMPLEX: return new ShowExecuteComplexCommand();
+            case UPDATE_DATE_EXECUTED_ASSIGNED_COMPLEX: return new UpdateDateExecutedAssignedComplexCommand();
 
-            case DELETE_SUBSCRIPTION: return  new DeleteSubscriptionCommand();
-            case SHOW_SUBSCRIPTION_EDIT: return  new ShowSubscriptionEditCommand();
-            case UPDATE_SUBSCRIPTION: return  new UpdateSubscriptionCommand();
-            case SHOW_ALL_SUBSCRIPTIONS: return  new ShowAllSubscriptionsCommand();
-            case SHOW_SUBSCRIPTION_BUY: return  new ShowSubscriptionBuyCommand();
-            case SHOW_VISITOR_SUBSCRIPTION: return  new ShowVisitorSubscriptionCommand();
-            case SAVE_NEW_SUBSCRIPTION: return  new SaveNewSubscriptionCommand();
-            case SHOW_VISITORS_BY_TRAINER: return  new ShowVisitorsByTrainerCommand();
+            case DELETE_SUBSCRIPTION: return new DeleteSubscriptionCommand();
+            case SHOW_SUBSCRIPTION_EDIT: return new ShowSubscriptionEditCommand();
+            case UPDATE_SUBSCRIPTION: return new UpdateSubscriptionCommand();
+            case SHOW_ALL_SUBSCRIPTIONS: return new ShowAllSubscriptionsCommand();
+            case SHOW_SUBSCRIPTION_BUY: return new ShowSubscriptionBuyCommand();
+            case SHOW_VISITOR_SUBSCRIPTION: return new ShowVisitorSubscriptionCommand();
+            case SAVE_NEW_SUBSCRIPTION: return new SaveNewSubscriptionCommand();
+            case SHOW_VISITORS_BY_TRAINER: return new ShowVisitorsByTrainerCommand();
 
 
-            case UPDATE_PERSON: return  new UpdatePersonCommand();
-            case SHOW_PERSON_EDIT: return  new ShowPersonEditCommand();
+            case UPDATE_PERSON: return new UpdatePersonCommand();
+            case SHOW_PERSON_EDIT: return new ShowPersonEditCommand();
 
-            case SHOW_ASSIGNED_TRAINER_LIST: return  new ShowAssignedTrainerListCommand();
-            case SHOW_ASSIGNED_TRAINER_SET_PAGE: return  new ShowAssignedTrainerSetPageCommand();
-            case SAVE_ASSIGNED_TRAINER: return  new SaveAssignedTrainerCommand();
-            case DELETE_ASSIGNED_TRAINER: return  new DeleteAssignedTrainerCommand();
+            case SHOW_ASSIGNED_TRAINER_LIST: return new ShowAssignedTrainerListCommand();
+            case SHOW_ASSIGNED_TRAINER_SET_PAGE: return new ShowAssignedTrainerSetPageCommand();
+            case SAVE_ASSIGNED_TRAINER: return new SaveAssignedTrainerCommand();
+            case DELETE_ASSIGNED_TRAINER: return new DeleteAssignedTrainerCommand();
 
-            case SHOW_ASSIGNED_COMPLEXES: return  new ShowAssignedComplexesCommand();
-            case SHOW_ASSIGNED_COMPLEX_ADD_PAGE: return  new ShowAssignedComplexAddPageCommand();
-            case ADD_ASSIGNED_COMPLEX: return  new AddAssignedComplexCommand();
-            case DELETE_ASSIGNED_COMPLEX: return  new DeleteAssignedComplexCommand();
-            case SHOW_ASSIGNED_COMPLEX_EDIT_PAGE: return  new ShowAssignedComplexEditPageCommand();
-            case UPDATE_ASSIGNED_COMPLEX: return  new UpdateAssignedComplexCommand();
+            case SHOW_ASSIGNED_COMPLEXES: return new ShowAssignedComplexesCommand();
+            case SHOW_ASSIGNED_COMPLEX_ADD_PAGE: return new ShowAssignedComplexAddPageCommand();
+            case ADD_ASSIGNED_COMPLEX: return new AddAssignedComplexCommand();
+            case DELETE_ASSIGNED_COMPLEX: return new DeleteAssignedComplexCommand();
+            case SHOW_ASSIGNED_COMPLEX_EDIT_PAGE: return new ShowAssignedComplexEditPageCommand();
+            case UPDATE_ASSIGNED_COMPLEX: return new UpdateAssignedComplexCommand();
 
-            case SHOW_EXERCISE_LIST: return  new ShowExerciseListCommand();
-            case DELETE_EXERCISE: return  new DeleteExerciseCommand();
-            case SHOW_EXERCISE_ADD_PAGE: return  new ShowExerciseAddPageCommand();
-            case ADD_EXERCISE: return  new AddExerciseCommand();
-            case SHOW_EXERCISE_EDIT: return  new ShowExerciseEditCommand();
-            case UPDATE_EXERCISE: return  new UpdateExerciseCommand();
+            case SHOW_EXERCISE_LIST: return new ShowExerciseListCommand();
+            case DELETE_EXERCISE: return new DeleteExerciseCommand();
+            case SHOW_EXERCISE_ADD_PAGE: return new ShowExerciseAddPageCommand();
+            case ADD_EXERCISE: return new AddExerciseCommand();
+            case SHOW_EXERCISE_EDIT: return new ShowExerciseEditCommand();
+            case UPDATE_EXERCISE: return new UpdateExerciseCommand();
 
-            case SHOW_MY_COMPLEXES: return  new ShowMyComplexesCommand();
-            case DELETE_COMPLEX: return  new DeleteComplexCommand();
-            case SHOW_EDIT_COMPLEX_PAGE: return  new ShowEditComplexPageCommand();
-            case SHOW_ADD_EXERCISE_IN: return  new ShowAddExerciseInComplex();
-            case ADD_EXERCISE_IN_COMPLEX: return  new AddExerciseInComplexCommand();
-            case DELETE_EXERCISE_IN_COMPLEX: return  new DeleteExerciseInComplexCommand();
-            case UPDATE_COMPLEX: return  new UpdateComplexCommand();
-            case SHOW_ADD_COMPLEX_PAGE: return  new ShowAddComplexPageCommand();
-            case SAVE_NEW_COMPLEX: return  new SaveNewComplexCommand();
-            case SHOW_MY_ACCOUNT_PAGE: return  new ShowMyAccountPageCommand();
+            case SHOW_MY_COMPLEXES: return new ShowMyComplexesCommand();
+            case DELETE_COMPLEX: return new DeleteComplexCommand();
+            case SHOW_EDIT_COMPLEX_PAGE: return new ShowEditComplexPageCommand();
+            case SHOW_ADD_EXERCISE_IN: return new ShowAddExerciseInComplex();
+            case ADD_EXERCISE_IN_COMPLEX: return new AddExerciseInComplexCommand();
+            case DELETE_EXERCISE_IN_COMPLEX: return new DeleteExerciseInComplexCommand();
+            case UPDATE_COMPLEX: return new UpdateComplexCommand();
+            case SHOW_ADD_COMPLEX_PAGE: return new ShowAddComplexPageCommand();
+            case SAVE_NEW_COMPLEX: return new SaveNewComplexCommand();
+            case SHOW_MY_ACCOUNT_PAGE: return new ShowMyAccountPageCommand();
+
+            case SHOW_REGISTER_TRAINER_PAGE: return new ShowRegisterTrainerPageCommand();
+            case REGISTER_TRAINER: return new RegisterTrainerCommand();
             default: throw new IllegalArgumentException();
         }
 

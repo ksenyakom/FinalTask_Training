@@ -51,6 +51,7 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/complex/add_exercise_in_complex",  CommandName.SHOW_ADD_EXERCISE_IN);
         commandsGet.put("/complex/add",  CommandName.SHOW_ADD_COMPLEX_PAGE);
         commandsGet.put("/my_account",  CommandName.SHOW_MY_ACCOUNT_PAGE);
+        commandsGet.put("/admin/register_trainer",  CommandName.SHOW_REGISTER_TRAINER_PAGE);
 
         commandsPost.put("/user/deleteUser",  CommandName.DELETE_USER);
         commandsPost.put("/user/save_changes_login",  CommandName.SAVE_CHANGED_LOGIN);
@@ -74,6 +75,7 @@ public class CommandFromUriFilter implements Filter {
         commandsPost.put("/complex/delete_exercise_in_complex",  CommandName.DELETE_EXERCISE_IN_COMPLEX);
         commandsPost.put("/complex/edit",  CommandName.UPDATE_COMPLEX);
         commandsPost.put("/complex/save",  CommandName.SAVE_NEW_COMPLEX);
+        commandsPost.put("/admin/register_trainer",  CommandName.REGISTER_TRAINER);
 
     }
 

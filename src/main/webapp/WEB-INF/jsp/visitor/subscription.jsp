@@ -33,7 +33,9 @@
             <hr>
             <h4 class="text-center"><fmt:message key="title.my_subscription"/></h4>
             <br>
-                <div class="table-responsive">
+            <c:import url="../common/messages.jsp"/>
+
+            <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <tr class="active">
                             <th scope="col">№</th>

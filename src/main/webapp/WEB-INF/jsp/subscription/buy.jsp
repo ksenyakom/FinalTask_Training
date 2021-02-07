@@ -23,12 +23,15 @@
         <c:import url="../visitor/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8">
+            <c:import url="../common/messages.jsp"/>
+
             <c:url value="save_new.html" var="myURL">
                   <c:param name = "previousEndDate" value = "${subscription.endDate}"/>
             </c:url>
             <form action="${myURL}" method="POST" onsubmit="return validateSubscriptionNew(this)">
                 <div class="container col-xs-8">
                     <h3><fmt:message key="title.subscription_buy"/></h3>
+
                     <br>
                     <c:choose>
                         <c:when test="${empty subscription}">

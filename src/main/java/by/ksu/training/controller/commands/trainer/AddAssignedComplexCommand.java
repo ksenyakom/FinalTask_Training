@@ -23,26 +23,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Adds assigned complex to visitor.
+ *
  * @Author Kseniya Oznobishina
  * @Date 22.01.2021
  */
 public class AddAssignedComplexCommand extends TrainerCommand {
     private static Logger logger = LogManager.getLogger(AddAssignedComplexCommand.class);
 
+    /**
+     * Adds assigned complex to visitor.
+     * Performs check if current authorized user is trainer of visitor,
+     * which visitorId came with request.
+     */
     @Override
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Validator<AssignedComplex> validator = new AssignedComplexValidator();
         AssignedComplexService service = factory.getService(AssignedComplexService.class);
+        AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
+        User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
+
         int visitorId = 0;
         try {
             visitorId = validator.validateIntAttr(AttrName.VISITOR_ID, request);
             User visitor = new User(visitorId);
             int complexId = validator.validateIntAttr(AttrName.COMPLEX_ID, request);
-            AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
-            User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
-            boolean check = assignedTrainerService.checkTrainerByVisitor(user, visitor);
 
-            if (check){
+            boolean check = assignedTrainerService.checkTrainerByVisitor(user, visitor);
+            if (check) {
                 AssignedComplex assignedComplex = validator.validate(request);
                 assignedComplex.setVisitor(visitor);
                 assignedComplex.setComplex(new Complex(complexId));
@@ -55,11 +63,9 @@ public class AddAssignedComplexCommand extends TrainerCommand {
             } else {
                 throw new PersistentException("You are not allowed to add complex to this visitor");
             }
-
         } catch (IncorrectFormDataException e) {
-
             logger.warn("User entered invalid data", e);
-            String parameter = "?" + AttrName.USER_ID +"="+ visitorId;
+            String parameter = "?" + AttrName.USER_ID + "=" + visitorId;
             ResponseState state = new RedirectState("assigned_complex/add.html" + parameter);
             state.getAttributes().put(AttrName.WARNING_MAP, validator.getWarningMap());
             return state;

@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-//TODO убрать эту команду
 
 public class StartCommand extends Command{
     private static Logger logger = LogManager.getLogger(StartCommand.class);

@@ -3,6 +3,7 @@ package by.ksu.training.controller.commands.trainer;
 import by.ksu.training.controller.AttrName;
 import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.ResponseState;
+import by.ksu.training.entity.Entity;
 import by.ksu.training.entity.Subscription;
 import by.ksu.training.entity.User;
 import by.ksu.training.exception.PersistentException;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Prepares data to show on page: visitors of trainer.
+ *
  * @Author Kseniya Oznobishina
  * @Date 22.01.2021
  */
@@ -27,12 +30,13 @@ public class ShowVisitorsByTrainerCommand extends TrainerCommand {
     protected ResponseState exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         User user = (User) request.getSession().getAttribute(AttrName.AUTHORIZED_USER);
         SubscriptionService subscriptionService = factory.getService(SubscriptionService.class);
-        List<Subscription> subscriptions = subscriptionService.findAllActive();
         AssignedTrainerService assignedTrainerService = factory.getService(AssignedTrainerService.class);
+
+        //TODO вытягиваю лишние данные. Подумать как обойтись без этого
+        List<Subscription> subscriptions = subscriptionService.findAllActive();
         List<User> visitors = assignedTrainerService.findVisitorsByTrainer(user);
         List<Integer> activeVisitorsId = visitors.stream()
-                .collect(Collectors.mapping(visitor -> visitor.getId(), Collectors.toList()));
-
+                .map(Entity::getId).collect(Collectors.toList());
         List<Subscription> activeVisitorSubscriptionList = subscriptions.stream()
                 .filter(subscription -> activeVisitorsId.contains(subscription.getVisitor().getId()))
                 .collect(Collectors.toList());

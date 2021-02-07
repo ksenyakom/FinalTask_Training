@@ -27,3 +27,9 @@ function validateAdd(form) {
     }
 
 }
+
+function changeLanguage(form){
+  //   document.cookie = ;
+    document.getElementById("test").innerHTML = "language=" + form.lang.value;
+    return false;
+}

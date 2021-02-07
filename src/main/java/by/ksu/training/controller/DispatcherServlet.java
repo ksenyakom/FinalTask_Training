@@ -51,7 +51,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            resp.setContentType("text/html;charset=UTF-8"); //TODO куда перенести?
+            resp.setContentType("text/html;charset=UTF-8");
             HttpSession session = req.getSession(false);
             if(session != null) {
                 @SuppressWarnings("unchecked")
@@ -90,11 +90,10 @@ public class DispatcherServlet extends HttpServlet {
             } else {
                 req.setAttribute(AttrName.WARNING_MESSAGE, "No such command!!");
                 req.getRequestDispatcher("/index.jsp").forward(req, resp);
-                //TODO
+                logger.error("No such command.");
             }
         } catch (PersistentException e) {
-//            logger.error("Exception in command!!!!", e);
-//            request.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            logger.error(e);
             req.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
             req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
         }

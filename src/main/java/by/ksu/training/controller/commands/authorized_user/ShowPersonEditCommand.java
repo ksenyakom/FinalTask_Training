@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Prepared data to show on page "person edit".
+ *
  * @Author Kseniya Oznobishina
  * @Date 17.01.2021
  */

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Forward user to "edit login" page.
+ *
  * @Author Kseniya Oznobishina
  * @Date 17.01.2021
  */

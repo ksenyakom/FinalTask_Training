@@ -63,7 +63,7 @@
                         </tr>
                         <c:forEach items="${lst}" var="assign" varStatus="status">
                             <tr <c:choose>
-                                <c:when test="${empty assign.trainer}">class="warning"</c:when>
+                                <c:when test="${empty assign.trainer}">class="danger"</c:when>
                                 <c:when test="${ not empty assign.trainer && empty assign.endDate}">class="success"</c:when>
                                 <c:otherwise>class="text-muted"</c:otherwise>
                             </c:choose>>
