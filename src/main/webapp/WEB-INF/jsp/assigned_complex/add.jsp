@@ -29,21 +29,21 @@
 
             <form action='<c:url value="add.html"/>' method="post" enctype="multipart/form-data">
                 <input type="hidden" name="visitorId" value="${visitor.id}">
-                <div class="table-responsive">
+                <div class="form-group col-sm-5">
+                    <h4 class="text-center"><fmt:message key="title.complex_assignment"/></h4>
+                    <p class="text-info"><fmt:message key="label.visitor"/> ${ visitor.login }</p>
+                    <label for="dateExpected"а><fmt:message key="label.training_date"/></label>
+                    <input type="date" class="form-control" id="dateExpected"
+                           name="dateExpected" required>
+                    <%--                                <div disabled="true">--%>
+                    <%--                                    <p><input id="frequency1" type="radio"><label for="frequency1">Один раз в неделю</label></p>--%>
+                    <%--                                    <p><input id="frequency2" type="radio"><label for="frequency2">Два раза в неделю</label></p>--%>
+                    <%--                                </div>--%>
+
+                </div>
+                <div class="table-responsive col-sm-12">
                     <table class="table table-hover table-bordered">
                         <caption>
-                            <h4 class="text-center"><fmt:message key="title.complex_assignment"/></h4>
-                            <p class="text-info"><fmt:message key="label.visitor"/> ${ visitor.login }</p>
-                            <div class="form-group">
-                                <label for="dateExpected">Дата тренировки</label>
-                                <input type="date" class="form-control" id="dateExpected"
-                                       name="dateExpected" required>
-                                <%--                                <div disabled="true">--%>
-                                <%--                                    <p><input id="frequency1" type="radio"><label for="frequency1">Один раз в неделю</label></p>--%>
-                                <%--                                    <p><input id="frequency2" type="radio"><label for="frequency2">Два раза в неделю</label></p>--%>
-                                <%--                                </div>--%>
-
-                            </div>
                         </caption>
                         <tr class="active">
                             <th scope="col">№</th>
@@ -61,6 +61,7 @@
                             </tr>
                         </c:forEach>
                     </table>
+                    <p id="errorMessage" class="text-danger"></p>
                     <button type="submit" class="btn btn-success"><fmt:message key="button.save"/></button>
                 </div>
             </form>

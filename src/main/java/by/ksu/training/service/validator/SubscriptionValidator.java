@@ -14,7 +14,7 @@ import java.util.Map;
  * @Author Kseniya Oznobishina
  * @Date 16.01.2021
  */
-public class SubscriptionValidator extends BaseValidator<Subscription> implements Validator<Subscription> {
+public class SubscriptionValidator extends BaseValidator<Subscription> implements EntityValidator<Subscription> {
 
     @Override
     public Map<String, String> getWarningMap() {
@@ -74,7 +74,7 @@ public class SubscriptionValidator extends BaseValidator<Subscription> implement
         return null;
     }
 
-    private LocalDate validateDate (String attrName, String date) {
+    public LocalDate validateDate (String attrName, String date) {
         if (date != null) {
             try {
                 return LocalDate.parse(date);

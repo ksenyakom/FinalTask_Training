@@ -49,8 +49,7 @@ public class BaseValidator<T> {
         try {
             return Integer.parseInt(attribute);
         } catch (NumberFormatException e) {
-            throw new PersistentException(String.format("Parameter not correct: %s found %s",
-                    attrName, attribute));
+            throw new PersistentException(String.format("Parameter not correct: %s found %s",  attrName, attribute));
         }
     }
 

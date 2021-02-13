@@ -13,7 +13,7 @@ import java.util.Map;
  * @Author Kseniya Oznobishina
  * @Date 18.01.2021
  */
-public class PersonValidator extends BaseValidator<Person> implements Validator<Person> {
+public class PersonValidator extends BaseValidator<Person> implements EntityValidator<Person> {
     private static final String NAME = "name";
     private static final String SURNAME = "surname";
     private static final String PATRONYMIC = "patronymic";

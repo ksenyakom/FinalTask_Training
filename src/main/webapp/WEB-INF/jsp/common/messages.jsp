@@ -10,25 +10,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <titleMessages</title>
+    <title>Messages</title>
     <%@ include file="head.jsp" %>
 </head>
 <body>
 <c:if test="${not empty warningMap}">
     <c:forEach var="warning" items="${warningMap}">
-        <p class="text-warning">
+        <p class="bg-warning">
             <fmt:message key="${warning.key }"/> : <fmt:message key="${ warning.value }"/></p>
     </c:forEach>
 </c:if>
-<c:if test="${ not empty warningMessage }"><p class="text-warning"><fmt:message
-        key="${ warningMessage }"/></p></c:if>
-<c:if test="${not empty successMessage }"><p class="text-success"><fmt:message
-        key="${ successMessage }"/></p></c:if>
-<c:if test="${not empty errorMessage }"><p class="text-danger"><fmt:message
-        key="${ errorMessage }"/></p></c:if>
+<c:if test="${ not empty warningMessage }">
+    <p class="bg-warning"><fmt:message key="${ warningMessage }"/></p></c:if>
+<c:if test="${not empty successMessage }">
+    <p class="bg-success"><fmt:message key="${ successMessage }"/></p></c:if>
+<c:if test="${not empty errorMessage }">
+    <p class="bg-danger"><fmt:message key="${ errorMessage }"/></p></c:if>
 
-
-<%--<p id="errorMessage" class="text-danger"></p>--%>
 </body>
 </html>
 

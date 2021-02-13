@@ -51,6 +51,7 @@
                             <th scope="col"><fmt:message key="table.trainer_developed"/></th>
                             <th scope="col"><fmt:message key="table.visitor_for"/></th>
                             <th scope="col"><fmt:message key="table.rating"/></th>
+<%--                            <th scope="col"><fmt:message key="table.exercise_count"/></th>--%>
                             <th scope="col"><fmt:message key="table.edit"/></th>
                             <th scope="col"><fmt:message key="table.remove"/></th>
                             <th scope="col"><fmt:message key="table.execute"/></th>
@@ -66,6 +67,7 @@
                                 <td>${ complex.trainerDeveloped.login }</td>
                                 <td>${ complex.visitorFor.login }</td>
                                 <td><fmt:formatNumber value="${ complex.rating }"/></td>
+<%--                                <td>${complex.listOfUnits.size()}</td>--%>
                                 <c:choose>
                                     <c:when test="${ empty complex.visitorFor and isAdmin}">
                                         <td><a href='<c:url value="edit.html?complexId=${complex.id}"/>'>

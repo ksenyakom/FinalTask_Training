@@ -34,7 +34,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             statement.setInt(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
 
-            return resultSetToObject(resultSet, user, false);
+            return resultSetToObjectList(resultSet, user, false);
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
@@ -47,7 +47,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             statement.setInt(2, periodDays);
             ResultSet resultSet = statement.executeQuery();
 
-            return resultSetToObject(resultSet, user, true);
+            return resultSetToObjectList(resultSet, user, true);
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
@@ -59,7 +59,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
             statement.setInt(1, periodDays);
             ResultSet resultSet = statement.executeQuery();
 
-            return resultSetToObject(resultSet, null, true);
+            return resultSetToObjectList(resultSet, null, true);
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
@@ -103,7 +103,6 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
                 assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
             }
-
             return assignedComplex;
         } catch (SQLException e) {
             throw new PersistentException(e);
@@ -123,7 +122,6 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
                 assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
                 assignedComplex.setDateExecuted(parseDate.sqlToLocal(resultSet.getDate("date_executed")));
             }
-
             return assignedComplex;
         } catch (SQLException e) {
             throw new PersistentException(e);
@@ -155,7 +153,7 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
         }
     }
 
-    private List<AssignedComplex> resultSetToObject(ResultSet resultSet, User existUser, boolean readDateExecuted) throws SQLException {
+    private List<AssignedComplex> resultSetToObjectList(ResultSet resultSet, User existUser, boolean readDateExecuted) throws SQLException {
         List<AssignedComplex> list = new ArrayList<>();
         Map<Integer, User> users = existUser == null ? new HashMap<>() : null;
         Map<Integer, Complex> complexes = new HashMap<>();
@@ -167,27 +165,15 @@ public class AssignedComplexDaoImpl extends BaseDaoImpl implements AssignedCompl
         while (resultSet.next()) {
             assignedComplex = new AssignedComplex();
             assignedComplex.setId(resultSet.getInt("id"));
-
             if (existUser != null) {
                 assignedComplex.setVisitor(existUser);
             } else {
                 id = resultSet.getInt("visitor_id");
-                if (users.containsKey(id)) {
-                    user = users.get(id);
-                } else {
-                    user = new User(id);
-                    users.put(id, user);
-                }
+                user = users.merge(id, new User(id),(oldValue, newValue)->oldValue);
                 assignedComplex.setVisitor(user);
             }
-
             id = resultSet.getInt("complex_id");
-            if (complexes.containsKey(id)) {
-                complex = complexes.get(id);
-            } else {
-                complex = new Complex(id);
-                complexes.put(id, complex);
-            }
+            complex= complexes.merge(id, new Complex(id), (oldValue, newValue)->oldValue);
             assignedComplex.setComplex(complex);
             assignedComplex.setDateExpected(parseDate.sqlToLocal(resultSet.getDate("date_expected")));
             if (readDateExecuted) {

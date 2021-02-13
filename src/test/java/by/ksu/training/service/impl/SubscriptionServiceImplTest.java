@@ -134,6 +134,72 @@ public class SubscriptionServiceImplTest {
 
         assertEquals(subscription, expectedActiveSub);
     }
+    @Test
+    public void testFindFrom() throws PersistentException {
+        LocalDate from = LocalDate.parse("2020-10-02");
+        List<Subscription> subscriptionList = subscriptionService.findFrom(from);
+        int expected = 2;
 
+        assertEquals(subscriptionList.size(),expected);
+    }
+
+    @Test
+    public void testFindTo() throws PersistentException{
+        LocalDate to = LocalDate.parse("2020-10-02");
+        List<Subscription> subscriptionList = subscriptionService.findTo(to);
+        int expected = 1;
+
+        assertEquals(subscriptionList.size(),expected);
+    }
+
+    @Test
+    public void testFindFromTo() throws PersistentException {
+        LocalDate from = LocalDate.parse("2020-10-02");
+        LocalDate to = LocalDate.parse("2020-11-02");
+        List<Subscription> subscriptionList = subscriptionService.findFromTo(from,to);
+        int expected = 2;
+
+        assertEquals(subscriptionList.size(),expected);
+    }
+
+    @Test
+    public void testFindByUserLogin() throws PersistentException {
+        String login = "visitor";
+        List<Subscription> subscriptionList = subscriptionService.findByUserLogin(login);
+        int expected = 2;
+
+        assertEquals(subscriptionList.size(),expected);
+    }
+
+    @Test
+    public void testFindFromLogin() throws PersistentException {
+        LocalDate from = LocalDate.parse("2020-10-02");
+        String login = "visitor";
+        List<Subscription> subscriptionList = subscriptionService.findFromLogin(from,login);
+        int expected = 2;
+
+        assertEquals(subscriptionList.size(),expected);
+    }
+
+    @Test
+    public void testFindToLogin() throws PersistentException {
+        LocalDate from = LocalDate.parse("2021-10-02");
+        String login = "visitor";
+        List<Subscription> subscriptionList = subscriptionService.findToLogin(from,login);
+        int expected = 2;
+
+        assertEquals(subscriptionList.size(),expected);
+    }
+
+    @Test
+    public void testFindFromToLogin() throws PersistentException {
+        LocalDate from = LocalDate.parse("2020-10-02");
+        LocalDate to = LocalDate.parse("2020-11-02");
+        String login = "visitor";
+        List<Subscription> subscriptionList = subscriptionService.findFromToLogin(from,to,login);
+        int expected = 2;
+
+        assertEquals(subscriptionList.size(),expected);
+    }
 
 }

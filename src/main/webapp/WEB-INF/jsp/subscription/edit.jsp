@@ -39,18 +39,18 @@
 
                     <p>Visitor: ${subscription.visitor.login}</p>
                     <div class="form-group">
-                        <label for="beginDate">Дата начала</label>
+                        <label for="beginDate"><fmt:message key="table.begin_date"/></label>
                         <input type="date" class="form-control" id="beginDate"
                                name="beginDate" value="${subscription.beginDate}" required>
                     </div>
                     <div class="form-group">
-                        <label for="endDate">Дата окончания</label>
+                        <label for="endDate"><fmt:message key="table.end_date"/></label>
                         <input type="date" class="form-control" id="endDate"
                                name="endDate" value="${subscription.endDate}" required>
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="price">Стоимость</label>
+                        <label for="price"><fmt:message key="table.price"/></label>
                         <input type="number" class="form-control" id="price"
                                name="price" value="${subscription.price}" required>
                     </div>
@@ -69,17 +69,3 @@
 <%@ include file="../common/footer.jsp" %>
 </body>
 </html>
-
-
-<%--                            <td>--%>
-<%--                                <fmt:parseDate value="${subscription.beginDate}" pattern="yyyy-MM-dd"--%>
-<%--                                               var="parsedBeginDate" type="date"/>--%>
-<%--                                <fmt:formatDate value="${parsedBeginDate}" type="date" dateStyle="short"/>--%>
-<%--                            </td>--%>
-<%--                            <td>--%>
-<%--                                <fmt:parseDate value="${subscription.endDate}" pattern="yyyy-MM-dd" var="parsedEndDate"--%>
-<%--                                               type="date"/>--%>
-<%--                                <fmt:formatDate value="${parsedEndDate}" type="date" dateStyle="short"/>--%>
-<%--                            </td>--%>
-<%--                            <td><fmt:formatNumber value="${ subscription.price }"/></td>--%>
-

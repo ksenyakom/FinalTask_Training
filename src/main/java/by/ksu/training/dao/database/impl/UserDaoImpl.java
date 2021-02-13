@@ -20,9 +20,9 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     private static final String CREATE = "INSERT INTO `user`(`login`,`password`,`email`,`role`) VALUES (?,?,?,?)";
     private static final String READ_BY_ID = "SELECT * FROM `user` WHERE `id` = ? ";
     private static final String READ_LOGIN_BY_ID = "SELECT `login` FROM `user` WHERE `id` = ? ";
-    private static final String READ_ID_BY_ROLE = "SELECT `id` FROM `user` WHERE `role`=? ORDER BY `id`";
     private static final String READ_BY_ROLE = "SELECT `id`,`login`,`email` FROM `user` WHERE `role`=? ORDER BY `id`";
     private static final String READ_BY_LOGIN = "SELECT `id`, `role`, `email`,`password` FROM `user` WHERE `login` = ?";
+    private static final String READ_BY_LOGIN_PART = "SELECT `id`, `login` FROM `user` WHERE `login` LIKE CONCAT('%', ?, '%')";
     private static final String UPDATE = "UPDATE `user` SET `login` = ?,`password` = ?, `email` = ?,`role` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `user` WHERE `id` = ?";
     private static final String CHECK_BY_LOGIN = "SELECT 1 FROM `user` WHERE `login`=? limit 1";
@@ -65,6 +65,25 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 user.setEmail(resultSet.getString("email"));
             }
             return user;
+
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<User> readByLoginPart(String userLogin) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_BY_LOGIN_PART)) {
+            statement.setString(1, userLogin);
+            ResultSet resultSet = statement.executeQuery();
+            User user = null;
+            List<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                user = new User(resultSet.getInt("id"));
+                user.setLogin(resultSet.getString("login"));
+                users.add(user);
+            }
+            return users;
 
         } catch (SQLException e) {
             throw new PersistentException(e);

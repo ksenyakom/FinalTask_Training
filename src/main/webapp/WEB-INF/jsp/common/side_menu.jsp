@@ -25,10 +25,10 @@
 <br>
 <br>
 <br>
-<br><p>Для наладки</p>
-    <p><a href='<c:url value="/user/list.html"/>'>Личный кабинет админа</a></p>
-    <p><a href='<c:url value="/visitor/list.html"/>'>Личный кабинет тренера</a></p>
-    <p><a href='<c:url value="/visitor/assigned_trainings.html"/>'>Личный кабинет посетителя</a></p>
+<%--<br><p>Для наладки</p>--%>
+<%--    <p><a href='<c:url value="/user/list.html"/>'>Личный кабинет админа</a></p>--%>
+<%--    <p><a href='<c:url value="/visitor/list.html"/>'>Личный кабинет тренера</a></p>--%>
+<%--    <p><a href='<c:url value="/visitor/assigned_trainings.html"/>'>Личный кабинет посетителя</a></p>--%>
 </div>
 </body>
 </html>

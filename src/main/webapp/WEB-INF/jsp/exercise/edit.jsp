@@ -30,6 +30,7 @@
             <form action='${myURL}' method="post" enctype="multipart/form-data">
                 <input type="hidden" name="exerciseId" value="${exercise.id}">
                 <input type="hidden" name="picturePath" value="${exercise.picturePath}">
+                <input type="hidden" name="currentPage" value="${currentPage}">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="title"><fmt:message key="label.exercise_title"/></label>

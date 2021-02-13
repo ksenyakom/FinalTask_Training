@@ -2,9 +2,6 @@ package by.ksu.training.service.validator;
 
 import by.ksu.training.controller.AttrName;
 import by.ksu.training.entity.AssignedComplex;
-import by.ksu.training.entity.AssignedTrainer;
-import by.ksu.training.entity.Complex;
-import by.ksu.training.entity.User;
 import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 
@@ -17,7 +14,7 @@ import java.util.Map;
  * @Author Kseniya Oznobishina
  * @Date 22.01.2021
  */
-public class AssignedComplexValidator extends BaseValidator<AssignedComplex> implements Validator<AssignedComplex> {
+public class AssignedComplexValidator extends BaseValidator<AssignedComplex> implements EntityValidator<AssignedComplex> {
     @Override
     public Map<String, String> getWarningMap() {
         return warningMap;

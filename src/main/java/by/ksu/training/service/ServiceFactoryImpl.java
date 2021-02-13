@@ -8,11 +8,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ServiceFactoryImpl implements ServiceFactory {
-    //TODO разобраться что тут
     private static Logger logger = LogManager.getLogger(ServiceFactoryImpl.class);
     private TransactionFactory factory;
 
-    public ServiceFactoryImpl(TransactionFactory factory) throws PersistentException {
+    public ServiceFactoryImpl(TransactionFactory factory)  {
         this.factory = factory;
     }
 

@@ -18,6 +18,7 @@
     <p><a href='<c:url value="/exercise/list.html"/>'><fmt:message key="label.side_menu.exercise_list"/></a></p>
     <p><a href='<c:url value="/complex/my_complexes.html"/>'><fmt:message key="label.side_menu.trainings"/></a></p>
     <p><a href='<c:url value="/admin/register_trainer.html"/>'><fmt:message key="title.register_trainer"/></a></p>
+    <p><a href='<c:url value="/report/subscription.html"/>'><fmt:message key="title.reports"/></a></p>
 </div>
 </body>
 </html>

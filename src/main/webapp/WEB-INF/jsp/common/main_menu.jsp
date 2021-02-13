@@ -12,8 +12,8 @@
 <body>
 <%--выбор языка--%>
 <div class="text-right">
-    <a href='<c:url value="/change_language.html?language=ru_RU&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>рус</a>
-    <a class="language" href='<c:url value="/change_language.html?language=en_US&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>eng</a>
+    <a href='<c:url value="/change_language.html?language=ru_RU&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>Ру</a>
+    <a class="language" href='<c:url value="/change_language.html?language=en_US&page=${requestScope['javax.servlet.forward.request_uri']}"/>'>En</a>
 </div>
 
 <nav class="navbar navbar-default">
@@ -27,7 +27,7 @@
                 <li class="nav-link"><a href="#"><fmt:message key="label.main_menu.about_us"/></a></li>
                 <li class="nav-link"><a href='<c:url value="/index.jsp"/>'><fmt:message key="label.main_menu.main"/></a></li>
                 <li class="nav-link"><a href='<c:url value="/my_account.html"/>'><fmt:message key="label.main_menu.room"/></a></li>
-                <li class="nav-link"><a href="#"><fmt:message key="label.main_menu.contacts"/></a></li>
+                <li class="nav-link"><a href='<c:url value="/contacts.html"/>'><fmt:message key="label.main_menu.contacts"/></a></li>
             </ul>
 
 

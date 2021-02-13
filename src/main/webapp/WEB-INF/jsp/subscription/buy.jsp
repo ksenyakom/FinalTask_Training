@@ -35,27 +35,23 @@
                     <br>
                     <c:choose>
                         <c:when test="${empty subscription}">
-                            <p>Нет активной подписки</p>
+                            <p><fmt:message key="message.no_active_subscription"/></p>
                         </c:when>
                         <c:otherwise>
-                            <p>Текущая активная подписка: ${subscription.beginDate} - ${subscription.endDate}</p>
+                            <p><fmt:message key="message.active_subscription"/>: ${subscription.beginDate} - ${subscription.endDate}</p>
                         </c:otherwise>
                     </c:choose>
                     <hr>
                     <div class="form-group">
-                        <label for="beginDate">Дата начала новой подписки</label>
+                        <label for="beginDate"><fmt:message key="label.new_subscription_begin_date"/> </label>
                         <input type="date" class="form-control" id="beginDate"
                                name="beginDate"  required>
                     </div>
-                    <p> Продолжительность</p>
-                    <div class="radio">
-                        <label><input type="radio" name="period" value="1" checked>1 месяц - 100р</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="period" value="2">2 месяца - 150р</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="period" value="3">3 месяца - 200р</label>
+                    <p> <fmt:message key="label.duration"/></p>
+                    <div class="radio ">
+                        <p> <label><input type="radio" name="period" value="1" checked>1 <fmt:message key="word.month"/>  - 100р</label></p>
+                        <p><label><input type="radio" name="period" value="2">2 <fmt:message key="word.months"/> - 150р</label></p>
+                        <p><label><input type="radio" name="period" value="3">3 <fmt:message key="word.months"/> - 200р</label></p>
                     </div>
                     <br>
                     <p id="errorMessage" class="text-danger"></p>

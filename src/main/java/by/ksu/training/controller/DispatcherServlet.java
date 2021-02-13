@@ -26,6 +26,7 @@ public class DispatcherServlet extends HttpServlet {
     public static final int DB_POOL_MAX_SIZE = 100;
     public static final int DB_POOL_CHECK_CONNECTION_TIMEOUT = 0;
 
+    @Override
     public void init() {
         try {
             GetProperties getDBProperties = new GetDbProperties();
@@ -36,6 +37,11 @@ public class DispatcherServlet extends HttpServlet {
             logger.error("It is impossible to initialize application", e);
             destroy();
         }
+    }
+
+    @Override
+    public void destroy() {
+        ConnectionPool.getInstance().destroy();
     }
 
     @Override
@@ -94,7 +100,7 @@ public class DispatcherServlet extends HttpServlet {
             }
         } catch (PersistentException e) {
             logger.error(e);
-            req.setAttribute(AttrName.ERROR_MESSAGE, e.getMessage());
+            req.setAttribute(AttrName.ERROR_MESSAGE, e);
             req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
         }
     }

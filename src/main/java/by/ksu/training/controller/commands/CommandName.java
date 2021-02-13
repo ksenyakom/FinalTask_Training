@@ -40,7 +40,8 @@ public enum CommandName {
     SHOW_ADD_COMPLEX_PAGE,
     SHOW_MY_ACCOUNT_PAGE,
     SHOW_REGISTER_TRAINER_PAGE,
-
+    SHOW_CONTACTS,
+    SHOW_REPORT_SUBSCRIPTION,
     //  commandsPost
 
     DELETE_USER,
@@ -65,5 +66,6 @@ public enum CommandName {
     DELETE_EXERCISE_IN_COMPLEX,
     UPDATE_COMPLEX,
     SAVE_NEW_COMPLEX,
-    REGISTER_TRAINER
+    REGISTER_TRAINER;
+
 }

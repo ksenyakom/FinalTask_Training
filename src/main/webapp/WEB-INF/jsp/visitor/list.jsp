@@ -25,11 +25,7 @@
         <%--Content of the page --%>
         <div class="col-sm-8">
             <%--Message--%>
-            <c:if test="${not empty warningMessage}"><p class="text-warning"><fmt:message
-                    key="${ warningMessage }"/></p></c:if>
-            <c:if test="${not empty successMessage}"><p class="text-success"><fmt:message
-                    key="${ successMessage }"/></p></c:if>
-
+                <c:import url="../common/messages.jsp"/>
             <h4 class="text-center"><fmt:message key="title.my_trainable"/></h4>
             <br>
             <form onsubmit="return validateDelete(this)">

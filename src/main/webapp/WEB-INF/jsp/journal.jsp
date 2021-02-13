@@ -6,8 +6,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctg" uri="customtags" %>
-
-<%--Локализация--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${cookie.language.value}"/>
 <fmt:setBundle basename="properties.text"/>
@@ -15,8 +13,7 @@
 <html lang="ru">
 <head>
     <title><fmt:message key="title.journal"/></title>
-    <c:import url="common/head.jsp"/>
-
+    <%@ include file="common/head.jsp" %>
 </head>
 <body>
 <c:import url="common/main_menu.jsp"/>
@@ -41,7 +38,8 @@
                             <td>${ status.count }</td>
                             <td>${ assignedComplex.complex.title }</td>
                             <td>${ assignedComplex.visitor.login }</td>
-                            <td><ctg:parse localDate="${ assignedComplex.dateExecuted }" language="${cookie.language.value}"/></td>
+                            <td><ctg:parse localDate="${ assignedComplex.dateExecuted }"
+                                           language="${cookie.language.value}"/></td>
                         </tr>
                     </c:forEach>
                 </table>

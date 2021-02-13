@@ -12,7 +12,7 @@ import java.util.Map;
  * @Author Kseniya Oznobishina
  * @Date 24.01.2021
  */
-public class ExerciseValidator extends BaseValidator<Exercise> implements Validator<Exercise> {
+public class ExerciseValidator extends BaseValidator<Exercise> implements EntityValidator<Exercise> {
 
 
     @Override

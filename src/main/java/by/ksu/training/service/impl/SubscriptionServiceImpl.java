@@ -8,6 +8,8 @@ import by.ksu.training.exception.PersistentException;
 import by.ksu.training.service.ServiceImpl;
 import by.ksu.training.service.SubscriptionService;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,82 @@ public class SubscriptionServiceImpl extends ServiceImpl implements Subscription
         SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
         List<Subscription> subscriptionList = sDao.read();
         readUserLogin(subscriptionList);
+        return subscriptionList;
+    }
+
+    @Override
+    public List<Subscription> findFrom(LocalDate from) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        List<Subscription> subscriptionList = sDao.readFrom(from);
+        readUserLogin(subscriptionList);
+        return subscriptionList;
+    }
+
+    @Override
+    public List<Subscription> findTo(LocalDate to) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        List<Subscription> subscriptionList = sDao.readTo(to);
+        readUserLogin(subscriptionList);
+        return subscriptionList;
+    }
+
+    @Override
+    public List<Subscription> findFromTo(LocalDate from, LocalDate to) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        List<Subscription> subscriptionList = sDao.readFromTo(from,to);
+        readUserLogin(subscriptionList);
+        return subscriptionList;
+    }
+
+    @Override
+    public List<Subscription> findByUserLogin(String userLogin) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        UserDao userDao = transaction.createDao(UserDao.class);
+
+        List<User> users = userDao.readByLoginPart(userLogin);
+        List<Subscription> subscriptionList = new ArrayList<>();
+        for(User user: users) {
+            subscriptionList.addAll(sDao.readByUser(user));
+        }
+        return subscriptionList;
+    }
+
+    @Override
+    public List<Subscription> findFromLogin(LocalDate from, String userLogin) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        UserDao userDao = transaction.createDao(UserDao.class);
+
+        List<User> users = userDao.readByLoginPart(userLogin);
+        List<Subscription> subscriptionList = new ArrayList<>();
+        for(User user: users) {
+            subscriptionList.addAll(sDao.readFromLogin(from,user));
+        }
+        return subscriptionList;
+    }
+
+    @Override
+    public List<Subscription> findToLogin(LocalDate to, String userLogin) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        UserDao userDao = transaction.createDao(UserDao.class);
+
+        List<User> users = userDao.readByLoginPart(userLogin);
+        List<Subscription> subscriptionList = new ArrayList<>();
+        for(User user: users) {
+            subscriptionList.addAll(sDao.readToLogin(to, user));
+        }
+        return subscriptionList;
+    }
+
+    @Override
+    public List<Subscription> findFromToLogin(LocalDate from, LocalDate to, String userLogin) throws PersistentException {
+        SubscriptionDao sDao = transaction.createDao(SubscriptionDao.class);
+        UserDao userDao = transaction.createDao(UserDao.class);
+
+        List<User> users = userDao.readByLoginPart(userLogin);
+        List<Subscription> subscriptionList = new ArrayList<>();
+        for(User user: users) {
+            subscriptionList.addAll(sDao.readFromToLogin(from, to,  user));
+        }
         return subscriptionList;
     }
 

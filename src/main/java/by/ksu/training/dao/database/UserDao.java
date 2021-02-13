@@ -16,4 +16,6 @@ public interface UserDao extends Dao<User> {
     void readLogin(List<User> users) throws PersistentException;
 
     boolean checkIfLoginExist(String login) throws PersistentException;
+
+    List<User> readByLoginPart(String userLogin) throws PersistentException;
 }

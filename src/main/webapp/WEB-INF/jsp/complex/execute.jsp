@@ -64,7 +64,7 @@
                             <td>${ unit.exercise.adjusting }</td>
                             <td>${ unit.exercise.mistakes }</td>
                             <td><img src='<c:url value="${ unit.exercise.picturePath }"/>'
-                                     class="img-responsive center-block" width=200 alt="picture"/>
+                                     class="center-block" width=200 alt="picture"/>
                             </td>
                             <td>
                                 <audio controls style="width: 150px;">

@@ -15,6 +15,10 @@ import by.ksu.training.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ *
+ */
+
 public class AssignedComplexServiceImpl extends ServiceImpl implements AssignedComplexService {
     @Override
     public AssignedComplex findById(Integer id) throws PersistentException {

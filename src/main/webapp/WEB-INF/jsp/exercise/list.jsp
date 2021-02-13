@@ -38,6 +38,7 @@
             <h2><fmt:message key="title.exercise_list"/></h2>
             <%@ include file="../common/messages.jsp" %>
             <form onsubmit="return validateDelete(this)" enctype="multipart/form-data">
+                <input type="hidden" name="currentPage" value="${currentPage}">
                 <div class="table-responsive">
                     <c:if test="${isAdmin}">
                         <a href='<c:url value="add.html"/>' class="btn btn-success" role="button"><fmt:message
@@ -74,7 +75,7 @@
                                     </audio>
                                 </td>
                                 <c:if test="${isAdmin}">
-                                    <td><a href='<c:url value="edit.html?exerciseId=${exercise.id}"/>'>
+                                    <td><a href='<c:url value="edit.html?exerciseId=${exercise.id}&currentPage=${currentPage}"/>'>
                                         <fmt:message key="table.edit"/></a></td>
                                     <td><input type="checkbox" class="require-one" name="remove"
                                                value="${exercise.id}"/></td>

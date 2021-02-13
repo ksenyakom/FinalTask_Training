@@ -26,14 +26,6 @@
         <c:import url="/WEB-INF/jsp/common/side_menu.jsp"/>
         <%--Content of the page --%>
         <div class="col-sm-8 text-justify">
-            <%--            test--%>
-            <form onclick="return changeLanguage(this)">
-                <input type="button" name="lang" value="ru_RU">RU</input>
-                <a type="button" name="lang" value="en_US">EN</a>
-            </form>
-            <div id="test"></div>
-            <fmt:message key="table.training_title"/>
-            <%--    test--%>
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <caption>

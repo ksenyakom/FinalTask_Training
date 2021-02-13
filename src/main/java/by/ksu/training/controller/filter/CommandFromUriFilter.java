@@ -52,6 +52,8 @@ public class CommandFromUriFilter implements Filter {
         commandsGet.put("/complex/add",  CommandName.SHOW_ADD_COMPLEX_PAGE);
         commandsGet.put("/my_account",  CommandName.SHOW_MY_ACCOUNT_PAGE);
         commandsGet.put("/admin/register_trainer",  CommandName.SHOW_REGISTER_TRAINER_PAGE);
+        commandsGet.put("/contacts",  CommandName.SHOW_CONTACTS);
+        commandsGet.put("/report/subscription",  CommandName.SHOW_REPORT_SUBSCRIPTION);
 
         commandsPost.put("/user/deleteUser",  CommandName.DELETE_USER);
         commandsPost.put("/user/save_changes_login",  CommandName.SAVE_CHANGED_LOGIN);

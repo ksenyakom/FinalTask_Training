@@ -12,7 +12,7 @@
             <class name="by.ksu.training.dao.database.PersonDaoImplTest"/>
             <class name="by.ksu.training.dao.database.AssignedTrainerDaoImplTest"/>
             <class name="by.ksu.training.service.impl.UserServiceImplTest"/>
-            <class name="by.ksu.training.service.impl.SubscriptionServiceImpl"/>
+            <class name="by.ksu.training.service.impl.SubscriptionServiceImplTest"/>
             <class name="by.ksu.training.service.impl.PersonServiceImplTest"/>
             <class name="by.ksu.training.service.impl.ExerciseServiceImplTest"/>
             <class name="by.ksu.training.service.impl.ComplexServiceImplTest"/>

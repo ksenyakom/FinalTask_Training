@@ -6,16 +6,26 @@ import by.ksu.training.exception.IncorrectFormDataException;
 import by.ksu.training.exception.PersistentException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  * @Author Kseniya Oznobishina
  * @Date 05.01.2021
  */
-public class UserValidator extends BaseValidator<User> implements Validator<User> {
+public class UserValidator extends BaseValidator<User> implements EntityValidator<User> {
     public static final String REGEX_LOGIN = "[A-Za-z0-9_\\-]{5,}";
     public static final String REGEX_EMAIL = "^[a-zA-Z0-9_.+\\-]+@[a-zA-Z0-9\\-]+\\.[a-zA-Z0-9\\-.]+";
 
+    @Override
+    public Map<String, String> getWarningMap() {
+        return warningMap;
+    }
+
+    @Override
+    public User getInvalid() {
+        return invalid;
+    }
 
     @Override
     public Integer validateId(HttpServletRequest request) throws PersistentException {

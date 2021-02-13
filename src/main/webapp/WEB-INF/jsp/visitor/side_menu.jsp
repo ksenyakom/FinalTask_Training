@@ -12,12 +12,12 @@
 <body>
 <div class="col-sm-2 sidenav text-left">
 <%--    <p><a href='<c:url value="/user/list.html"/>'><fmt:message key="label.side_menu.admin.users"/></a></p>--%>
-    <p><a href='<c:url value="/visitor/assigned_trainings.html"/>'>Мои тренировки</a></p>
-    <p><a href='<c:url value="/visitor/subscription.html"/>'>Моя подписка</a></p>
-    <p><a href='<c:url value="/person/edit.html"/>'>Редактировать личные данные</a></p>
-    <p><a href='<c:url value="/user/edit_login.html"/>'>Изменить логин</a></p>
-    <p><a href='<c:url value="/user/edit_password.html"/>'>Изменить пароль</a></p>
-    <p><a href="#">Мой тренер</a></p>
+    <p><a href='<c:url value="/visitor/assigned_trainings.html"/>'> <fmt:message key="label.my_trainings"/></a></p>
+    <p><a href='<c:url value="/visitor/subscription.html"/>'><fmt:message key="label.my_subscription"/></a></p>
+    <p><a href='<c:url value="/person/edit.html"/>'><fmt:message key="label.edit_person"/></a></p>
+    <p><a href='<c:url value="/user/edit_login.html"/>'><fmt:message key="label.edit_login"/></a></p>
+    <p><a href="#"><fmt:message key="label.edit_password"/></a></p>
+    <p><a href="#"><fmt:message key="label.my_trainer"/></a></p>
 </div>
 </body>
 </html>

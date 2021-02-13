@@ -16,51 +16,73 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public final class ConnectionPool {
     private static Logger logger = LogManager.getLogger(ConnectionPool.class);
-
+    /**
+     * Database properties.
+     */
     private Properties properties;
+    /**
+     * Database url.
+     */
     private String databaseUrl;
+    /**
+     * Max size of pool.
+     */
     private int maxSize;
+    /**
+     * Timeout to check if connection is valid.
+     */
     private int checkConnectionTimeout;
 
+    /**
+     * Collection of free connections.
+     */
     private BlockingQueue<PooledConnection> freeConnections = new LinkedBlockingQueue<>();
+    /**
+     * Collection of used connections.
+     */
     private Set<PooledConnection> usedConnections = new ConcurrentSkipListSet<>();
+
     private static final ReentrantLock lock = new ReentrantLock();
 
+    private ConnectionPool() { }
+
     /**
-     * Constructor
+     * Takes connection from pool,
+     * if there is no free connections, then creates another one
+     * if total number of connections is less then maxSize.
+     *
+     * @return connection from pool
+     * @throws PersistentException - if number of connectrions is maxSize
+     *                               or it is impossible to connect to a database.
      */
-    private ConnectionPool() {
-    }
-
     public Connection getConnection() throws PersistentException {
-            PooledConnection connection = null;
-            while (connection == null) {
-                try {
-                    if (!freeConnections.isEmpty()) {
-                        connection = freeConnections.take();
-                        if (!connection.isValid(checkConnectionTimeout)) {
-                            try {
-                                connection.getConnection().close();
-                            } catch (SQLException e) {
-                            }
-                            connection = null;
+        PooledConnection connection = null;
+        while (connection == null) {
+            try {
+                if (!freeConnections.isEmpty()) {
+                    connection = freeConnections.take();
+                    if (!connection.isValid(checkConnectionTimeout)) {
+                        try {
+                            connection.getConnection().close();
+                        } catch (SQLException e) {
                         }
-                    } else if (usedConnections.size() < maxSize) {
-                        connection = createConnection();
-                    } else {
-                        logger.error("The limit of number of by.ksu.database connections is exceeded");
-                        throw new PersistentException();
-
+                        connection = null;
                     }
-                } catch (InterruptedException | SQLException e) {
-                    logger.error("It is impossible to connect to a by.ksu.database", e);
-                    throw new PersistentException(e);
+                } else if (usedConnections.size() < maxSize) {
+                    connection = createConnection();
+                } else {
+                    logger.error("The limit of number of database connections is exceeded");
+                    throw new PersistentException();
                 }
+            } catch (InterruptedException | SQLException e) {
+                logger.error("It is impossible to connect to a database", e);
+                throw new PersistentException(e);
             }
+        }
 
-            usedConnections.add(connection);
-            logger.debug("Connection was received from pool. Current pool size:{} used connections; {} free connection", usedConnections.size(), freeConnections.size());
-            return connection;
+        usedConnections.add(connection);
+        logger.debug("Connection was received from pool. Current pool size:{} used connections; {} free connection", usedConnections.size(), freeConnections.size());
+        return connection;
     }
 
     void freeConnection(PooledConnection connection) {
@@ -81,13 +103,21 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Initializes pool of connections to database, using parameters.
+     * All connections are put to collection freeConnections.
+     *
+     * @param properties             - properties for connection.
+     * @param startSize              - start size of pool.
+     * @param maxSize                - max size of pool.
+     * @param checkConnectionTimeout - timeout to check if connection is valid.
+     * @throws PersistentException - if is imposible to initialize connection pool.
+     */
     public void init(Properties properties, int startSize, int maxSize, int checkConnectionTimeout) throws PersistentException {
-        lock.lock();
         try {
             destroy();
-
             String driverName = (String) properties.get("driver");
-            Class.forName(driverName);                          // подключили драйвер
+            Class.forName(driverName);
             this.properties = properties;
             this.databaseUrl = (String) properties.get("db.url");
             this.maxSize = maxSize;
@@ -98,8 +128,6 @@ public final class ConnectionPool {
         } catch (ClassNotFoundException | SQLException | InterruptedException e) {
             logger.fatal("It is impossible to initialize connection pool", e);
             throw new PersistentException(e);
-        } finally {
-            lock.unlock();
         }
     }
 
@@ -117,29 +145,25 @@ public final class ConnectionPool {
         }
     }
 
+
     private PooledConnection createConnection() throws SQLException {
         return new PooledConnection(DriverManager.getConnection(databaseUrl, properties));
     }
 
     public void destroy() {
-        lock.lock();
-        try {
-            usedConnections.addAll(freeConnections);
-            freeConnections.clear();
-            for (PooledConnection connection : usedConnections) {
-                try {
-                    connection.getConnection().close();
-                } catch (SQLException e) {
-                }
+        usedConnections.addAll(freeConnections);
+        freeConnections.clear();
+        for (PooledConnection connection : usedConnections) {
+            try {
+                connection.getConnection().close();
+            } catch (SQLException e) {
             }
-            usedConnections.clear();
-        } finally {
-            lock.unlock();
         }
+        usedConnections.clear();
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        destroy();
-    }
+//    @Override
+//    protected void finalize() throws Throwable {
+//        destroy();
+//    }
 }

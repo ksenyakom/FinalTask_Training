@@ -10,12 +10,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao {
+
     private static Logger logger = LogManager.getLogger(SubscriptionDaoImpl.class);
     ParseDate parseDate = new ParseDate();
 
@@ -28,12 +30,89 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
     private static final String UPDATE = "UPDATE `subscription` SET `visitor_id`=?,`begin_date`=?,`end_date`=?,`price` = ? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `subscription` WHERE `id` = ?";
 
+    private static final String READ_FROM = "SELECT * FROM `subscription` WHERE `begin_date`>=? ";
+    private static final String READ_FROM_TO_VISITOR_ID = "SELECT * FROM `subscription` WHERE  `begin_date`>= ? AND `begin_date`<= ? AND `visitor_id` = ?";
+    private static final String READ_TO_AND_VISITOR_ID = "SELECT * FROM `subscription` WHERE  `begin_date`<= ? AND `visitor_id` = ?";
+    private static final String READ_TO = "SELECT * FROM `subscription` WHERE  `begin_date`<= ?";
+    private static final String READ_FROM_TO =  "SELECT * FROM `subscription` WHERE  `begin_date`>= ? AND `begin_date`<= ?";
+    private static final String READ_FROM_AND_VISITOR_ID = "SELECT * FROM `subscription` WHERE  `begin_date`>= ? AND `visitor_id` = ?";;
+
     @Override
     public List<Subscription> read() throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_ALL)) {
             ResultSet resultSet = statement.executeQuery();
-            List<Subscription> list = resultSetToList(resultSet);
-            return list;
+            return resultSetToList(resultSet);
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Subscription> readFrom(LocalDate from) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_FROM)) {
+            statement.setDate(1, parseDate.localToSql(from));
+            ResultSet resultSet = statement.executeQuery();
+            return resultSetToList(resultSet);
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Subscription> readTo(LocalDate to) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_TO)) {
+            statement.setDate(1, parseDate.localToSql(to));
+            ResultSet resultSet = statement.executeQuery();
+            return resultSetToList(resultSet);
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Subscription> readFromTo(LocalDate from, LocalDate to) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_FROM_TO)) {
+            statement.setDate(1, parseDate.localToSql(from));
+            statement.setDate(2, parseDate.localToSql(to));
+            ResultSet resultSet = statement.executeQuery();
+            return resultSetToList(resultSet);
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Subscription> readFromLogin(LocalDate from, User visitor) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_FROM_AND_VISITOR_ID)) {
+            statement.setDate(1, parseDate.localToSql(from));
+            statement.setInt(2, visitor.getId());
+            ResultSet resultSet = statement.executeQuery();
+            return resultSetToList(resultSet);
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Subscription> readToLogin(LocalDate to,User visitor) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_TO_AND_VISITOR_ID)) {
+            statement.setDate(1, parseDate.localToSql(to));
+            statement.setInt(2, visitor.getId());
+            ResultSet resultSet = statement.executeQuery();
+            return resultSetToList(resultSet);
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        }
+    }
+
+    @Override
+    public List<Subscription> readFromToLogin(LocalDate from, LocalDate to, User visitor) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_FROM_TO_VISITOR_ID)) {
+            statement.setDate(1, parseDate.localToSql(from));
+            statement.setDate(2, parseDate.localToSql(to));
+            statement.setInt(3, visitor.getId());
+            ResultSet resultSet = statement.executeQuery();
+            return resultSetToList(resultSet);
         } catch (SQLException e) {
             throw new PersistentException(e);
         }
@@ -104,7 +183,7 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
 
             if (resultSet.next()) {
                 subscription = new Subscription(id);
-                subscription.setVisitor( new User(resultSet.getInt("visitor_id")));
+                subscription.setVisitor(new User(resultSet.getInt("visitor_id")));
                 subscription.setBeginDate(parseDate.sqlToLocal(resultSet.getDate("begin_date")));
                 subscription.setEndDate(parseDate.sqlToLocal(resultSet.getDate("end_date")));
                 subscription.setPrice(resultSet.getBigDecimal("price"));
@@ -163,7 +242,7 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
         try {
             List<Subscription> list = new ArrayList<>();
             Subscription subscription = null;
-            Map<Integer,User> userMap = new HashMap<>();
+            Map<Integer, User> userMap = new HashMap<>();
             User user = null;
             Integer userId = null;
 
@@ -183,7 +262,7 @@ public class SubscriptionDaoImpl extends BaseDaoImpl implements SubscriptionDao 
                 list.add(subscription);
             }
             return list;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new PersistentException(e);
         }
     }

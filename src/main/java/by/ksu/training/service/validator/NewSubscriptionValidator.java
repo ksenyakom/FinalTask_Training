@@ -13,7 +13,7 @@ import java.util.Map;
  * @Author Kseniya Oznobishina
  * @Date 18.01.2021
  */
-public class NewSubscriptionValidator extends BaseValidator<Subscription> implements Validator<Subscription> {
+public class NewSubscriptionValidator extends BaseValidator<Subscription> implements EntityValidator<Subscription> {
 
 
     @Override
@@ -46,16 +46,6 @@ public class NewSubscriptionValidator extends BaseValidator<Subscription> implem
                 addWarning("error", "message.warning.new_subscription_must_be_later");
             }
         }
-
-//        // начало новой подписки позже чем старая закончится
-//        if (previousSubscriptionEndDate != null) {
-//            LocalDate previousEnd = validateDate(AttrName.PREVIOUS_END_DAY, previousSubscriptionEndDate);
-//            if (newBegin != null && previousEnd != null) {
-//                if (newBegin.isBefore(previousEnd)) {
-//                    addWarning("error", "message.warning.new_subscription_must_be_later");
-//                }
-//            }
-//        }
         subscription.setBeginDate(newBegin);
         try {
             if (period != null) {
