@@ -29,7 +29,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 
     @Override
-    public List<User> readUserByRole(Role role) throws PersistentException {
+    public List<User> readUserByRole(final Role role) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ROLE)) {
             statement.setInt(1, role.getIdentity());
             ResultSet resultSet = statement.executeQuery();
@@ -51,7 +51,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public User readByLogin(String login) throws PersistentException {
+    public User readByLogin(final String login) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_LOGIN)) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
@@ -72,7 +72,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> readByLoginPart(String userLogin) throws PersistentException {
+    public List<User> readByLoginPart(final String userLogin) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_LOGIN_PART)) {
             statement.setString(1, userLogin);
             ResultSet resultSet = statement.executeQuery();
@@ -91,7 +91,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean checkIfLoginExist(String login) throws PersistentException {
+    public boolean checkIfLoginExist(final String login) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(CHECK_BY_LOGIN)) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
@@ -107,7 +107,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 
     @Override
-    public Integer create(User entity) throws PersistentException {
+    public Integer create(final User entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getLogin());
             statement.setString(2, entity.getPassword());
@@ -130,7 +130,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public User read(Integer id) throws PersistentException {
+    public User read(final Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -151,7 +151,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public void readLogin(List<User> users) throws PersistentException {
+    public void readLogin(final List<User> users) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_LOGIN_BY_ID)) {
             for (User user : users) {
                 statement.setInt(1, user.getId());
@@ -167,7 +167,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(User entity) throws PersistentException {
+    public void update(final User entity) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
             statement.setString(1, entity.getLogin());
             statement.setString(2, entity.getPassword());
@@ -181,7 +181,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(Integer id) throws PersistentException {
+    public void delete(final Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
             statement.setInt(1, id);
             statement.executeUpdate();

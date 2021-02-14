@@ -6,6 +6,6 @@ import by.ksu.training.entity.Role;
 import java.util.Set;
 
 public abstract class VisitorCommand extends Command {
-    public VisitorCommand() {setAllowedRoles(Set.of(Role.VISITOR));}
+    protected VisitorCommand() {setAllowedRoles(Set.of(Role.VISITOR));}
 
 }

@@ -6,6 +6,6 @@ import by.ksu.training.entity.Role;
 import java.util.Set;
 
 public abstract class AdminAndTrainerCommand extends Command {
-    public AdminAndTrainerCommand() {setAllowedRoles(Set.of(Role.ADMINISTRATOR, Role.TRAINER));}
+    protected AdminAndTrainerCommand() {setAllowedRoles(Set.of(Role.ADMINISTRATOR, Role.TRAINER));}
 
 }

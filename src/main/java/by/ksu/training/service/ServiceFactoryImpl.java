@@ -11,7 +11,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
     private static Logger logger = LogManager.getLogger(ServiceFactoryImpl.class);
     private TransactionFactory factory;
 
-    public ServiceFactoryImpl(TransactionFactory factory)  {
+    public ServiceFactoryImpl(TransactionFactory factory) {
         this.factory = factory;
     }
 

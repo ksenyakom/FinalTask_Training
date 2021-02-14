@@ -17,7 +17,7 @@ public class TransactionFactoryImpl implements TransactionFactory {
 		try {
 			connection.setAutoCommit(false);
 		} catch(SQLException e) {
-			logger.error("It is impossible to turn off autocommiting for by.ksu.database connection", e);
+			logger.error("It is impossible to turn off autocommiting for database connection", e);
 			throw new PersistentException(e);
 		}
 	}

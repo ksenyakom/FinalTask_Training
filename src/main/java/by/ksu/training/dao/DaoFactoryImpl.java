@@ -6,6 +6,8 @@ import by.ksu.training.exception.PersistentException;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * A factory for dao classes. Singleton.
+ *
  * @Author Kseniya Oznobishina
  * @Date 30.01.2021
  */
@@ -28,8 +30,6 @@ public class DaoFactoryImpl implements DaoFactory {
         }
         return instance;
     }
-
-    //TODO singleton  потокобезопасный
 
     @Override
     public <T extends BaseDaoImpl> T getDao(Class<T> clazz) throws PersistentException {

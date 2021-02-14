@@ -3,7 +3,7 @@ package by.ksu.training.controller.commands;
 
 import by.ksu.training.controller.commands.admin.*;
 import by.ksu.training.controller.commands.admin_and_trainer.*;
-import by.ksu.training.controller.commands.authorized_user.*;
+import by.ksu.training.controller.commands.authorized.*;
 import by.ksu.training.controller.commands.common.*;
 import by.ksu.training.controller.commands.trainer.*;
 import by.ksu.training.controller.commands.visitor.*;

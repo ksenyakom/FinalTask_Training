@@ -1,7 +1,6 @@
-package by.ksu.training.controller.commands.authorized_user;
+package by.ksu.training.controller.commands.authorized;
 
 import by.ksu.training.controller.AttrName;
-import by.ksu.training.controller.state.ForwardState;
 import by.ksu.training.controller.state.RedirectState;
 import by.ksu.training.controller.state.ResponseState;
 

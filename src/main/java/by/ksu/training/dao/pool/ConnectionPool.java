@@ -44,7 +44,8 @@ public final class ConnectionPool {
 
     private static final ReentrantLock lock = new ReentrantLock();
 
-    private ConnectionPool() { }
+    private ConnectionPool() {
+    }
 
     /**
      * Takes connection from pool,
@@ -53,7 +54,7 @@ public final class ConnectionPool {
      *
      * @return connection from pool
      * @throws PersistentException - if number of connectrions is maxSize
-     *                               or it is impossible to connect to a database.
+     *                             or it is impossible to connect to a database.
      */
     public Connection getConnection() throws PersistentException {
         PooledConnection connection = null;
@@ -65,6 +66,7 @@ public final class ConnectionPool {
                         try {
                             connection.getConnection().close();
                         } catch (SQLException e) {
+                            logger.error("Unable to close invalid connection", e);
                         }
                         connection = null;
                     }
@@ -99,6 +101,8 @@ public final class ConnectionPool {
             try {
                 connection.getConnection().close();
             } catch (SQLException e2) {
+                logger.error("Unable to close connection", e2);
+
             }
         }
     }
@@ -157,13 +161,10 @@ public final class ConnectionPool {
             try {
                 connection.getConnection().close();
             } catch (SQLException e) {
+                logger.error("Unable to close connection", e);
             }
         }
         usedConnections.clear();
     }
 
-//    @Override
-//    protected void finalize() throws Throwable {
-//        destroy();
-//    }
 }

@@ -14,29 +14,35 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
 
 
     @Override
-    public List<User> findUserByRole(Role role) throws PersistentException {
+    public List<User> findUserByRole(final Role role) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
         return userDao.readUserByRole(role);
     }
 
+    /**
+     * Finds User by id.
+     *
+     * @param id - identity of record to find.
+     * @return found User object or null, if record with this id not found.
+     * @throws PersistentException - if exception occur in dao layer.
+     */
     @Override
-    public User findById(Integer id) throws PersistentException {
+    public User findById(final Integer id) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
         return userDao.read(id);
     }
 
     @Override
-    public void findLogin(List<User> users) throws PersistentException {
+    public void findLogin(final List<User> users) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
         userDao.readLogin(users);
     }
 
     @Override
-    public User findByLoginAndPassword(String login, String password) throws PersistentException {
+    public User findByLoginAndPassword(final String login, final String password) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
         User user = userDao.readByLogin(login);
-        // Check that an unencrypted password matches one that has
-// previously been hashed
+        // Check that an unencrypted password matches one that has  been hashed previously
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             return user;
         } else {
@@ -46,36 +52,48 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
 
 
     @Override
-    public void save(User user) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
+    public void save(final User user) throws PersistentException {
+        try {
+            UserDao userDao = transaction.createDao(UserDao.class);
 
-        if (user.getId() != null) {
-            if (user.getPassword() != null) {
-                user.setPassword(bcrypt(user.getPassword()));
+            if (user.getId() != null) {
+                if (user.getPassword() != null) {
+                    user.setPassword(bcrypt(user.getPassword()));
+                } else {
+                    User oldUser = userDao.read(user.getId());
+                    user.setPassword(oldUser.getPassword());
+                }
+                userDao.update(user);
             } else {
-                User oldUser = userDao.read(user.getId());
-                user.setPassword(oldUser.getPassword());
+                user.setPassword(bcrypt(user.getPassword()));
+                user.setId(userDao.create(user));
             }
-            userDao.update(user);
-        } else {
-            user.setPassword(bcrypt(user.getPassword()));
-            user.setId(userDao.create(user));
+            transaction.commit();
+        } catch (PersistentException e) {
+            transaction.rollback();
+            throw new PersistentException("User can not be updated or saved", e);
         }
     }
 
     @Override
-    public void delete(Integer id) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
-        userDao.delete(id);
+    public void delete(final Integer id) throws PersistentException {
+        try {
+            UserDao userDao = transaction.createDao(UserDao.class);
+            userDao.delete(id);
+            transaction.commit();
+        } catch (PersistentException e) {
+            transaction.rollback();
+            throw new PersistentException("Subscription can not be deleted", e);
+        }
     }
 
     @Override
-    public boolean checkLoginExist(String login) throws PersistentException {
+    public boolean checkLoginExist(final String login) throws PersistentException {
         UserDao userDao = transaction.createDao(UserDao.class);
         return userDao.checkIfLoginExist(login);
     }
 
-    private String bcrypt(String pass) {
+    private String bcrypt(final String pass) {
         return BCrypt.hashpw(pass, BCrypt.gensalt(10));
     }
 }

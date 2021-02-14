@@ -17,10 +17,16 @@ public interface SubscriptionService extends EntityService<Subscription> {
     Subscription findActiveByUser(User user) throws PersistentException;
 
     List<Subscription> findFrom(LocalDate from) throws PersistentException;
+
     List<Subscription> findTo(LocalDate to) throws PersistentException;
-    List<Subscription> findFromTo(LocalDate from,LocalDate to) throws PersistentException;
+
+    List<Subscription> findFromTo(LocalDate from, LocalDate to) throws PersistentException;
+
     List<Subscription> findByUserLogin(String userLogin) throws PersistentException;
-    List<Subscription> findFromLogin(LocalDate from,String userLogin) throws PersistentException;
-    List<Subscription> findToLogin(LocalDate to,String userLogin) throws PersistentException;
-    List<Subscription> findFromToLogin(LocalDate from,LocalDate to,String userLogin) throws PersistentException;
+
+    List<Subscription> findFromLogin(LocalDate from, String userLogin) throws PersistentException;
+
+    List<Subscription> findToLogin(LocalDate to, String userLogin) throws PersistentException;
+
+    List<Subscription> findFromToLogin(LocalDate from, LocalDate to, String userLogin) throws PersistentException;
 }

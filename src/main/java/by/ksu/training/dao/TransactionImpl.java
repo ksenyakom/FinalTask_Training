@@ -36,31 +36,15 @@ public class TransactionImpl implements Transaction {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <Type extends Dao<?>> Type createDao(Class<Type> key) throws PersistentException {
+    public <T extends Dao<?>> T createDao(Class<T> key) throws PersistentException {
         Class<? extends BaseDaoImpl> value = classes.get(key);
         if (value != null) {
             BaseDaoImpl dao = daoFactory.getDao(value);
             dao.setConnection(connection);
-            return (Type) dao;
+            return (T) dao;
         }
         return null;
     }
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public <Type extends Dao<?>> Type createDao(Class<Type> key) throws PersistentException {
-//		Class<? extends BaseDaoImpl> value = classes.get(key);
-//		if(value != null) {
-//			try {
-//				BaseDaoImpl dao = value.getConstructor().newInstance();// .newInstance(); //TODO Factory
-//				dao.setConnection(connection);
-//				return (Type)dao;
-//			} catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-//				logger.error("It is impossible to create data access object", e);
-//				throw new PersistentException(e);
-//			}
-//		}
-//		return null;
-//	}
 
     @Override
     public void commit() throws PersistentException {

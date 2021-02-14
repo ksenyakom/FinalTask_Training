@@ -4,7 +4,7 @@ package by.ksu.training.dao;
 import by.ksu.training.exception.PersistentException;
 
 public interface Transaction {
-	<Type extends Dao<?>> Type createDao(Class<Type> key) throws PersistentException, PersistentException;
+	<T extends Dao<?>> T createDao(Class<T> key) throws PersistentException;
 
 	void commit() throws PersistentException;
 

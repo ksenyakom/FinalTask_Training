@@ -9,14 +9,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * Defines which parameters entered user for search
+ * and calls service method to evaluate enquiry.
+ *
  * @Author Kseniya Oznobishina
  * @Date 11.02.2021
  */
 
 public class SearchSubscription implements Specification<Subscription> {
-    private LocalDate from;
-    private LocalDate to;
-    private String userLogin;
+    private final LocalDate from;
+    private final LocalDate to;
+    private final String userLogin;
 
     public SearchSubscription(LocalDate from, LocalDate to, String userLogin) {
         this.from = from;
@@ -28,17 +31,26 @@ public class SearchSubscription implements Specification<Subscription> {
     public List<Subscription> search(EntityService<Subscription> service) throws PersistentException {
         if (service instanceof SubscriptionService) {
             SubscriptionService subscriptionService = (SubscriptionService) service;
-            byte b = checkParameters();
-            switch (b) {
-                case 0: return List.of();
-                case 1: return subscriptionService.findFrom(from);
-                case 2: return subscriptionService.findTo(to);
-                case 3: return subscriptionService.findFromTo(from,to);
-                case 4: return subscriptionService.findByUserLogin(userLogin);
-                case 5: return subscriptionService.findFromLogin(from, userLogin);
-                case 6: return subscriptionService.findToLogin(to, userLogin);
-                case 7: return subscriptionService.findFromToLogin(from, to , userLogin);
-                default: return subscriptionService.findAllActive();
+            byte choice = checkParameters();
+            switch (choice) {
+                case 0:
+                    return List.of();
+                case 1:
+                    return subscriptionService.findFrom(from);
+                case 2:
+                    return subscriptionService.findTo(to);
+                case 3:
+                    return subscriptionService.findFromTo(from, to);
+                case 4:
+                    return subscriptionService.findByUserLogin(userLogin);
+                case 5:
+                    return subscriptionService.findFromLogin(from, userLogin);
+                case 6:
+                    return subscriptionService.findToLogin(to, userLogin);
+                case 7:
+                    return subscriptionService.findFromToLogin(from, to, userLogin);
+                default:
+                    return subscriptionService.findAllActive();
             }
         } else {
             throw new PersistentException("Wrong service");

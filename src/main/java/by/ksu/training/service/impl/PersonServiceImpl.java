@@ -15,23 +15,42 @@ public class PersonServiceImpl extends ServiceImpl implements PersonService {
         return personDao.read();
     }
 
+    /**
+     * Finds Person by id.
+     *
+     * @param id - identity of record to find.
+     * @return found Person object or null, if record with this id not found.
+     * @throws PersistentException - if exception occur in dao layer.
+     */
     @Override
-    public Person findById(Integer id) throws PersistentException {
+    public Person findById(final Integer id) throws PersistentException {
         PersonDao personDao = transaction.createDao(PersonDao.class);
         return personDao.read(id);
     }
 
 
     @Override
-    public void save(Person person) throws PersistentException {
-        PersonDao personDao = transaction.createDao(PersonDao.class);
-        personDao.create(person);
+    public void save(final Person person) throws PersistentException {
+        try {
+            PersonDao personDao = transaction.createDao(PersonDao.class);
+            personDao.create(person);
+            transaction.commit();
+        } catch (PersistentException e) {
+            transaction.rollback();
+            throw new PersistentException("Person can not be updated or saved", e);
+        }
     }
 
     @Override
-    public void delete(Integer id) throws PersistentException {
-        PersonDao personDao = transaction.createDao(PersonDao.class);
-        personDao.delete(id);
+    public void delete(final Integer id) throws PersistentException {
+        try {
+            PersonDao personDao = transaction.createDao(PersonDao.class);
+            personDao.delete(id);
+            transaction.commit();
+        } catch (PersistentException e) {
+            transaction.rollback();
+            throw new PersistentException("Person can not be deleted", e);
+        }
     }
 
 }

@@ -14,19 +14,17 @@ import java.util.List;
 
 public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
     private static Logger logger = LogManager.getLogger(PersonDaoImpl.class);
-    ParseDate parseDate = new ParseDate();
 
-
-    private static final String CREATE =
-            "REPLACE INTO `person` (`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`phone`,`achievements`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String CREATE = "REPLACE INTO `person` (`id`,`surname`,`name`,`patronymic`,`date_of_birth`,`address`,`phone`,`achievements`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String READ_BY_ID = "SELECT * FROM `person` WHERE `id`= ?";
     private static final String READ_ALL = "SELECT * FROM `person`";
-    private static final String UPDATE =
-            "UPDATE `person` SET `surname`=?,`name`=?,`patronymic`=?,`date_of_birth`=?,`address`=?,`phone`=?,`achievements`=? WHERE `id` = ?";
+    private static final String UPDATE = "UPDATE `person` SET `surname`=?,`name`=?,`patronymic`=?,`date_of_birth`=?,`address`=?,`phone`=?,`achievements`=? WHERE `id` = ?";
     private static final String DELETE = "DELETE FROM `person` WHERE `id`= ?";
 
     @Override
-    public Integer create(Person entity) throws PersistentException {
+    public Integer create(final Person entity) throws PersistentException {
+        ParseDate parseDate = new ParseDate();
+
         try (PreparedStatement statement = connection.prepareStatement(CREATE)) {
             statement.setInt(1, entity.getId());
             statement.setString(2, entity.getSurname());
@@ -46,7 +44,9 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
     }
 
     @Override
-    public Person read(Integer id) throws PersistentException {
+    public Person read(final Integer id) throws PersistentException {
+        ParseDate parseDate = new ParseDate();
+
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -71,7 +71,9 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
     }
 
     @Override
-    public Person read(Person person) throws PersistentException {
+    public Person read(final Person person) throws PersistentException {
+        ParseDate parseDate = new ParseDate();
+
         try (PreparedStatement statement = connection.prepareStatement(READ_BY_ID)) {
             statement.setInt(1, person.getId());
             ResultSet resultSet = statement.executeQuery();
@@ -94,6 +96,8 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
 
     @Override
     public List<Person> read() throws PersistentException {
+        ParseDate parseDate = new ParseDate();
+
         try (PreparedStatement statement = connection.prepareStatement(READ_ALL)) {
             ResultSet resultSet = statement.executeQuery();
             Person person = null;
@@ -118,7 +122,9 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
     }
 
     @Override
-    public void update(Person entity) throws PersistentException {
+    public void update(final Person entity) throws PersistentException {
+        ParseDate parseDate = new ParseDate();
+
         try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
             statement.setString(1, entity.getSurname());
             statement.setString(2, entity.getName());
@@ -135,7 +141,7 @@ public class PersonDaoImpl extends BaseDaoImpl implements PersonDao {
     }
 
     @Override
-    public void delete(Integer id) throws PersistentException {
+    public void delete(final Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
             statement.setInt(1, id);
             statement.executeUpdate();
